@@ -9,19 +9,23 @@ UI =
 
   enterInsertMode: ->
     el = document.activeElement
-    # TODO(philc): We should only enter insert mode if google docs thinks the cursor is positioned on a cell.
-    # Is this the right condition?
+    # TODO(philc): We should only allow the insert mode command to enter a cell if the cursor is already on a
+    # cell
     return unless el.classList.contains("cell-input")
-    @mode = "insert"
+    @setMode("insert")
     @typeKey(KeyboardUtils.keyCodes.enter)
 
   exitInsertMode: ->
-    @mode = "normal"
+    @setMode("normal")
     @typeKey(KeyboardUtils.keyCodes.ESC)
 
   # This is for debugging purposes. TODO(philc): Delete this.
   debugOutputCommand: ->
     console.log "test command executed"
+
+  setMode: (mode) ->
+    console.log "Entering #{mode} mode." if mode != @mode
+    @mode = mode
 
   # We inject the page_script into the page so that we can simulate keypress events, which must be done by a
   # page script, and not a content script.
@@ -36,14 +40,13 @@ UI =
     el.isContentEditable || tagName == "input" || tagName == "textarea"
 
   onFocus: (e) ->
+    @setupEditor() unless @editor
     el = event.target
     if el.id != @richTextEditorId && @isEditable(el)
-      console.log "switching to insert mode"
-      @mode = "insert"
-    @setupEditor() unless @editor
+      @setMode("insert")
 
   onBlur: (e) ->
-    @mode = "normal" if @mode == "insert"
+    @setMode("insert") if @mode == "insert"
 
   setupEditor: ->
     unless @editor
@@ -52,7 +55,7 @@ UI =
         # Listen for when the editor's style attribute changes. This indicates that a cell is now being
         # edited, perhaps due to double clicking into a cell.
         observer = new MutationObserver((mutations) =>
-          if @isEditorEditing() then @mode = "insert" else @mode = "normal")
+          if @isEditorEditing() then @setMode("insert") else @setMode("normal"))
         observer.observe(@editor.parentNode,
           attributes: true
           attributeFilter: ["style"])
@@ -71,49 +74,16 @@ UI =
     return unless (self == top)
     @injectPageScript()
     window.addEventListener("focus", ((e) => @onFocus(e)), true)
+    window.addEventListener("blur", ((e) => @onBlur(e)), true)
     window.addEventListener "mouseup", (e) =>
       console.log "click received. Editing?", @isEditorEditing()
-    setInterval((=> console.log "editing?", @isEditorEditing()), 1000)
-
-    window.addEventListener("blur", ((e) => @onBlur(e)), true)
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
-    # window.addEventListener("keypress", ((e) => @onKeypress(e)), true)
-    # window.addEventListener("keyup", ((e) => @onKeyup(e)), true)
-    window.addEventListener("test", (e) =>
-      console.log("received test event", e)
-      @enterInsertMode()
-    )
-    window.addEventListener("load", =>
-      button = document.createElement("button")
-      s = button.style
-      s.position = "absolute"
-      s.top = "0"
-      s.right = "0"
-      button.innerHTML = "test"
-      button.addEventListener("click", =>
-         console.log("received test event", e)
-         KeyboardUtils.simulateKeypress(document.body, KeyboardUtils.keyCodes.enter)
-         )
-
-      document.body.appendChild(button))
 
   cancelEvent: (e) ->
     e.preventDefault()
     e.stopPropagation()
-
-  # onKeypress: (e) ->
-  #   console.log "keypress", e.keyCode, e.keyIdentifier, @handledCurrentKey
-  #   return
-  #   # @cancelEvent(e) if @handledCurrentKey
-
-  # onKeyup: (e) ->
-  #   console.log "keyup", e.keyCode, e.keyIdentifier, @handledCurrentKey
-  #   return
-  #   if @handledCurrentKey
-  #     @cancelEvent(e)
-  #     @handledCurrentKey = false
 
   onKeydown: (e) ->
     keyString = KeyboardUtils.getKeyString(e)
