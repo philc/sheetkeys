@@ -1,30 +1,26 @@
 UI =
   keyQueue: []
-  ignoreNextKey: false
-  handledCurrentKey: false
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 2
   mode: "normal" # One of "normal" or "insert".
   # Keys which were typed recently
   keyQueue: []
+  richTextEditorId: "waffle-rich-text-editor"
 
   enterInsertMode: ->
-    console.log "entering insert mode"
-    @mode = "insert"
-    @ignoreNextKey = true
-    # TODO(philc):
     el = document.activeElement
     # TODO(philc): We should only enter insert mode if google docs thinks the cursor is positioned on a cell.
+    # Is this the right condition?
     return unless el.classList.contains("cell-input")
-    console.log "Issuing enter"
-    KeyboardUtils.simulateKeypress(el, KeyboardUtils.keyCodes.enter)
+    @mode = "insert"
+    @typeKey(KeyboardUtils.keyCodes.enter)
 
   exitInsertMode: ->
     @mode = "normal"
-    @ignoreNextKey = true
-    KeyboardUtils.simulateKeypress(el, KeyboardUtils.keyCodes.ESC)
+    @typeKey(KeyboardUtils.keyCodes.ESC)
 
-  testCommand: ->
+  # This is for debugging purposes. TODO(philc): Delete this.
+  debugOutputCommand: ->
     console.log "test command executed"
 
   # We inject the page_script into the page so that we can simulate keypress events, which must be done by a
@@ -36,28 +32,55 @@ UI =
     document.documentElement.appendChild(script)
 
   isEditable: (el) ->
-    type = element.tagName.toLowerCase()
+    tagName = el.tagName?.toLowerCase() # Note that the window object doesn't have a tagname.
     el.isContentEditable || tagName == "input" || tagName == "textarea"
 
   onFocus: (e) ->
-    console.log "onFocus", e
     el = event.target
-    @mode = "insert"
+    if el.id != @richTextEditorId && @isEditable(el)
+      console.log "switching to insert mode"
+      @mode = "insert"
+    @setupEditor() unless @editor
 
   onBlur: (e) ->
     @mode = "normal" if @mode == "insert"
+
+  setupEditor: ->
+    unless @editor
+      @editor = document.getElementById(@richTextEditorId)
+      if @editor
+        # Listen for when the editor's style attribute changes. This indicates that a cell is now being
+        # edited, perhaps due to double clicking into a cell.
+        observer = new MutationObserver((mutations) =>
+          if @isEditorEditing() then @mode = "insert" else @mode = "normal")
+        observer.observe(@editor.parentNode,
+          attributes: true
+          attributeFilter: ["style"])
+
+    @editor
+
+  isEditorEditing: ->
+    return false unless @editor
+    # There's no obvious way to determine directly that the cell editor is currently editing a cell.
+    # However, when this happens, the parent node of the editor gets a big long style attribute to portray
+    # the cell editor input box.
+    @editor.parentNode.getAttribute("style")?
 
   init: ->
     # For clarity and efficiency, don't run inside of an iframe (Google sheets loads some iframes in the page)
     return unless (self == top)
     @injectPageScript()
-    window.addEventListener("focus", (e) => @onFocus(e))
-    window.addEventListener("blur", (e) => @onBlur(e))
+    window.addEventListener("focus", ((e) => @onFocus(e)), true)
+    window.addEventListener "mouseup", (e) =>
+      console.log "click received. Editing?", @isEditorEditing()
+    setInterval((=> console.log "editing?", @isEditorEditing()), 1000)
+
+    window.addEventListener("blur", ((e) => @onBlur(e)), true)
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
-    window.addEventListener("keypress", ((e) => @onKeypress(e)), true)
-    window.addEventListener("keyup", ((e) => @onKeyup(e)), true)
+    # window.addEventListener("keypress", ((e) => @onKeypress(e)), true)
+    # window.addEventListener("keyup", ((e) => @onKeyup(e)), true)
     window.addEventListener("test", (e) =>
       console.log("received test event", e)
       @enterInsertMode()
@@ -70,7 +93,6 @@ UI =
       s.right = "0"
       button.innerHTML = "test"
       button.addEventListener("click", =>
-         document.querySelector(".active-cell-border").parentNode
          console.log("received test event", e)
          KeyboardUtils.simulateKeypress(document.body, KeyboardUtils.keyCodes.enter)
          )
@@ -81,35 +103,33 @@ UI =
     e.preventDefault()
     e.stopPropagation()
 
-  onKeypress: (e) ->
-    console.log "keypress", e.keyCode, e.keyIdentifier, @handledCurrentKey
-    return
-    @cancelEvent(e) if @handledCurrentKey
+  # onKeypress: (e) ->
+  #   console.log "keypress", e.keyCode, e.keyIdentifier, @handledCurrentKey
+  #   return
+  #   # @cancelEvent(e) if @handledCurrentKey
 
-  onKeyup: (e) ->
-    console.log "keyup", e.keyCode, e.keyIdentifier, @handledCurrentKey
-    return
-    if @handledCurrentKey
-      @cancelEvent(e)
-      @handledCurrentKey = false
+  # onKeyup: (e) ->
+  #   console.log "keyup", e.keyCode, e.keyIdentifier, @handledCurrentKey
+  #   return
+  #   if @handledCurrentKey
+  #     @cancelEvent(e)
+  #     @handledCurrentKey = false
 
   onKeydown: (e) ->
     keyString = KeyboardUtils.getKeyString(e)
-    console.log ">>>> keydown keyString:", keyString, e.keyCode, e.keyIdentifier, @handledCurrentKey
-    console.log e
+    console.log ">>>> keydown keyString:", keyString, e.keyCode, e.keyIdentifier, e
     if @ignoreKeys
       console.log "ignoring"
       return
-    if @ignoreNextKey
-      console.log "ignoring this keydown"
-      @ignoreNextKey = false
-      return
-    return unless keyString
-    if keyString == "esc"
-      if @mode == "insert"
+
+    return unless keyString # Ignore key presses which are just modifiers.
+
+    if @mode == "insert"
+      if keyString == "esc"
         @cancelEvent(e)
         @exitInsertMode()
-        return
+      return
+
     @keyQueue.push(keyString)
     @keyQueue.shift() if @keyQueue.length > @maxBindingLength
     # See if a command matches the typed key sequence, and execute it.
@@ -120,7 +140,6 @@ UI =
         if fn = keyBindings[keySequence]
           @keyQueue = []
           @cancelEvent(e)
-          # @handledCurrentKey = true
           fn()
           return
     null
@@ -135,17 +154,10 @@ UI =
     setTimeout(fn, 0)
 
   moveUp: ->
-    @typeKey(KeyboardUtils.keyCodes.downArrow)
-    return
-    KeyboardUtils.simulateKeypress(document.activeElement, KeyboardUtils.keyCodes.upArrow)
+    @typeKey(KeyboardUtils.keyCodes.upArrow)
 
   moveDown: ->
     @typeKey(KeyboardUtils.keyCodes.downArrow)
-    return
-    @nextFrame(=>
-      console.log "moving down"
-      # console.log "moving down", document.activeElement
-      @typeKey(65, "U+0041"))
 
   moveLeft: ->
     KeyboardUtils.simulateKeypress(document.activeElement, KeyboardUtils.keyCodes.leftArrow)
@@ -153,9 +165,11 @@ UI =
   moveRight: ->
     KeyboardUtils.simulateKeypress(document.activeElement, KeyboardUtils.keyCodes.rightArrow)
 
+# Default keybindings.
+# TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
   "i": UI.enterInsertMode.bind(UI)
-  "t": UI.testCommand.bind(UI)
+  "t": UI.debugOutputCommand.bind(UI)
   "k": UI.moveUp.bind(UI)
   "j": UI.moveDown.bind(UI)
   # TODO(philc): Support multi-letter commands, like d,d
