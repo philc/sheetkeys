@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Sheetkeys",
+  "version": "0.1",
+  "description": "TODO",
+  "content_scripts": [
+    {
+      "matches": ["https://docs.google.com/spreadsheets/*"],
+      "js": ["content_scripts/keyboard_utils.js",
+             "content_scripts/sheet_actions.js",
+             "content_scripts/main.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }],
+  "web_accessible_resources": ["page_scripts/page_script.js"]
+}
