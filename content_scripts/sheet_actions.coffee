@@ -4,6 +4,8 @@ window.SheetActions =
     rowBelow: "Row below"
     moveRowUp: "Move row up"
     moveRowDown: "Move row down"
+    moveColumnLeft: "Move column left"
+    moveColumnRight: "Move column right"
 
   # A mapping of button-caption to DOM element.
   buttonElements: {}
@@ -47,3 +49,11 @@ window.SheetActions =
   moveRowsDown: () ->
     @selectRow()
     @click(@buttons.moveRowDown)
+
+  moveColumnsLeft: () ->
+    @selectColumn()
+    @click(@buttons.moveColumnLeft)
+
+  moveColumnsRight: () ->
+    @selectColumn()
+    @click(@buttons.moveColumnRight)
