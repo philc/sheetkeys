@@ -8,18 +8,15 @@
 # - args: an object with keys keyCode, shiftKey
 simulateKeypress = (el, args) ->
   type = "keydown"
-  keyIdentifier = null
   eventType = "keydown"
   # How to do this in Chrome: http://stackoverflow.com/q/10455626/46237
   event = document.createEvent("KeyboardEvent")
   Object.defineProperty(event, "keyCode", get : -> @keyCodeVal)
   Object.defineProperty(event, "which", get: -> @keyCodeVal)
-  Object.defineProperty(event, "keyIdentifier", get: -> keyIdentifier)
   # eventName, canBubble, canceable, view, keyIdentifier string, ?, meta, ?, ?, shift, ?, keyCode, ?
   event.initKeyboardEvent(eventType, true, true, document.defaultView, null,
-    false, args.mods.meta, false, args.mods.shift, false, args.keyCode, args.keyCode)
+    args.mods.meta, args.mods.control, false, args.mods.shift, false, args.keyCode, args.keyCode)
   event.keyCodeVal = args.keyCode
-  event.keyIdentifier = keyIdentifier
   el.dispatchEvent(event)
 
 jsonEl = document.createElement("div")
