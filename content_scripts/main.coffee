@@ -120,7 +120,7 @@ window.UI =
     modifiers ||= {}
     document.getElementById("sheetkeys-json-message").innerText =
       JSON.stringify({keyCode: keyCode, mods: modifiers})
-    window.dispatchEvent(new CustomEvent("sheetkeys-simulate-keydown", {}))
+    window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}))
     @ignoreKeys = false
 
 
