@@ -6,6 +6,8 @@ window.SheetActions =
     moveRowDown: "Move row down"
     moveColumnLeft: "Move column left"
     moveColumnRight: "Move column right"
+    undo: "Undo"
+    redo: "Redo"
 
   # A mapping of button-caption to DOM element.
   buttonElements: {}
@@ -42,6 +44,17 @@ window.SheetActions =
   selectColumn: ->
     UI.typeKey(KeyboardUtils.keyCodes.space, control: true)
 
+  #
+  # Movement
+  #
+  moveUp: -> UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+  moveDown: -> UI.typeKey(KeyboardUtils.keyCodes.downArrow)
+  moveLeft: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow)
+  moveRight: -> UI.typeKey(KeyboardUtils.keyCodes.rightArrow)
+
+  #
+  # Row movement
+  #
   moveRowsUp: () ->
     @selectRow()
     @click(@buttons.moveRowUp)
@@ -57,3 +70,9 @@ window.SheetActions =
   moveColumnsRight: () ->
     @selectColumn()
     @click(@buttons.moveColumnRight)
+
+  #
+  # Editing
+  #
+  undo: () -> @click(@buttons.undo)
+  redo: () -> @click(@buttons.redo)

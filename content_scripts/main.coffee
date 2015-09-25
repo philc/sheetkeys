@@ -123,27 +123,29 @@ window.UI =
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-keydown", {}))
     @ignoreKeys = false
 
-  moveUp: -> @typeKey(KeyboardUtils.keyCodes.upArrow)
-  moveDown: -> @typeKey(KeyboardUtils.keyCodes.downArrow)
-  moveLeft: -> @typeKey(KeyboardUtils.keyCodes.leftArrow)
-  moveRight: -> @typeKey(KeyboardUtils.keyCodes.rightArrow)
 
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
   "i": UI.enterInsertMode.bind(UI)
   "t": UI.debugOutputCommand.bind(UI)
-  "k": UI.moveUp.bind(UI)
-  "j": UI.moveDown.bind(UI)
-  "h": UI.moveLeft.bind(UI)
-  "l": UI.moveRight.bind(UI)
-  # TODO(philc): Support multi-letter commands, like d,d
-  "d": SheetActions.deleteRows.bind(SheetActions)
+
+  # Movement
+  "k": SheetActions.moveUp.bind(SheetActions)
+  "j": SheetActions.moveDown.bind(SheetActions)
+  "h": SheetActions.moveLeft.bind(SheetActions)
+  "l": SheetActions.moveRight.bind(SheetActions)
 
   # Row movement
   "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
   "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
   "<C-H>": SheetActions.moveColumnsLeft.bind(SheetActions)
   "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
+
+  # Editing
+  # TODO(philc): Support multi-letter commands, like d,d
+  "u": SheetActions.undo.bind(SheetActions)
+  "<C-r>": SheetActions.redo.bind(SheetActions)
+  "d": SheetActions.deleteRows.bind(SheetActions)
 
 UI.init()
