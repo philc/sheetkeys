@@ -1,7 +1,20 @@
 window.KeyboardUtils =
   keyCodes:
-    { ESC: 27, backspace: 8, deleteKey: 46, enter: 13, ctrlEnter: 10, space: 32, shiftKey: 16, ctrlKey: 17,
-    f1: 112, f12: 123, tab: 9, downArrow: 40, upArrow: 38 }
+    backspace: 8
+    tab: 9
+    ctrlEnter: 10
+    enter: 13
+    shiftKey: 16
+    ctrlKey: 17
+    ESC: 27
+    space: 32
+    leftArrow: 37
+    upArrow: 38
+    rightArrow: 39
+    downArrow: 40
+    deleteKey: 46
+    f1: 112
+    f12: 123
 
   keyNames:
     { 37: "left", 38: "up", 39: "right", 40: "down", 27: "esc" }
@@ -32,11 +45,11 @@ window.KeyboardUtils =
     if (event.shiftKey)
       keyString = keyString.toUpperCase()
     if (event.metaKey)
-      modifiers.push("m")
+      modifiers.push("M")
     if (event.ctrlKey)
-      modifiers.push("c")
+      modifiers.push("C")
     if (event.altKey)
-      modifiers.push("a")
+      modifiers.push("A")
 
     for mod in modifiers
       keyString = mod + "-" + keyString
