@@ -1,4 +1,4 @@
-UI =
+window.UI =
   keyQueue: []
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 2
@@ -75,8 +75,6 @@ UI =
     @injectPageScript()
     window.addEventListener("focus", ((e) => @onFocus(e)), true)
     window.addEventListener("blur", ((e) => @onBlur(e)), true)
-    window.addEventListener "mouseup", (e) =>
-      console.log "click received. Editing?", @isEditorEditing()
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
@@ -114,26 +112,21 @@ UI =
           return
     null
 
-  typeKey: (keyCode, keyIdentifier) ->
+  typeKey: (keyCode, modifiers) ->
+    unless keyCode?
+      console.log("No keyCode provided to typeKey")
+      return
     @ignoreKeys = true
-    document.getElementById("sheetkeys-json-message").innerText = JSON.stringify({keyCode: keyCode})
+    modifiers ||= {}
+    document.getElementById("sheetkeys-json-message").innerText =
+      JSON.stringify({keyCode: keyCode, mods: modifiers})
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-keydown", {}))
     @ignoreKeys = false
 
-  nextFrame: (fn) ->
-    setTimeout(fn, 0)
-
-  moveUp: ->
-    @typeKey(KeyboardUtils.keyCodes.upArrow)
-
-  moveDown: ->
-    @typeKey(KeyboardUtils.keyCodes.downArrow)
-
-  moveLeft: ->
-    KeyboardUtils.simulateKeypress(document.activeElement, KeyboardUtils.keyCodes.leftArrow)
-
-  moveRight: ->
-    KeyboardUtils.simulateKeypress(document.activeElement, KeyboardUtils.keyCodes.rightArrow)
+  moveUp: -> @typeKey(KeyboardUtils.keyCodes.upArrow)
+  moveDown: -> @typeKey(KeyboardUtils.keyCodes.downArrow)
+  moveLeft: -> @typeKey(KeyboardUtils.keyCodes.leftArrow)
+  moveRight: -> @typeKey(KeyboardUtils.keyCodes.rightArrow)
 
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
@@ -142,7 +135,13 @@ keyBindings =
   "t": UI.debugOutputCommand.bind(UI)
   "k": UI.moveUp.bind(UI)
   "j": UI.moveDown.bind(UI)
+  "h": UI.moveLeft.bind(UI)
+  "l": UI.moveRight.bind(UI)
   # TODO(philc): Support multi-letter commands, like d,d
   "d": SheetActions.deleteRows.bind(SheetActions)
+
+  # Row movement
+  "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
+  "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
 
 UI.init()

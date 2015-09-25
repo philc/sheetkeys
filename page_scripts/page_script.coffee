@@ -17,7 +17,7 @@ simulateKeypress = (el, args) ->
   Object.defineProperty(event, "keyIdentifier", get: -> keyIdentifier)
   # eventName, canBubble, canceable, view, keyIdentifier string, ?, meta, ?, ?, shift, ?, keyCode, ?
   event.initKeyboardEvent(eventType, true, true, document.defaultView, null,
-    false, false, false, args.shiftKey, false, args.keyCode, args.keyCode)
+    false, args.mods.meta, false, args.mods.shift, false, args.keyCode, args.keyCode)
   event.keyCodeVal = args.keyCode
   event.keyIdentifier = keyIdentifier
   el.dispatchEvent(event)
@@ -31,6 +31,4 @@ window.addEventListener "sheetkeys-simulate-keydown", (e) ->
   console.log "got simulate keydown event", e
   editorEl = document.getElementById("waffle-rich-text-editor")
   args = JSON.parse(jsonEl.innerText)
-  console.log ">>>> args:", args
-  console.log editorEl
   simulateKeypress(editorEl, args)
