@@ -85,7 +85,7 @@ window.UI =
 
   onKeydown: (e) ->
     keyString = KeyboardUtils.getKeyString(e)
-    console.log ">>>> keydown keyString:", keyString, e.keyCode, e.keyIdentifier, e
+    console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
     if @ignoreKeys
       console.log "ignoring"
       return
@@ -146,6 +146,8 @@ keyBindings =
   # TODO(philc): Support multi-letter commands, like d,d
   "u": SheetActions.undo.bind(SheetActions)
   "<C-r>": SheetActions.redo.bind(SheetActions)
+  "o": SheetActions.openRowBelow.bind(SheetActions)
+  "O": SheetActions.openRowAbove.bind(SheetActions)
   "d": SheetActions.deleteRows.bind(SheetActions)
 
 UI.init()
