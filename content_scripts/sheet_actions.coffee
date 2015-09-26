@@ -93,6 +93,24 @@ window.SheetActions =
     @clear()
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
+  # Put the cursor at the beginning of the cell.
+  editCell: ->
+    UI.typeKey(KeyboardUtils.keyCodes.enter)
+    @moveCursorToCellStart()
+
+  editCellAppend: ->
+    # Note that appending to the cell's contents is the default behavior of the Enter key in Sheets.
+    UI.typeKey(KeyboardUtils.keyCodes.enter)
+
+  moveCursorToCellStart: ->
+    # http://stackoverflow.com/q/6249095/46237
+    selection = window.getSelection()
+    range = selection.getRangeAt(0)
+    range.setStart(range.startContainer, 0)
+    range.collapse(true)
+    selection.removeAllRanges()
+    selection.addRange(range)
+
   commitCellChanges: ->
     UI.typeKey(KeyboardUtils.keyCodes.enter)
     # Enter in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.

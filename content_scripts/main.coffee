@@ -10,23 +10,6 @@ window.UI =
   keyBindingPrefixes: null
   richTextEditorId: "waffle-rich-text-editor"
 
-  enterInsertMode: ->
-    el = document.activeElement
-    # TODO(philc): We should only allow the insert mode command to enter a cell if the cursor is already on a
-    # cell
-    return unless el.classList.contains("cell-input")
-    @setMode("insert")
-    @typeKey(KeyboardUtils.keyCodes.enter)
-
-  exitInsertMode: ->
-    @setMode("normal")
-    @typeKey(KeyboardUtils.keyCodes.esc)
-
-  # Enter insert mode, but place the cursor at the end of the cell's contents.
-  appendInsertMode: ->
-    @enterInsertMode()
-    @typeKey(KeyboardUtils.keyCodes.end)
-
   # This is for debugging purposes. TODO(philc): Delete this.
   debugOutputCommand: ->
     console.log "test command executed"
@@ -161,8 +144,8 @@ keyBindings =
     "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
 
     # Editing
-    "i": UI.enterInsertMode.bind(UI)
-    "a": UI.appendInsertMode.bind(UI)
+    "i": SheetActions.editCell.bind(SheetActions)
+    "a": SheetActions.editCellAppend.bind(SheetActions)
     "t": UI.debugOutputCommand.bind(UI)
     "u": SheetActions.undo.bind(SheetActions)
     "<C-r>": SheetActions.redo.bind(SheetActions)
