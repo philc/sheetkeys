@@ -88,3 +88,7 @@ window.SheetActions =
   openRowAbove: () ->
     @click(@buttons.rowAbove)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
+
+  changeCell: () ->
+    @clear()
+    UI.typeKey(KeyboardUtils.keyCodes.enter)
