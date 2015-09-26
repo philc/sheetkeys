@@ -61,9 +61,10 @@ window.KeyboardUtils =
     keyString
 
   getKeyChar: (event) ->
+    return @keyNames[event.keyCode] if (@keyNames[event.keyCode])
+
     # Not a letter
     if (event.keyIdentifier.slice(0, 2) != "U+")
-      return @keyNames[event.keyCode] if (@keyNames[event.keyCode])
       # F-key
       if (event.keyCode >= @keyCodes.f1 && event.keyCode <= @keyCodes.f12)
         return "f" + (1 + event.keyCode - keyCodes.f1)
