@@ -57,38 +57,38 @@ window.SheetActions =
   #
   # Row movement
   #
-  moveRowsUp: () ->
+  moveRowsUp: ->
     @selectRow()
     @click(@buttons.moveRowUp)
 
-  moveRowsDown: () ->
+  moveRowsDown: ->
     @selectRow()
     @click(@buttons.moveRowDown)
 
-  moveColumnsLeft: () ->
+  moveColumnsLeft: ->
     @selectColumn()
     @click(@buttons.moveColumnLeft)
 
-  moveColumnsRight: () ->
+  moveColumnsRight: ->
     @selectColumn()
     @click(@buttons.moveColumnRight)
 
   #
   # Editing
   #
-  undo: () -> @click(@buttons.undo)
-  redo: () -> @click(@buttons.redo)
+  undo: -> @click(@buttons.undo)
+  redo: -> @click(@buttons.redo)
 
-  clear: () -> @click(@buttons.deleteValues)
+  clear: -> @click(@buttons.deleteValues)
 
-  openRowBelow: () ->
+  openRowBelow: ->
     @click(@buttons.rowBelow)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
-  openRowAbove: () ->
+  openRowAbove: ->
     @click(@buttons.rowAbove)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
-  changeCell: () ->
+  changeCell: ->
     @clear()
     UI.typeKey(KeyboardUtils.keyCodes.enter)
