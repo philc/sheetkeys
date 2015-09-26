@@ -33,7 +33,7 @@ window.SheetActions =
 
   click: (buttonCaption) -> KeyboardUtils.simulateClick(@getButton(buttonCaption))
 
-  deleteRows: -> @click(buttons.deleteRow)
+  deleteRows: -> @click(@buttons.deleteRow)
 
   insertRowsBelow: (n) ->
     for i in [0..n]
