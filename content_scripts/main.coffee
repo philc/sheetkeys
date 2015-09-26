@@ -17,7 +17,12 @@ window.UI =
 
   exitInsertMode: ->
     @setMode("normal")
-    @typeKey(KeyboardUtils.keyCodes.ESC)
+    @typeKey(KeyboardUtils.keyCodes.esc)
+
+  # Enter insert mode, but place the cursor at the end of the cell's contents.
+  appendInsertMode: ->
+    @enterInsertMode()
+    @typeKey(KeyboardUtils.keyCodes.end)
 
   # This is for debugging purposes. TODO(philc): Delete this.
   debugOutputCommand: ->
@@ -127,9 +132,6 @@ window.UI =
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
-  "i": UI.enterInsertMode.bind(UI)
-  "t": UI.debugOutputCommand.bind(UI)
-
   # Movement
   "k": SheetActions.moveUp.bind(SheetActions)
   "j": SheetActions.moveDown.bind(SheetActions)
@@ -144,10 +146,14 @@ keyBindings =
 
   # Editing
   # TODO(philc): Support multi-letter commands, like d,d
+  "i": UI.enterInsertMode.bind(UI)
+  "a": UI.appendInsertMode.bind(UI)
+  "t": UI.debugOutputCommand.bind(UI)
   "u": SheetActions.undo.bind(SheetActions)
   "<C-r>": SheetActions.redo.bind(SheetActions)
   "o": SheetActions.openRowBelow.bind(SheetActions)
   "O": SheetActions.openRowAbove.bind(SheetActions)
   "d": SheetActions.deleteRows.bind(SheetActions)
+  "x": SheetActions.clear.bind(SheetActions)
 
 UI.init()

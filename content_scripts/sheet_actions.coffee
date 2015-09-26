@@ -1,6 +1,7 @@
 window.SheetActions =
   buttons:
     deleteRow: "Delete row"
+    deleteValues: "Delete values"
     rowAbove: "Row above"
     rowBelow: "Row below"
     moveRowUp: "Move row up"
@@ -77,6 +78,8 @@ window.SheetActions =
   #
   undo: () -> @click(@buttons.undo)
   redo: () -> @click(@buttons.redo)
+
+  clear: () -> @click(@buttons.deleteValues)
 
   openRowBelow: () ->
     @click(@buttons.rowBelow)

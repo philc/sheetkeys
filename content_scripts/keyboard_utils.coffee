@@ -6,8 +6,10 @@ window.KeyboardUtils =
     enter: 13
     shiftKey: 16
     ctrlKey: 17
-    ESC: 27
+    esc: 27
     space: 32
+    end: 35
+    home: 36
     leftArrow: 37
     upArrow: 38
     rightArrow: 39
