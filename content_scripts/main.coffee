@@ -1,3 +1,10 @@
+# Utilities
+clone = (o) -> extend({}, o)
+extend = (o, properties) ->
+  for key, val of properties
+    o[key] = val
+  o
+
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 3
@@ -19,6 +26,16 @@ window.UI =
     console.log "Entering #{mode} mode."
     @mode = mode
     @keyQueue = []
+
+  enterVisualMode: -> @setMode("visual")
+  # In this mode, entire lines are selected.
+  enterVisualLineMode: ->
+    SheetActions.selectRow()
+    @setMode("visual")
+
+  exitVisualMode: ->
+    SheetActions.unselectRow()
+    @setMode("normal")
 
   # We inject the page_script into the page so that we can simulate keypress events, which must be done by a
   # page script, and not a content script.
@@ -155,9 +172,21 @@ keyBindings =
     "x": SheetActions.clear.bind(SheetActions)
     "c,c": SheetActions.changeCell.bind(SheetActions)
 
+    # Selection
+    "v": UI.enterVisualMode.bind(UI)
+    "V": UI.enterVisualLineMode.bind(UI)
+
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
     # people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
     "esc": SheetActions.commitCellChanges.bind(SheetActions)
+
+keyBindings.visual = extend clone(keyBindings.normal),
+  "j": SheetActions.moveDownAndSelect.bind(SheetActions)
+  "k": SheetActions.moveUpAndSelect.bind(SheetActions)
+  "h": SheetActions.moveLeftAndSelect.bind(SheetActions)
+  "l": SheetActions.moveRightAndSelect.bind(SheetActions)
+
+  "esc": UI.exitVisualMode.bind(UI)
 
 UI.init()

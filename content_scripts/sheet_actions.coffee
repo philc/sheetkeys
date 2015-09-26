@@ -46,6 +46,9 @@ window.SheetActions =
   selectColumn: ->
     UI.typeKey(KeyboardUtils.keyCodes.space, control: true)
 
+  # Assuming a row is selected, just select the first cell in that row.
+  unselectRow: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow)
+
   #
   # Movement
   #
@@ -53,6 +56,11 @@ window.SheetActions =
   moveDown: -> UI.typeKey(KeyboardUtils.keyCodes.downArrow)
   moveLeft: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow)
   moveRight: -> UI.typeKey(KeyboardUtils.keyCodes.rightArrow)
+
+  moveDownAndSelect: -> UI.typeKey(KeyboardUtils.keyCodes.downArrow, shift: true)
+  moveUpAndSelect: -> UI.typeKey(KeyboardUtils.keyCodes.upArrow, shift: true)
+  moveLeftAndSelect: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow, shift: true)
+  moveRightAndSelect: -> UI.typeKey(KeyboardUtils.keyCodes.rightArrow, shift: true)
 
   #
   # Row movement
