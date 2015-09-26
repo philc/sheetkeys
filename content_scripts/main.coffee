@@ -4,7 +4,7 @@ window.UI =
   mode: "normal" # One of "normal" or "insert".
   # Keys which were typed recently
   keyQueue: []
-  # A map of comma-separated keys which are prefixes to the user's bound keybindings.
+  # A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound keybindings.
   keyBindingPrefixes: null
   richTextEditorId: "waffle-rich-text-editor"
 
@@ -30,8 +30,10 @@ window.UI =
     console.log "test command executed"
 
   setMode: (mode) ->
-    console.log "Entering #{mode} mode." if mode != @mode
+    return if @mode == mode
+    console.log "Entering #{mode} mode."
     @mode = mode
+    @keyQueue = []
 
   # We inject the page_script into the page so that we can simulate keypress events, which must be done by a
   # page script, and not a content script.
@@ -90,11 +92,13 @@ window.UI =
   # Returns a map of keyString =>
   buildKeyBindingPrefixes: ->
     prefixes = {}
-    for keyString of keyBindings
-      keys = keyString.split(",")
-      for i in [0..keys.length]
-        keyString = keys.slice(0, i+1).join(",")
-        prefixes[keyString] = true
+    for mode of keyBindings
+      prefixes[mode] = {}
+      for keyString of keyBindings
+        keys = keyString.split(",")
+        for i in [0..keys.length]
+          keyString = keys.slice(0, i+1).join(",")
+          prefixes[mode][keyString] = true
     prefixes
 
   cancelEvent: (e) ->
@@ -118,18 +122,20 @@ window.UI =
 
     @keyQueue.push(keyString)
     @keyQueue.shift() if @keyQueue.length > @maxBindingLength
+    modeBindings = keyBindings[@mode] || []
+    modePrefixes = @keyBindingPrefixes[@mode] || []
     # See if a command matches the typed key sequence, and execute it.
     # TODO(philc): Consider executing a simulated keypress on the next frame.
     for length in [1..@maxBindingLength]
       for i in [1..length]
         keySequence = @keyQueue.slice(@keyQueue.length - i, @keyQueue.length).join(",")
-        if fn = keyBindings[keySequence]
+        if fn = modeBindings[keySequence]
           @keyQueue = []
           @cancelEvent(e)
           fn()
           return
         # If this key could be part of one of the bound key bindings, don't pass it through to the page.
-        else if @keyBindingPrefixes[keySequence]
+        else if modePrefixes[keySequence]
           @cancelEvent(e)
     null
 
@@ -147,28 +153,29 @@ window.UI =
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
-  # Movement
-  "k": SheetActions.moveUp.bind(SheetActions)
-  "j": SheetActions.moveDown.bind(SheetActions)
-  "h": SheetActions.moveLeft.bind(SheetActions)
-  "l": SheetActions.moveRight.bind(SheetActions)
+  "normal":
+    # Movement
+    "k": SheetActions.moveUp.bind(SheetActions)
+    "j": SheetActions.moveDown.bind(SheetActions)
+    "h": SheetActions.moveLeft.bind(SheetActions)
+    "l": SheetActions.moveRight.bind(SheetActions)
 
-  # Row movement
-  "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
-  "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
-  "<C-H>": SheetActions.moveColumnsLeft.bind(SheetActions)
-  "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
+    # Row movement
+    "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
+    "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
+    "<C-H>": SheetActions.moveColumnsLeft.bind(SheetActions)
+    "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
 
-  # Editing
-  "i": UI.enterInsertMode.bind(UI)
-  "a": UI.appendInsertMode.bind(UI)
-  "t": UI.debugOutputCommand.bind(UI)
-  "u": SheetActions.undo.bind(SheetActions)
-  "<C-r>": SheetActions.redo.bind(SheetActions)
-  "o": SheetActions.openRowBelow.bind(SheetActions)
-  "O": SheetActions.openRowAbove.bind(SheetActions)
-  "d,d": SheetActions.deleteRows.bind(SheetActions)
-  "x": SheetActions.clear.bind(SheetActions)
-  "c,c": SheetActions.changeCell.bind(SheetActions)
+    # Editing
+    "i": UI.enterInsertMode.bind(UI)
+    "a": UI.appendInsertMode.bind(UI)
+    "t": UI.debugOutputCommand.bind(UI)
+    "u": SheetActions.undo.bind(SheetActions)
+    "<C-r>": SheetActions.redo.bind(SheetActions)
+    "o": SheetActions.openRowBelow.bind(SheetActions)
+    "O": SheetActions.openRowAbove.bind(SheetActions)
+    "d,d": SheetActions.deleteRows.bind(SheetActions)
+    "x": SheetActions.clear.bind(SheetActions)
+    "c,c": SheetActions.changeCell.bind(SheetActions)
 
 UI.init()
