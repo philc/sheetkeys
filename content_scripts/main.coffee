@@ -114,12 +114,6 @@ window.UI =
 
     return unless keyString # Ignore key presses which are just modifiers.
 
-    if @mode == "insert"
-      if keyString == "esc"
-        @cancelEvent(e)
-        @exitInsertMode()
-      return
-
     @keyQueue.push(keyString)
     @keyQueue.shift() if @keyQueue.length > @maxBindingLength
     modeBindings = keyBindings[@mode] || []
@@ -177,5 +171,10 @@ keyBindings =
     "d,d": SheetActions.deleteRows.bind(SheetActions)
     "x": SheetActions.clear.bind(SheetActions)
     "c,c": SheetActions.changeCell.bind(SheetActions)
+
+  "insert":
+    # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
+    # people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
+    "esc": SheetActions.commitCellChanges.bind(SheetActions)
 
 UI.init()

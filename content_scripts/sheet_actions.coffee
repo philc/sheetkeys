@@ -92,3 +92,8 @@ window.SheetActions =
   changeCell: ->
     @clear()
     UI.typeKey(KeyboardUtils.keyCodes.enter)
+
+  commitCellChanges: ->
+    UI.typeKey(KeyboardUtils.keyCodes.enter)
+    # Enter in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
+    UI.typeKey(KeyboardUtils.keyCodes.upArrow)
