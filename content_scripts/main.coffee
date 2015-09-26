@@ -1,7 +1,9 @@
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 3
-  mode: "normal" # One of "normal" or "insert".
+  # One of [normal, insert, disabled]. "insert" mode is for editing a cell's contents. "disabled" is when the
+  # cursor is on some other form field in Sheets, like the find dialog.
+  mode: "normal"
   # Keys which were typed recently
   keyQueue: []
   # A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound keybindings.
@@ -50,11 +52,10 @@ window.UI =
   onFocus: (e) ->
     @setupEditor() unless @editor
     el = event.target
-    if el.id != @richTextEditorId && @isEditable(el)
-      @setMode("insert")
-
-  onBlur: (e) ->
-    @setMode("insert") if @mode == "insert"
+    if el.id == @richTextEditorId
+      @setMode("normal") if @mode == "disabled"
+    else if @isEditable(el)
+      @setMode("disabled")
 
   setupEditor: ->
     unless @editor
@@ -82,7 +83,6 @@ window.UI =
     return unless (self == top)
     @injectPageScript()
     window.addEventListener("focus", ((e) => @onFocus(e)), true)
-    window.addEventListener("blur", ((e) => @onBlur(e)), true)
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
