@@ -15,7 +15,7 @@ simulateKeyEvent = (eventType, el, args) ->
   event.initKeyboardEvent(eventType, true, true, document.defaultView, "Enter",
     args.mods.meta, args.mods.control, false, args.mods.shift, false, args.keyCode, args.keyCode)
   event.keyCodeVal = args.keyCode
-  console.log "Simulating keyboard event:", args.keyCode, args, event
+  # console.log "Simulating keyboard event:", args.keyCode, args, event
   el.dispatchEvent(event)
 
 jsonEl = document.createElement("div")

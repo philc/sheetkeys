@@ -103,10 +103,8 @@ window.UI =
 
   onKeydown: (e) ->
     keyString = KeyboardUtils.getKeyString(e)
-    console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
-    if @ignoreKeys
-      console.log "ignoring"
-      return
+    # console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
+    return if @ignoreKeys
 
     return unless keyString # Ignore key presses which are just modifiers.
 
