@@ -1,10 +1,11 @@
 window.UI =
-  keyQueue: []
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
-  maxBindingLength: 2
+  maxBindingLength: 3
   mode: "normal" # One of "normal" or "insert".
   # Keys which were typed recently
   keyQueue: []
+  # A map of comma-separated keys which are prefixes to the user's bound keybindings.
+  keyBindingPrefixes: null
   richTextEditorId: "waffle-rich-text-editor"
 
   enterInsertMode: ->
@@ -84,6 +85,18 @@ window.UI =
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
 
+    @keyBindingPrefixes = @buildKeyBindingPrefixes()
+
+  # Returns a map of keyString =>
+  buildKeyBindingPrefixes: ->
+    prefixes = {}
+    for keyString of keyBindings
+      keys = keyString.split(",")
+      for i in [0..keys.length]
+        keyString = keys.slice(0, i+1).join(",")
+        prefixes[keyString] = true
+    prefixes
+
   cancelEvent: (e) ->
     e.preventDefault()
     e.stopPropagation()
@@ -115,6 +128,9 @@ window.UI =
           @cancelEvent(e)
           fn()
           return
+        # If this key could be part of one of the bound key bindings, don't pass it through to the page.
+        else if @keyBindingPrefixes[keySequence]
+          @cancelEvent(e)
     null
 
   typeKey: (keyCode, modifiers) ->
@@ -127,7 +143,6 @@ window.UI =
       JSON.stringify({keyCode: keyCode, mods: modifiers})
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}))
     @ignoreKeys = false
-
 
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
@@ -145,7 +160,6 @@ keyBindings =
   "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
 
   # Editing
-  # TODO(philc): Support multi-letter commands, like d,d
   "i": UI.enterInsertMode.bind(UI)
   "a": UI.appendInsertMode.bind(UI)
   "t": UI.debugOutputCommand.bind(UI)
@@ -153,7 +167,7 @@ keyBindings =
   "<C-r>": SheetActions.redo.bind(SheetActions)
   "o": SheetActions.openRowBelow.bind(SheetActions)
   "O": SheetActions.openRowAbove.bind(SheetActions)
-  "d": SheetActions.deleteRows.bind(SheetActions)
+  "d,d": SheetActions.deleteRows.bind(SheetActions)
   "x": SheetActions.clear.bind(SheetActions)
 
 UI.init()
