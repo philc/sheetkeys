@@ -90,7 +90,8 @@ window.UI =
     prefixes = {}
     for mode of keyBindings
       prefixes[mode] = {}
-      for keyString of keyBindings
+      modeKeyBindings = keyBindings[mode]
+      for keyString of modeKeyBindings
         keys = keyString.split(",")
         for i in [0..keys.length]
           keyString = keys.slice(0, i+1).join(",")
