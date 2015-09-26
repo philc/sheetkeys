@@ -1,4 +1,5 @@
 window.KeyboardUtils =
+  # TODO(philc): keyNames should just be the inverse of this map.
   keyCodes:
     backspace: 8
     tab: 9
@@ -56,8 +57,7 @@ window.KeyboardUtils =
     for mod in modifiers
       keyString = mod + "-" + keyString
 
-    if (modifiers.length > 0 || keyString.length > 1)
-      keyString = "<" + keyString + ">"
+    keyString = "<#{keyString}>" if (modifiers.length > 0)
     keyString
 
   getKeyChar: (event) ->
