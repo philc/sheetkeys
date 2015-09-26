@@ -170,6 +170,10 @@ keyBindings =
     "v": UI.enterVisualMode.bind(UI)
     "V": UI.enterVisualLineMode.bind(UI)
 
+    # Tabs
+    ">,>": SheetActions.moveTabRight.bind(SheetActions)
+    "<,<": SheetActions.moveTabLeft.bind(SheetActions)
+
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
     # people used to Vim. Now ESC will save your cell edits and put you back in normal mode.

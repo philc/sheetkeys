@@ -31,13 +31,13 @@ window.SheetActions =
         return menuItem
     null
 
-  click: (buttonCaption) -> KeyboardUtils.simulateClick(@getButton(buttonCaption))
+  clickMenu: (buttonCaption) -> KeyboardUtils.simulateClick(@getButton(buttonCaption))
 
-  deleteRows: -> @click(@buttons.deleteRow)
+  deleteRows: -> @clickMenu(@buttons.deleteRow)
 
   insertRowsBelow: (n) ->
     for i in [0..n]
-      @click(@buttons.rowBelow)
+      @clickMenu(@buttons.rowBelow)
 
   selectRow: ->
     # TODO(philc): Remove this circular dependency
@@ -67,34 +67,34 @@ window.SheetActions =
   #
   moveRowsUp: ->
     @selectRow()
-    @click(@buttons.moveRowUp)
+    @clickMenu(@buttons.moveRowUp)
 
   moveRowsDown: ->
     @selectRow()
-    @click(@buttons.moveRowDown)
+    @clickMenu(@buttons.moveRowDown)
 
   moveColumnsLeft: ->
     @selectColumn()
-    @click(@buttons.moveColumnLeft)
+    @clickMenu(@buttons.moveColumnLeft)
 
   moveColumnsRight: ->
     @selectColumn()
-    @click(@buttons.moveColumnRight)
+    @clickMenu(@buttons.moveColumnRight)
 
   #
   # Editing
   #
-  undo: -> @click(@buttons.undo)
-  redo: -> @click(@buttons.redo)
+  undo: -> @clickMenu(@buttons.undo)
+  redo: -> @clickMenu(@buttons.redo)
 
-  clear: -> @click(@buttons.deleteValues)
+  clear: -> @clickMenu(@buttons.deleteValues)
 
   openRowBelow: ->
-    @click(@buttons.rowBelow)
+    @clickMenu(@buttons.rowBelow)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
   openRowAbove: ->
-    @click(@buttons.rowAbove)
+    @clickMenu(@buttons.rowAbove)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
   changeCell: ->
@@ -123,3 +123,33 @@ window.SheetActions =
     UI.typeKey(KeyboardUtils.keyCodes.enter)
     # Enter in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
     UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+
+  #
+  # Tabs
+  #
+  moveTabRight: -> @clickTabButton("Move right")
+  moveTabLeft: -> @clickTabButton("Move left")
+
+  clickTabButton: (buttonCaption) ->
+    menu = document.querySelector(".docs-sheet-tab-menu")
+    # This tab menu element gets created the first time the user clicks on it, so it may not yet be available
+    # in the DOM.
+    @activateTabMenu() unless menu
+    menuItems = document.querySelectorAll(".docs-sheet-tab-menu .goog-menuitem")
+    result = null
+    for item in menuItems
+      if item.innerText.indexOf(buttonCaption) == 0
+        result = item
+        break
+    unless result
+      console.log "Couldn't find a tab menu item with the caption #{buttonCaption}"
+      return
+    KeyboardUtils.simulateClick(result)
+
+  # Shows and then hides this the tab menu for the currently selected tab.
+  # This has the side effect of forcing Sheets to create the menu if it hasn't yet been created.
+  activateTabMenu: ->
+    menuButton = document.querySelector(".docs-sheet-active-tab .docs-icon-arrow-dropdown")
+    # Show and then hide the tab menu.
+    KeyboardUtils.simulateClick(menuButton)
+    KeyboardUtils.simulateClick(menuButton)
