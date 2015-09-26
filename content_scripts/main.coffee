@@ -17,10 +17,6 @@ window.UI =
   keyBindingPrefixes: null
   richTextEditorId: "waffle-rich-text-editor"
 
-  # This is for debugging purposes. TODO(philc): Delete this.
-  debugOutputCommand: ->
-    console.log "test command executed"
-
   setMode: (mode) ->
     return if @mode == mode
     console.log "Entering #{mode} mode."
@@ -163,7 +159,6 @@ keyBindings =
     # Editing
     "i": SheetActions.editCell.bind(SheetActions)
     "a": SheetActions.editCellAppend.bind(SheetActions)
-    "t": UI.debugOutputCommand.bind(UI)
     "u": SheetActions.undo.bind(SheetActions)
     "<C-r>": SheetActions.redo.bind(SheetActions)
     "o": SheetActions.openRowBelow.bind(SheetActions)
