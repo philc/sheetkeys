@@ -9,6 +9,8 @@ window.KeyboardUtils =
     ctrlKey: 17
     esc: 27
     space: 32
+    pageUp: 33
+    pageDown: 34
     end: 35
     home: 36
     leftArrow: 37

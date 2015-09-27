@@ -170,6 +170,10 @@ keyBindings =
     "v": UI.enterVisualMode.bind(UI)
     "V": UI.enterVisualLineMode.bind(UI)
 
+    # Scrolling
+    "<C-d>": SheetActions.scrollHalfPageDown.bind(SheetActions)
+    "<C-u>": SheetActions.scrollHalfPageUp.bind(SheetActions)
+
     # Tabs
     ">,>": SheetActions.moveTabRight.bind(SheetActions)
     "<,<": SheetActions.moveTabLeft.bind(SheetActions)
