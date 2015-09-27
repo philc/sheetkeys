@@ -173,6 +173,8 @@ keyBindings =
     # Tabs
     ">,>": SheetActions.moveTabRight.bind(SheetActions)
     "<,<": SheetActions.moveTabLeft.bind(SheetActions)
+    "g,t": SheetActions.nextTab.bind(SheetActions)
+    "g,T": SheetActions.prevTab.bind(SheetActions)
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for

@@ -127,8 +127,26 @@ window.SheetActions =
   #
   # Tabs
   #
+  getTabEls: -> document.querySelectorAll(".docs-sheet-tab")
+  getActiveTabIndex: ->
+    for tab, i in @getTabEls()
+      return i if tab.classList.contains("docs-sheet-active-tab")
+    null
+
   moveTabRight: -> @clickTabButton("Move right")
   moveTabLeft: -> @clickTabButton("Move left")
+
+  prevTab: ->
+    tabs = @getTabEls()
+    prev = @getActiveTabIndex() - 1
+    return unless prev >= 0
+    KeyboardUtils.simulateClick(tabs[prev])
+
+  nextTab: ->
+    tabs = @getTabEls()
+    next = @getActiveTabIndex() + 1
+    return unless next < tabs.length
+    KeyboardUtils.simulateClick(tabs[next])
 
   clickTabButton: (buttonCaption) ->
     menu = document.querySelector(".docs-sheet-tab-menu")
@@ -146,8 +164,8 @@ window.SheetActions =
       return
     KeyboardUtils.simulateClick(result)
 
-  # Shows and then hides this the tab menu for the currently selected tab.
-  # This has the side effect of forcing Sheets to create the menu if it hasn't yet been created.
+  # Shows and then hides the tab menu for the currently selected tab.
+  # This has the side effect of forcing Sheets to create the menu DOM element if it hasn't yet been created.
   activateTabMenu: ->
     menuButton = document.querySelector(".docs-sheet-active-tab .docs-icon-arrow-dropdown")
     # Show and then hide the tab menu.
