@@ -11,9 +11,9 @@ simulateKeyEvent = (eventType, el, args) ->
   event = document.createEvent("KeyboardEvent")
   Object.defineProperty(event, "keyCode", get : -> @keyCodeVal)
   Object.defineProperty(event, "which", get: -> @keyCodeVal)
-  # eventName, canBubble, canceable, view, keyIdentifier string, ?, meta, control, ?, shift, ?, keyCode, ?
-  event.initKeyboardEvent(eventType, true, true, document.defaultView, "Enter",
-    args.mods.meta, args.mods.control, false, args.mods.shift, false, args.keyCode, args.keyCode)
+  # eventName, canBubble, canceable, view, keyIdentifier string, ?, control, ?, shift, meta, keyCode, ?
+  event.initKeyboardEvent(eventType, true, true, document.defaultView, "",
+    false, args.mods.control, null, args.mods.shift, args.mods.meta, args.keyCode, args.keyCode)
   event.keyCodeVal = args.keyCode
   # console.log "Simulating keyboard event:", args.keyCode, args, event
   el.dispatchEvent(event)
