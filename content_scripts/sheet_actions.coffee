@@ -125,6 +125,34 @@ window.SheetActions =
     UI.typeKey(KeyboardUtils.keyCodes.upArrow)
 
   #
+  # Scrolling
+  #
+
+  # In px. Measured on a mac with Chrome's zoom level at 100%.
+  rowHeight: -> 17
+
+  # The approximate number of visible rows. It's probably possible to compute this precisely.
+  visibleRowCount: ->
+     Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / @rowHeight())
+
+  # NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
+  scrollHalfPageDown: ->
+    for _ in [0..(@visibleRowCount() / 2)]
+      UI.typeKey(KeyboardUtils.keyCodes.downArrow)
+
+  scrollHalfPageUp: ->
+    for _ in [0..(@visibleRowCount() / 2)]
+      UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+
+  scrollToTop: ->
+    # TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
+    # those platforms?
+    UI.typeKey(KeyboardUtils.keyCodes.home, meta: true)
+
+  scrollToBottom: ->
+    UI.typeKey(KeyboardUtils.keyCodes.end, meta: true)
+
+  #
   # Tabs
   #
   getTabEls: -> document.querySelectorAll(".docs-sheet-tab")

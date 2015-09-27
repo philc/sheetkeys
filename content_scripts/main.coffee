@@ -173,6 +173,8 @@ keyBindings =
     # Scrolling
     "<C-d>": SheetActions.scrollHalfPageDown.bind(SheetActions)
     "<C-u>": SheetActions.scrollHalfPageUp.bind(SheetActions)
+    "g,g": SheetActions.scrollToTop.bind(SheetActions)
+    "G": SheetActions.scrollToBottom.bind(SheetActions)
 
     # Tabs
     ">,>": SheetActions.moveTabRight.bind(SheetActions)
