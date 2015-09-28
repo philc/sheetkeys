@@ -173,7 +173,7 @@ window.UI =
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
   "normal":
-    # Movement
+    # Cursor movement
     "k": SheetActions.moveUp.bind(SheetActions)
     "j": SheetActions.moveDown.bind(SheetActions)
     "h": SheetActions.moveLeft.bind(SheetActions)
@@ -213,8 +213,11 @@ keyBindings =
     "g,T": SheetActions.prevTab.bind(SheetActions)
 
     # Formatting
-    ";,w,w": SheetActions.setWrap.bind(SheetActions)
-    ";,w,o": SheetActions.setOverflow.bind(SheetActions)
+    ";,w,w": SheetActions.wrap.bind(SheetActions)
+    ";,w,o": SheetActions.overflow.bind(SheetActions)
+    ";,a,l": SheetActions.alignLeft.bind(SheetActions)
+    ";,a,c": SheetActions.alignCenter.bind(SheetActions)
+    ";,a,r": SheetActions.alignRight.bind(SheetActions)
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for

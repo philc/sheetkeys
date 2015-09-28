@@ -12,8 +12,11 @@ window.SheetActions =
     redo: "Redo"
 
   buttons:
-    wrap: "Wrap"
+    center: "Center"
+    left: "Left"
+    right: "Right"
     overflow: "Overflow"
+    wrap: "Wrap"
 
   # A mapping of button-caption to DOM element.
   menuItemElements: {}
@@ -208,5 +211,8 @@ window.SheetActions =
   #
   # Formatting
   #
-  setWrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
-  setOverflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
+  wrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
+  overflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
+  alignLeft: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.left))
+  alignCenter: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.center))
+  alignRight: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.right))
