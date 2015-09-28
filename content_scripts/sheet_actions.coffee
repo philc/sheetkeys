@@ -11,8 +11,14 @@ window.SheetActions =
     undo: "Undo"
     redo: "Redo"
 
+  buttons:
+    wrap: "Wrap"
+    overflow: "Overflow"
+
   # A mapping of button-caption to DOM element.
   menuItemElements: {}
+
+  getToolbarButton: (caption) -> document.querySelector("*[aria-label='#{caption}']")
 
   getMenuItem: (caption) ->
     item = @menuItemElements[caption]
@@ -198,3 +204,9 @@ window.SheetActions =
     # Show and then hide the tab menu.
     KeyboardUtils.simulateClick(menuButton)
     KeyboardUtils.simulateClick(menuButton)
+
+  #
+  # Formatting
+  #
+  setWrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
+  setOverflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
