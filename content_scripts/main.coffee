@@ -41,6 +41,26 @@ window.UI =
     script.src = chrome.extension.getURL('page_scripts/page_script.js')
     document.documentElement.appendChild(script)
 
+  # This makes the chrome at the top auto-hide onmouseover.
+  # The chrome takes up a lot of screen real estate and doesn't add much utility when you have shortcuts for
+  # everything, and the sheet's name is already shown in the tab title.
+  # TODO(philc): Expose this as a preference.
+  enableAutoHideChrome: ->
+    css = "
+      #docs-chrome {
+        height: 5px;
+        background-color: #aaa;
+        overflow: hidden;
+      }
+      #docs-chrome:hover {
+        height: auto;
+        background-color: white;
+      }"
+    style = document.createElement("style")
+    style.type = "text/css"
+    style.appendChild(document.createTextNode(css))
+    document.head.appendChild(style)
+
   isEditable: (el) ->
     tagName = el.tagName?.toLowerCase() # Note that the window object doesn't have a tagname.
     el.isContentEditable || tagName == "input" || tagName == "textarea"
@@ -82,8 +102,8 @@ window.UI =
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
-
     @keyBindingPrefixes = @buildKeyBindingPrefixes()
+    window.addEventListener("DOMContentLoaded", => @enableAutoHideChrome())
 
   # Returns a map of keyString =>
   buildKeyBindingPrefixes: ->
