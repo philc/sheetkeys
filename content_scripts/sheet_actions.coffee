@@ -137,11 +137,11 @@ window.SheetActions =
 
   # NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown: ->
-    for _ in [0..(@visibleRowCount() / 2)]
+    for _ in [0..(Math.floor(@visibleRowCount() / 2))]
       UI.typeKey(KeyboardUtils.keyCodes.downArrow)
 
   scrollHalfPageUp: ->
-    for _ in [0..(@visibleRowCount() / 2)]
+    for _ in [0..(Math.floor(@visibleRowCount() / 2))]
       UI.typeKey(KeyboardUtils.keyCodes.upArrow)
 
   scrollToTop: ->
