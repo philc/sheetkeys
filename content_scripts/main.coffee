@@ -30,6 +30,10 @@ window.UI =
     SheetActions.selectRow()
     @setMode("visual")
 
+  enterVisualColumnMode: ->
+    SheetActions.selectColumn()
+    @setMode("visual")
+
   exitVisualMode: ->
     SheetActions.unselectRow()
     @setMode("normal")
@@ -199,6 +203,7 @@ keyBindings =
     # Selection
     "v": UI.enterVisualMode.bind(UI)
     "V": UI.enterVisualLineMode.bind(UI)
+    "<A-v>": UI.enterVisualColumnMode.bind(UI)
 
     # Scrolling
     "<C-d>": SheetActions.scrollHalfPageDown.bind(SheetActions)
