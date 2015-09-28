@@ -106,7 +106,9 @@ window.UI =
     @keyBindingPrefixes = @buildKeyBindingPrefixes()
     window.addEventListener("DOMContentLoaded", => @enableAutoHideChrome())
 
-  # Returns a map of keyString =>
+  # Returns a map of (partial keyString) => is_bound?
+  # Note that the keys only include partial keystrings for bindings. So the binding "dap" will add "d" and
+  # "da" keys to this map, but not "dap".
   buildKeyBindingPrefixes: ->
     prefixes = {}
     for mode of keyBindings
@@ -114,7 +116,7 @@ window.UI =
       modeKeyBindings = keyBindings[mode]
       for keyString of modeKeyBindings
         keys = keyString.split(",")
-        for i in [0..keys.length]
+        for i in [0...keys.length-1]
           keyString = keys.slice(0, i+1).join(",")
           prefixes[mode][keyString] = true
     prefixes
@@ -134,19 +136,21 @@ window.UI =
     @keyQueue.shift() if @keyQueue.length > @maxBindingLength
     modeBindings = keyBindings[@mode] || []
     modePrefixes = @keyBindingPrefixes[@mode] || []
-    # See if a command matches the typed key sequence, and execute it.
-    # TODO(philc): Consider executing a simulated keypress on the next frame.
-    for length in [1..@maxBindingLength]
-      for i in [1..length]
-        keySequence = @keyQueue.slice(@keyQueue.length - i, @keyQueue.length).join(",")
-        if fn = modeBindings[keySequence]
-          @keyQueue = []
-          @cancelEvent(e)
-          fn()
-          return
-        # If this key could be part of one of the bound key bindings, don't pass it through to the page.
-        else if modePrefixes[keySequence]
-          @cancelEvent(e)
+    # See if a bound command matches the typed key sequence. If so, execute it.
+    # Prioritize longer bindings over shorter bindings.
+    for i in [Math.min(@maxBindingLength, @keyQueue.length)..1]
+      keySequence = @keyQueue.slice(@keyQueue.length - i, @keyQueue.length).join(",")
+      # If this key could be part of one of the bound key bindings, don't pass it through to the page.
+      # Also, if some longer binding partically matches this key sequence, then wait for more keys, and
+      # don't immediately apply a shorter binding which also matches this key sequence.
+      if modePrefixes[keySequence]
+        @cancelEvent(e)
+        return
+      else if fn = modeBindings[keySequence]
+        @keyQueue = []
+        @cancelEvent(e)
+        fn()
+        return
     null
 
   typeKey: (keyCode, modifiers) ->
