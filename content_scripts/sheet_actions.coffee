@@ -13,6 +13,7 @@ window.SheetActions =
 
   buttons:
     center: "Center"
+    clip: "Clip"
     left: "Left"
     right: "Right"
     overflow: "Overflow"
@@ -213,6 +214,7 @@ window.SheetActions =
   #
   wrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
   overflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
+  clip: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.clip))
   alignLeft: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.left))
   alignCenter: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.center))
   alignRight: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.right))

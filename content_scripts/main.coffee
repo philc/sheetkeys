@@ -215,6 +215,7 @@ keyBindings =
     # Formatting
     ";,w,w": SheetActions.wrap.bind(SheetActions)
     ";,w,o": SheetActions.overflow.bind(SheetActions)
+    ";,w,c": SheetActions.clip.bind(SheetActions)
     ";,a,l": SheetActions.alignLeft.bind(SheetActions)
     ";,a,c": SheetActions.alignCenter.bind(SheetActions)
     ";,a,r": SheetActions.alignRight.bind(SheetActions)
