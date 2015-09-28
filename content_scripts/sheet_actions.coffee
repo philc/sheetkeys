@@ -1,5 +1,5 @@
 window.SheetActions =
-  buttons:
+  menuItems:
     deleteRow: "Delete row"
     deleteValues: "Delete values"
     rowAbove: "Row above"
@@ -12,16 +12,16 @@ window.SheetActions =
     redo: "Redo"
 
   # A mapping of button-caption to DOM element.
-  buttonElements: {}
+  menuItemElements: {}
 
-  getButton: (caption) ->
-    button = @buttonElements[caption]
-    return button if button
-    button = @findMenuItem(caption)
-    unless button
-      console.log("Warning: could not find button with caption #{caption}")
+  getMenuItem: (caption) ->
+    item = @menuItemElements[caption]
+    return item if item
+    item = @findMenuItem(caption)
+    unless item
+      console.log("Warning: could not find menu item with caption #{caption}")
       return null
-    return @buttonElements[caption] = button
+    return @menuItemElements[caption] = item
 
   findMenuItem: (caption) ->
     menuItems = document.querySelectorAll(".goog-menuitem")
@@ -31,10 +31,10 @@ window.SheetActions =
         return menuItem
     null
 
-  clickMenu: (buttonCaption) -> KeyboardUtils.simulateClick(@getButton(buttonCaption))
+  clickMenu: (itemCaption) -> KeyboardUtils.simulateClick(@getMenuItem(itemCaption))
 
   deleteRows: ->
-     @clickMenu(@buttons.deleteRow)
+     @clickMenu(@menuItems.deleteRow)
      # Clear any row-level selections we might've had.
      @unselectRow()
 
@@ -66,34 +66,34 @@ window.SheetActions =
   #
   moveRowsUp: ->
     @selectRow()
-    @clickMenu(@buttons.moveRowUp)
+    @clickMenu(@menuItems.moveRowUp)
 
   moveRowsDown: ->
     @selectRow()
-    @clickMenu(@buttons.moveRowDown)
+    @clickMenu(@menuItems.moveRowDown)
 
   moveColumnsLeft: ->
     @selectColumn()
-    @clickMenu(@buttons.moveColumnLeft)
+    @clickMenu(@menuItems.moveColumnLeft)
 
   moveColumnsRight: ->
     @selectColumn()
-    @clickMenu(@buttons.moveColumnRight)
+    @clickMenu(@menuItems.moveColumnRight)
 
   #
   # Editing
   #
-  undo: -> @clickMenu(@buttons.undo)
-  redo: -> @clickMenu(@buttons.redo)
+  undo: -> @clickMenu(@menuItems.undo)
+  redo: -> @clickMenu(@menuItems.redo)
 
-  clear: -> @clickMenu(@buttons.deleteValues)
+  clear: -> @clickMenu(@menuItems.deleteValues)
 
   openRowBelow: ->
-    @clickMenu(@buttons.rowBelow)
+    @clickMenu(@menuItems.rowBelow)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
   openRowAbove: ->
-    @clickMenu(@buttons.rowAbove)
+    @clickMenu(@menuItems.rowAbove)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
 
   changeCell: ->
