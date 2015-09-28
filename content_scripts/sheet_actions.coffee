@@ -33,11 +33,10 @@ window.SheetActions =
 
   clickMenu: (buttonCaption) -> KeyboardUtils.simulateClick(@getButton(buttonCaption))
 
-  deleteRows: -> @clickMenu(@buttons.deleteRow)
-
-  insertRowsBelow: (n) ->
-    for i in [0..n]
-      @clickMenu(@buttons.rowBelow)
+  deleteRows: ->
+     @clickMenu(@buttons.deleteRow)
+     # Clear any row-level selections we might've had.
+     @unselectRow()
 
   selectRow: ->
     # TODO(philc): Remove this circular dependency
@@ -46,7 +45,7 @@ window.SheetActions =
   selectColumn: ->
     UI.typeKey(KeyboardUtils.keyCodes.space, control: true)
 
-  # Assuming a row is selected, just select the first cell in that row.
+  # TODO(philc): This has the side effect of moving the selected column. For some reason, ESC doesn't work.
   unselectRow: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow)
 
   #

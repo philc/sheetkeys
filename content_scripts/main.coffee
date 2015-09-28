@@ -24,6 +24,7 @@ window.UI =
     @keyQueue = []
 
   enterVisualMode: -> @setMode("visual")
+
   # In this mode, entire lines are selected.
   enterVisualLineMode: ->
     SheetActions.selectRow()
@@ -159,6 +160,11 @@ window.UI =
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}))
     @ignoreKeys = false
 
+  deleteRows: ->
+    SheetActions.deleteRows()
+    # In case we're in visual mode, exit that mode and return to normal mode.
+    @setMode("normal")
+
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
@@ -182,7 +188,7 @@ keyBindings =
     "<C-r>": SheetActions.redo.bind(SheetActions)
     "o": SheetActions.openRowBelow.bind(SheetActions)
     "O": SheetActions.openRowAbove.bind(SheetActions)
-    "d,d": SheetActions.deleteRows.bind(SheetActions)
+    "d,d": UI.deleteRows.bind(UI)
     "x": SheetActions.clear.bind(SheetActions)
     "c,c": SheetActions.changeCell.bind(SheetActions)
 
