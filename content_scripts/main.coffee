@@ -216,6 +216,8 @@ keyBindings =
     "<,<": SheetActions.moveTabLeft.bind(SheetActions)
     "g,t": SheetActions.nextTab.bind(SheetActions)
     "g,T": SheetActions.prevTab.bind(SheetActions)
+    "J": SheetActions.prevTab.bind(SheetActions)
+    "K": SheetActions.nextTab.bind(SheetActions)
 
     # Formatting
     ";,w,w": SheetActions.wrap.bind(SheetActions)
