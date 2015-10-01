@@ -249,6 +249,10 @@ keyBindings =
     ";,a,l": SheetActions.alignLeft.bind(SheetActions)
     ";,a,c": SheetActions.alignCenter.bind(SheetActions)
     ";,a,r": SheetActions.alignRight.bind(SheetActions)
+    ";,c,w": SheetActions.colorCellWhite.bind(SheetActions)
+    ";,c,y": SheetActions.colorCellLightYellow3.bind(SheetActions)
+    ";,c,b": SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions)
+    ";,c,p": SheetActions.colorCellLightPurple.bind(SheetActions)
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for

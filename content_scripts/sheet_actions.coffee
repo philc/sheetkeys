@@ -20,6 +20,12 @@ window.SheetActions =
     overflow: "Overflow"
     wrap: "Wrap"
 
+  colors:
+    white: "white"
+    lightYellow3: "light yellow 3"
+    lightCornflowBlue3: "light cornflower blue 3"
+    lightPurple3: "light purple 3"
+
   # A mapping of button-caption to DOM element.
   menuItemElements: {}
 
@@ -41,6 +47,19 @@ window.SheetActions =
       if (label && label.indexOf(caption) == 0)
         return menuItem
     null
+
+  # Returns the color palette button corresponding to the given color name.
+  # type: either "font" or "cell", depending on which color you want to change.
+  getColorButton: (color, type) ->
+    buttons = document.querySelectorAll("*[aria-label='#{color}']")
+    # There are 3 color palettes in the document. The first one is for fonts, the second for cell background
+    # colors. The third is for an undiscovered use.
+    switch type
+      when "font" then buttons[0]
+      when "cell" then buttons[1]
+
+  changeFontColor: (color) -> KeyboardUtils.simulateClick(@getColorButton(color, "font"))
+  changeCellColor: (color) -> KeyboardUtils.simulateClick(@getColorButton(color, "cell"))
 
   clickMenu: (itemCaption) -> KeyboardUtils.simulateClick(@getMenuItem(itemCaption))
 
@@ -237,3 +256,7 @@ window.SheetActions =
   alignLeft: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.left))
   alignCenter: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.center))
   alignRight: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.right))
+  colorCellWhite: -> @changeCellColor(@colors.white)
+  colorCellLightYellow3: -> @changeCellColor(@colors.lightYellow3)
+  colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowerBlue3)
+  colorCellLightPurple: -> @changeCellColor(@colors.lightPurple3)
