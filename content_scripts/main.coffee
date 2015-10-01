@@ -231,6 +231,9 @@ keyBindings =
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
     # people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
     "esc": SheetActions.commitCellChanges.bind(SheetActions)
+    # In form fields on Mac, C-e takes you to the end of the field. For some reason C-e doesn't work in
+    # Sheets. Here, we fix that.
+    "<C-e>": SheetActions.moveCursorToCellLineEnd.bind(SheetActions)
 
 keyBindings.visual = extend clone(keyBindings.normal),
   "j": SheetActions.moveDownAndSelect.bind(SheetActions)

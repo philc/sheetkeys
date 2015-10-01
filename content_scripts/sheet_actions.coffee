@@ -113,6 +113,7 @@ window.SheetActions =
   # Put the cursor at the beginning of the cell.
   editCell: ->
     UI.typeKey(KeyboardUtils.keyCodes.enter)
+    # Note that just typing the "home" key here doesn't work, for unknown reasons.
     @moveCursorToCellStart()
 
   editCellAppend: ->
@@ -127,6 +128,9 @@ window.SheetActions =
     range.collapse(true)
     selection.removeAllRanges()
     selection.addRange(range)
+
+  moveCursorToCellLineEnd: ->
+    UI.typeKey(KeyboardUtils.keyCodes.end)
 
   commitCellChanges: ->
     UI.typeKey(KeyboardUtils.keyCodes.enter)
