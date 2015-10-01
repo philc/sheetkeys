@@ -122,7 +122,9 @@ window.UI =
     for mode of keyBindings
       prefixes[mode] = {}
       modeKeyBindings = keyBindings[mode]
-      for keyString of modeKeyBindings
+      for keyString, action of modeKeyBindings
+        # If the bound action is null, then treat this key as unbound.
+        continue unless action
         keys = keyString.split(",")
         for i in [0...keys.length-1]
           keyString = keys.slice(0, i+1).join(",")
@@ -262,6 +264,7 @@ keyBindings.visual = extend clone(keyBindings.normal),
   "h": SheetActions.moveLeftAndSelect.bind(SheetActions)
   "l": SheetActions.moveRightAndSelect.bind(SheetActions)
   "y": SheetActions.copy.bind(SheetActions)
+  "y,y": null # Unbind "copy row", because it's superceded by "copy"
 
   "esc": UI.exitVisualMode.bind(UI)
 
