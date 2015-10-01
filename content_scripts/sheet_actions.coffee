@@ -148,6 +148,10 @@ window.SheetActions =
     @clickMenu(@menuItems.copy)
     @unselectRow()
 
+  copy: ->
+    @clickMenu(@menuItems.copy)
+    @unselectRow()
+
   #
   # Scrolling
   #

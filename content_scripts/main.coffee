@@ -261,6 +261,7 @@ keyBindings.visual = extend clone(keyBindings.normal),
   "k": SheetActions.moveUpAndSelect.bind(SheetActions)
   "h": SheetActions.moveLeftAndSelect.bind(SheetActions)
   "l": SheetActions.moveRightAndSelect.bind(SheetActions)
+  "y": SheetActions.copy.bind(SheetActions)
 
   "esc": UI.exitVisualMode.bind(UI)
 
