@@ -222,6 +222,8 @@ keyBindings =
     "x": SheetActions.clear.bind(SheetActions)
     "c,c": SheetActions.changeCell.bind(SheetActions)
     "y,y": SheetActions.copyRow.bind(SheetActions)
+    # "Yank cell"
+    "y,c": SheetActions.copy.bind(SheetActions)
 
     # Selection
     "v": UI.enterVisualMode.bind(UI)
