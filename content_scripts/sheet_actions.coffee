@@ -258,5 +258,5 @@ window.SheetActions =
   alignRight: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.right))
   colorCellWhite: -> @changeCellColor(@colors.white)
   colorCellLightYellow3: -> @changeCellColor(@colors.lightYellow3)
-  colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowerBlue3)
+  colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowBlue3)
   colorCellLightPurple: -> @changeCellColor(@colors.lightPurple3)
