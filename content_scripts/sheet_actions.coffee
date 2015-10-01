@@ -1,5 +1,6 @@
 window.SheetActions =
   menuItems:
+    copy: "Copy"
     deleteRow: "Delete row"
     deleteValues: "Delete values"
     rowAbove: "Row above"
@@ -141,6 +142,11 @@ window.SheetActions =
     UI.typeKey(KeyboardUtils.keyCodes.enter)
     # Enter in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
     UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+
+  copyRow: ->
+    @selectRow()
+    @clickMenu(@menuItems.copy)
+    @unselectRow()
 
   #
   # Scrolling
