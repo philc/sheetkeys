@@ -8,8 +8,12 @@ extend = (o, properties) ->
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 3
-  # One of [normal, insert, disabled]. "insert" mode is for editing a cell's contents. "disabled" is when the
-  # cursor is on some other form field in Sheets, like the find dialog.
+  # Mode can be one of:
+  # * normal
+  # * insert: when editing a cell's contents
+  # * disabled: when the cursor is on some other form field in Sheets, like the Find dialog.
+  # * replace: when "r" has been typed, and we're waiting for the user to type a character to replace the
+  #   cell's contents with.
   mode: "normal"
   # Keys which were typed recently
   keyQueue: []
@@ -136,6 +140,17 @@ window.UI =
 
     return unless keyString # Ignore key presses which are just modifiers.
 
+    # In replace mode, we're waiting for one character to be typed, and we will replace the cell's contents
+    # with that character and then return to normal mode.
+    if @mode == "replace"
+      if keyString == "esc"
+        @cancelEvent(e)
+        @setMode("normal")
+      else
+        SheetActions.changeCell()
+        setTimeout((=> SheetActions.commitCellChanges()), 0)
+      return
+
     @keyQueue.push(keyString)
     @keyQueue.shift() if @keyQueue.length > @maxBindingLength
     modeBindings = keyBindings[@mode] || []
@@ -173,6 +188,8 @@ window.UI =
     # In case we're in visual mode, exit that mode and return to normal mode.
     @setMode("normal")
 
+  replaceChar: -> @setMode("replace")
+
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
@@ -194,6 +211,7 @@ keyBindings =
     "a": SheetActions.editCellAppend.bind(SheetActions)
     "u": SheetActions.undo.bind(SheetActions)
     "<C-r>": SheetActions.redo.bind(SheetActions)
+    "r": UI.replaceChar.bind(UI)
     "o": SheetActions.openRowBelow.bind(SheetActions)
     "O": SheetActions.openRowAbove.bind(SheetActions)
     "s": SheetActions.insertRowBelow.bind(SheetActions)
