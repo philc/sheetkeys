@@ -98,6 +98,7 @@ window.SheetActions =
 
   clear: -> @clickMenu(@menuItems.deleteValues)
 
+  # Creates a row below and begins editing it.
   openRowBelow: ->
     @clickMenu(@menuItems.rowBelow)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
@@ -105,6 +106,10 @@ window.SheetActions =
   openRowAbove: ->
     @clickMenu(@menuItems.rowAbove)
     UI.typeKey(KeyboardUtils.keyCodes.enter)
+
+  # Like openRowBelow, but does not enter insert mode.
+  insertRowBelow: -> @clickMenu(@menuItems.rowBelow)
+  insertRowAbove: -> @clickMenu(@menuItems.rowAbove)
 
   changeCell: ->
     @clear()

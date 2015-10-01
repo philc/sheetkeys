@@ -196,6 +196,8 @@ keyBindings =
     "<C-r>": SheetActions.redo.bind(SheetActions)
     "o": SheetActions.openRowBelow.bind(SheetActions)
     "O": SheetActions.openRowAbove.bind(SheetActions)
+    "s": SheetActions.insertRowBelow.bind(SheetActions)
+    "S": SheetActions.insertRowAbove.bind(SheetActions)
     "d,d": UI.deleteRows.bind(UI)
     "x": SheetActions.clear.bind(SheetActions)
     "c,c": SheetActions.changeCell.bind(SheetActions)
