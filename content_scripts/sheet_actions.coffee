@@ -75,8 +75,18 @@ window.SheetActions =
   selectColumn: ->
     UI.typeKey(KeyboardUtils.keyCodes.space, control: true)
 
-  # TODO(philc): This has the side effect of moving the selected column. For some reason, ESC doesn't work.
-  unselectRow: -> UI.typeKey(KeyboardUtils.keyCodes.leftArrow)
+  unselectRow: ->
+    oldY = @cellCursorY()
+    # Typing any arrow key will unselect the current selection.
+    UI.typeKey(KeyboardUtils.keyCodes.downArrow)
+    # If the cursor moved after we typed our arrow key, undo this selection change.
+    if oldY != @cellCursorY()
+      UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+
+  cellCursorY: ->
+    # This is an approximate estimation of where the cell cursor is relative to the upper left corner of the
+    # sptreasheet canvas.
+    document.querySelector(".autofill-cover").getBoundingClientRect().top
 
   #
   # Movement
