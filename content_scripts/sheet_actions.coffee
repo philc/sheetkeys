@@ -20,6 +20,7 @@ window.SheetActions =
     overflow: "Overflow"
     wrap: "Wrap"
 
+  # You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
   colors:
     white: "white"
     lightYellow3: "light yellow 3"
