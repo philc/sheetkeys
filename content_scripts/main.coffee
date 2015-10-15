@@ -41,8 +41,8 @@ window.AutoHider = class
       350)
 
   onMouseLeave: ->
-    # TODO(philc):
-    # Also listen for goog-menu
+    # TODO(philc): Also listen mouseenter/leave events on .goog-menu elements, so that the chrome bar doesn't
+    # autohide if you're mousing over a menu.
     if @showTimer?
       # The user just quickly moved their mouse over the element, so don't expand it.
       clearTimeout(@showTimer)
@@ -50,7 +50,7 @@ window.AutoHider = class
     @hideTimer = setTimeout((=>
       @hideTimer = null
       @hideElement()),
-      300)
+      3000)
 
   showElement: ->
     @element.style.height = "auto"
