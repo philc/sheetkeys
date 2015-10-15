@@ -5,6 +5,61 @@ extend = (o, properties) ->
     o[key] = val
   o
 
+# This makes the chrome at the top auto-hide onmouseover.
+# The chrome takes up a lot of screen real estate and doesn't add much utility when you have shortcuts for
+# everything, and the sheet's name is already shown in the tab title.
+window.AutoHider = class
+  collapsedHeight: 7
+
+  constructor: (@elementSelector) ->
+    @injectCss()
+    window.addEventListener "DOMContentLoaded", =>
+      @element = document.querySelector(@elementSelector)
+      @element.addEventListener "mouseenter", (e) => @onMouseEnter(e)
+      @element.addEventListener "mouseleave", (e) => @onMouseLeave(e)
+
+  injectCss: ->
+    css = "
+      #{@elementSelector} {
+        height: #{@collapsedHeight}px;
+        background-color: #aaa;
+        overflow: hidden;
+      }"
+    style = document.createElement("style")
+    style.type = "text/css"
+    style.appendChild(document.createTextNode(css))
+    # document.head is not yet available in the DOM
+    document.documentElement.appendChild(style)
+
+  onMouseEnter: ->
+    if @hideTimer?
+      clearTimeout(@hideTimer)
+      return
+    @showTimer = setTimeout((=>
+      @showTimer = null
+      @showElement()),
+      350)
+
+  onMouseLeave: ->
+    # TODO(philc):
+    # Also listen for goog-menu
+    if @showTimer?
+      # The user just quickly moved their mouse over the element, so don't expand it.
+      clearTimeout(@showTimer)
+      return
+    @hideTimer = setTimeout((=>
+      @hideTimer = null
+      @hideElement()),
+      300)
+
+  showElement: ->
+    @element.style.height = "auto"
+    @element.style.backgroundColor = "white"
+
+  hideElement: ->
+    @element.style.height = "#{@collapsedHeight}px"
+    @element.style.backgroundColor = "#aaa"
+
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 3
@@ -50,26 +105,6 @@ window.UI =
     script.src = chrome.extension.getURL("page_scripts/page_script.js")
     document.documentElement.appendChild(script)
 
-  # This makes the chrome at the top auto-hide onmouseover.
-  # The chrome takes up a lot of screen real estate and doesn't add much utility when you have shortcuts for
-  # everything, and the sheet's name is already shown in the tab title.
-  # TODO(philc): Expose this as a preference.
-  enableAutoHideChrome: ->
-    css = "
-      #docs-chrome {
-        height: 5px;
-        background-color: #aaa;
-        overflow: hidden;
-      }
-      #docs-chrome:hover {
-        height: auto;
-        background-color: white;
-      }"
-    style = document.createElement("style")
-    style.type = "text/css"
-    style.appendChild(document.createTextNode(css))
-    document.head.appendChild(style)
-
   isEditable: (el) ->
     tagName = el.tagName?.toLowerCase() # Note that the window object doesn't have a tagname.
     el.isContentEditable || tagName == "input" || tagName == "textarea"
@@ -112,7 +147,7 @@ window.UI =
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
     @keyBindingPrefixes = @buildKeyBindingPrefixes()
-    window.addEventListener("DOMContentLoaded", => @enableAutoHideChrome())
+    @autoHider = new AutoHider("#docs-chrome")
 
   # Returns a map of (partial keyString) => is_bound?
   # Note that the keys only include partial keystrings for bindings. So the binding "dap" will add "d" and
