@@ -38,7 +38,7 @@ window.AutoHider = class
     @showTimer = setTimeout((=>
       @showTimer = null
       @showElement()),
-      350)
+      300)
 
   onMouseLeave: ->
     # TODO(philc): Also listen mouseenter/leave events on .goog-menu elements, so that the chrome bar doesn't
