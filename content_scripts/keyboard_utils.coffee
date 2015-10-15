@@ -103,5 +103,7 @@ window.KeyboardUtils =
     eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
     for eventName in eventSequence
       event = document.createEvent("MouseEvents");
-      event.initMouseEvent(eventName, true, true, window, 1, 0, 0, 0,0, false, false, false, false, 0, null);
+      # eventName, bubbles, cancelable, view, event-detail, screenX, screenY, clientX, clientY, ctrl, alt,
+      # shift, meta, button, relatedTarget
+      event.initMouseEvent(eventName, true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null)
       el.dispatchEvent(event);

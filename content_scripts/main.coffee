@@ -46,8 +46,8 @@ window.UI =
   # page script, and not a content script.
   # See here for docs on how to inject page scripts: http://stackoverflow.com/a/9517879/46237
   injectPageScript: ->
-    script = document.createElement('script');
-    script.src = chrome.extension.getURL('page_scripts/page_script.js')
+    script = document.createElement("script")
+    script.src = chrome.extension.getURL("page_scripts/page_script.js")
     document.documentElement.appendChild(script)
 
   # This makes the chrome at the top auto-hide onmouseover.
@@ -202,7 +202,7 @@ keyBindings =
     "h": SheetActions.moveLeft.bind(SheetActions)
     "l": SheetActions.moveRight.bind(SheetActions)
 
-    # Row movement
+    # Row & column movement
     "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
     "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
     "<C-H>": SheetActions.moveColumnsLeft.bind(SheetActions)
@@ -271,7 +271,6 @@ keyBindings.visual = extend clone(keyBindings.normal),
   "l": SheetActions.moveRightAndSelect.bind(SheetActions)
   "y": SheetActions.copy.bind(SheetActions)
   "y,y": null # Unbind "copy row", because it's superceded by "copy"
-
   "esc": UI.exitVisualMode.bind(UI)
 
 UI.init()
