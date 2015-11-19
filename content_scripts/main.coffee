@@ -36,6 +36,7 @@ window.AutoHider = class
       clearTimeout(@hideTimer)
       return
     @showTimer = setTimeout((=>
+      return if @paused
       @showTimer = null
       @showElement()),
       300)
@@ -48,6 +49,7 @@ window.AutoHider = class
       clearTimeout(@showTimer)
       return
     @hideTimer = setTimeout((=>
+      return if @paused
       @hideTimer = null
       @hideElement()),
       3000)
@@ -59,6 +61,9 @@ window.AutoHider = class
   hideElement: ->
     @element.style.height = "#{@collapsedHeight}px"
     @element.style.backgroundColor = "#aaa"
+
+  pause: -> @paused = true
+  resume: -> @paused = false
 
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
@@ -225,6 +230,14 @@ window.UI =
 
   replaceChar: -> @setMode("replace")
 
+  toggleChromeVisibility: ->
+    if @autoHider.paused
+      @autoHider.resume()
+      @autoHider.hideElement()
+    else
+      @autoHider.pause()
+      @autoHider.showElement()
+
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
@@ -288,6 +301,9 @@ keyBindings =
     ";,c,y": SheetActions.colorCellLightYellow3.bind(SheetActions)
     ";,c,b": SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions)
     ";,c,p": SheetActions.colorCellLightPurple.bind(SheetActions)
+
+    # Misc
+    ";,w,m": UI.toggleChromeVisibility.bind(UI) # Mnemonic for "window maximize"
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
