@@ -29,6 +29,12 @@ Installing from source:
 6. Click on "Load Unpacked Extension..."
 7. Select the Sheetkeys folder
 
+## Usage tips
+
+* If you're using [Vimium](https://github.com/philc/vimium), consider disabling it for
+  `https?://docs.google.com/spreadsheets/*` so that the Google sheets page receives the keyboard focus when it
+  first loads. Otherwise you'll need to click on the sheet before the SheetKeys hotkeys take effect.
+
 ## Developer workflow
 
 * Run `cake autobuild` in the `sheetkeys` directory. This auto-rebuilds the extension's Javascript every time
