@@ -13,10 +13,10 @@ window.AutoHider = class
 
   constructor: (@elementSelector) ->
     @injectCss()
-    window.addEventListener "DOMContentLoaded", =>
-      @element = document.querySelector(@elementSelector)
-      @element.addEventListener "mouseenter", (e) => @onMouseEnter(e)
-      @element.addEventListener "mouseleave", (e) => @onMouseLeave(e)
+    @paused = false
+    @element = document.querySelector(@elementSelector)
+    @element.addEventListener "mouseenter", (e) => @onMouseEnter(e)
+    @element.addEventListener "mouseleave", (e) => @onMouseLeave(e)
 
   injectCss: ->
     css = "
