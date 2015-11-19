@@ -139,8 +139,6 @@ window.UI =
     @editor.parentNode.getAttribute("style")?
 
   init: ->
-    # For clarity and efficiency, don't run inside of an iframe (Google sheets loads some iframes in the page)
-    return unless (self == top)
     @injectPageScript()
     window.addEventListener("focus", ((e) => @onFocus(e)), true)
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page

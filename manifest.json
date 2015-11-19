@@ -9,7 +9,7 @@
       "js": ["content_scripts/keyboard_utils.js",
              "content_scripts/sheet_actions.js",
              "content_scripts/main.js"],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "all_frames": false
     }],
   "web_accessible_resources": ["page_scripts/page_script.js"]

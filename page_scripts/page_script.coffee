@@ -21,7 +21,7 @@ simulateKeyEvent = (eventType, el, args) ->
 jsonEl = document.createElement("div")
 jsonEl.style.display = "none"
 jsonEl.id = "sheetkeys-json-message"
-document.addEventListener("DOMContentLoaded", -> document.body.appendChild(jsonEl))
+document.body.appendChild(jsonEl)
 
 window.addEventListener "sheetkeys-simulate-key-event", (e) ->
   editorEl = document.getElementById("waffle-rich-text-editor")
