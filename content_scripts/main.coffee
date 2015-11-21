@@ -270,6 +270,7 @@ keyBindings =
     "y,y": SheetActions.copyRow.bind(SheetActions)
     # "Yank cell"
     "y,c": SheetActions.copy.bind(SheetActions)
+    "p": SheetActions.paste.bind(SheetActions)
 
     # Selection
     "v": UI.enterVisualMode.bind(UI)

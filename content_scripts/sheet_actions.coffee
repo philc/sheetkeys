@@ -9,6 +9,7 @@ window.SheetActions =
     moveRowDown: "Move row down"
     moveColumnLeft: "Move column left"
     moveColumnRight: "Move column right"
+    paste: "Paste"
     undo: "Undo"
     redo: "Redo"
 
@@ -180,6 +181,10 @@ window.SheetActions =
 
   copy: ->
     @clickMenu(@menuItems.copy)
+    @unselectRow()
+
+  paste: ->
+    @clickMenu(@menuItems.paste)
     @unselectRow()
 
   #
