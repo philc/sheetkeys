@@ -266,6 +266,23 @@ window.SheetActions =
   #
   # Formatting
   #
+
+  # NOTE(philc): I couldn't reliably detect the selected font size for the current cell, and so I couldn't
+  # implement increaes font / decrease font commands.
+  getFontSizeMenu: -> @getMenuItem("6").parentNode
+  activateFontSizeMenu: ->
+     KeyboardUtils.simulateClick(@getMenuItem("Font size"))
+     # It's been shown; hide it again.
+     @getFontSizeMenu().style.display = "none"
+
+  setFontSize10: ->
+    @activateFontSizeMenu()
+    KeyboardUtils.simulateClick(@getMenuItem("10"))
+
+  setFontSize8: ->
+    @activateFontSizeMenu()
+    KeyboardUtils.simulateClick(@getMenuItem("8"))
+
   wrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
   overflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
   clip: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.clip))
