@@ -271,3 +271,20 @@ window.SheetActions =
   colorCellLightYellow3: -> @changeCellColor(@colors.lightYellow3)
   colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowBlue3)
   colorCellLightPurple: -> @changeCellColor(@colors.lightPurple3)
+
+  #
+  # Misc
+  #
+
+  # Returns the value of the current cell.
+  # Note that this has the side effect of copying the cell's value to the clipboard.
+  getCellValue: ->
+    # This is implemented by copying the contents of the cell the user's cursor is on (by using the Copy
+    # command) and then we read from the clipboard. This action needs to be done by the page script because
+    # content scripts don't have access to the clipboard.
+    window.dispatchEvent(new CustomEvent("sheetkeys-get-cell-value", {}))
+    message = JSON.parse(document.getElementById("sheetkeys-json-message").innerText)
+    message.value
+
+  # Opens a new tab using the current cell's value as the URL.
+  openCellAsUrl: -> window.open(@getCellValue(), "_blank")

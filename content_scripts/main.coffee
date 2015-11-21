@@ -304,6 +304,7 @@ keyBindings =
 
     # Misc
     ";,w,m": UI.toggleChromeVisibility.bind(UI) # Mnemonic for "window maximize"
+    ";,o": SheetActions.openCellAsUrl.bind(SheetActions)
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for

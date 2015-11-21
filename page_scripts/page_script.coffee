@@ -31,3 +31,18 @@ window.addEventListener "sheetkeys-simulate-key-event", (e) ->
   simulateKeyEvent("keydown", editorEl, args)
   simulateKeyEvent("keypress", editorEl, args)
   simulateKeyEvent("keyup", editorEl, args)
+
+getClipboardContents = ->
+  input = document.createElement("textarea")
+  document.body.appendChild(input)
+  input.focus()
+  document.execCommand("paste");
+  value = input.value
+  input.remove()
+  return value
+
+window.addEventListener "sheetkeys-get-cell-value", (e) ->
+  # It would be nice if we could obtain the value of the cell directly, but for now, we copy and paste it to
+  # read it. This is done by this page script because content scripts don't have access to the clipboard.
+  document.execCommand("copy")
+  jsonEl.innerText = JSON.stringify({value: getClipboardContents()})
