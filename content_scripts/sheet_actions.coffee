@@ -27,6 +27,7 @@ window.SheetActions =
     lightYellow3: "light yellow 3"
     lightCornflowBlue3: "light cornflower blue 3"
     lightPurple3: "light purple 3"
+    lightRed3: "light red 3"
 
   # A mapping of button-caption to DOM element.
   menuItemElements: {}
@@ -293,6 +294,7 @@ window.SheetActions =
   colorCellLightYellow3: -> @changeCellColor(@colors.lightYellow3)
   colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowBlue3)
   colorCellLightPurple: -> @changeCellColor(@colors.lightPurple3)
+  colorCellLightRed3: -> @changeCellColor(@colors.lightRed3)
 
   #
   # Misc

@@ -302,6 +302,7 @@ keyBindings =
     ";,c,y": SheetActions.colorCellLightYellow3.bind(SheetActions)
     ";,c,b": SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions)
     ";,c,p": SheetActions.colorCellLightPurple.bind(SheetActions)
+    ";,c,r": SheetActions.colorCellLightRed3.bind(SheetActions)
     ";,f,n": SheetActions.setFontSize10.bind(SheetActions) # Font size normal
     ";,f,s": SheetActions.setFontSize8.bind(SheetActions) # Font size small
 
