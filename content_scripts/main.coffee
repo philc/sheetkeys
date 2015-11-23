@@ -19,17 +19,19 @@ window.AutoHider = class
     @element.addEventListener "mouseleave", (e) => @onMouseLeave(e)
 
   injectCss: ->
+    # Set all child elements to opacity 0 so the top-level element is shown as a single collapsed bar of gray.
     css = "
       #{@elementSelector} {
         height: #{@collapsedHeight}px;
         background-color: #aaa;
         overflow: hidden;
-      }"
-    style = document.createElement("style")
-    style.type = "text/css"
-    style.appendChild(document.createTextNode(css))
+      }
+      #{@elementSelector} * { opacity: 0; }"
+    @style = document.createElement("style")
+    @style.type = "text/css"
+    @style.appendChild(document.createTextNode(css))
     # document.head is not yet available in the DOM
-    document.documentElement.appendChild(style)
+    document.documentElement.appendChild(@style)
 
   onMouseEnter: ->
     if @hideTimer?
@@ -55,12 +57,10 @@ window.AutoHider = class
       3000)
 
   showElement: ->
-    @element.style.height = "auto"
-    @element.style.backgroundColor = "white"
+    @style.remove()
 
   hideElement: ->
-    @element.style.height = "#{@collapsedHeight}px"
-    @element.style.backgroundColor = "#aaa"
+    document.documentElement.appendChild(@style)
 
   pause: -> @paused = true
   resume: -> @paused = false
