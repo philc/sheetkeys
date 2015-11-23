@@ -14,12 +14,12 @@ window.SheetActions =
     redo: "Redo"
 
   buttons:
-    center: "Center"
-    clip: "Clip"
-    left: "Left"
-    right: "Right"
-    overflow: "Overflow"
-    wrap: "Wrap"
+    center: ["Horizontal align", "Center"]
+    clip: ["Text wrapping", "Clip"]
+    left: ["Horizontal align", "Left"]
+    right: ["Horizontal align", "Right"]
+    overflow: ["Text wrapping", "Overflow"]
+    wrap: ["Text wrapping", "Wrap"]
 
   # You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
   colors:
@@ -32,7 +32,15 @@ window.SheetActions =
   # A mapping of button-caption to DOM element.
   menuItemElements: {}
 
-  getToolbarButton: (caption) -> document.querySelector("*[aria-label='#{caption}']")
+  clickToolbarButton: (captionList) ->
+    # Sometimes a toolbar button won't exist in the DOM until its parent has been clicked, so we click all of
+    # its parents in sequence.
+    for caption in captionList
+      el = document.querySelector("*[aria-label='#{caption}']")
+      unless el
+        console.log("Couldn't find the element for the button labeled #{caption} in #{captionList}")
+        return
+      KeyboardUtils.simulateClick(el)
 
   getMenuItem: (caption) ->
     item = @menuItemElements[caption]
@@ -284,12 +292,12 @@ window.SheetActions =
     @activateFontSizeMenu()
     KeyboardUtils.simulateClick(@getMenuItem("8"))
 
-  wrap: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.wrap))
-  overflow: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.overflow))
-  clip: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.clip))
-  alignLeft: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.left))
-  alignCenter: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.center))
-  alignRight: -> KeyboardUtils.simulateClick(@getToolbarButton(@buttons.right))
+  wrap: -> @clickToolbarButton(@buttons.wrap)
+  overflow: -> @clickToolbarButton(@buttons.overflow)
+  clip: -> @clickToolbarButton(@buttons.clip)
+  alignLeft: -> @clickToolbarButton(@buttons.left)
+  alignCenter: -> @clickToolbarButton(@buttons.center)
+  alignRight: -> @clickToolbarButton(@buttons.right)
   colorCellWhite: -> @changeCellColor(@colors.white)
   colorCellLightYellow3: -> @changeCellColor(@colors.lightYellow3)
   colorCellLightCornflowerBlue3: -> @changeCellColor(@colors.lightCornflowBlue3)
