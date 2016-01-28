@@ -1,5 +1,6 @@
 Sheetkeys is a Chrome extension which adds powerful keyboard navigation shortcuts to Google Sheets, in the
-spirit of the Vim text editor. It's written by the author of [Vimium](https://github.com/philc/vimium).
+spirit of the Vim text editor. It's written by one of the authors of
+[Vimium](https://github.com/philc/vimium).
 
 ## Keyboard Bindings
 
