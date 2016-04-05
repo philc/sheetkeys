@@ -252,6 +252,8 @@ keyBindings =
     "<C-J>": SheetActions.moveRowsDown.bind(SheetActions)
     "<C-K>": SheetActions.moveRowsUp.bind(SheetActions)
     "<C-H>": SheetActions.moveColumnsLeft.bind(SheetActions)
+    # TODO(philc): remove this because it's custom to my configuration
+    "BACKSPACE": SheetActions.moveColumnsLeft.bind(SheetActions)
     "<C-L>": SheetActions.moveColumnsRight.bind(SheetActions)
 
     # Editing
