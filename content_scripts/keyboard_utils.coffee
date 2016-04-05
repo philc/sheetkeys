@@ -99,11 +99,11 @@ window.KeyboardUtils =
     el.dispatchEvent(@createSimulatedKeyEvent(el, "keypress", keyCode, keyIdentifier))
     el.dispatchEvent(@createSimulatedKeyEvent(el, "keyup", keyCode, keyIdentifier))
 
-  simulateClick: (el) ->
+  simulateClick: (el, x = 0, y = 0) ->
     eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
     for eventName in eventSequence
       event = document.createEvent("MouseEvents");
       # eventName, bubbles, cancelable, view, event-detail, screenX, screenY, clientX, clientY, ctrl, alt,
       # shift, meta, button, relatedTarget
-      event.initMouseEvent(eventName, true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null)
+      event.initMouseEvent(eventName, true, true, window, 1, x, y, x, y, false, false, false, false, 0, null)
       el.dispatchEvent(event);

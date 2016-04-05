@@ -81,11 +81,25 @@ window.SheetActions =
      @unselectRow()
 
   selectRow: ->
-    # TODO(philc): Remove this circular dependency
-    UI.typeKey(KeyboardUtils.keyCodes.space, shift: true)
+    # Sheets allows you to type Shift+Space to select a row, but its behavior is buggy:
+    # 1. Sometimes it doesn't select the whole row, so you need to do type it twice.
+    # 2. In some sheets, moving a row after selecting a row with shift+space deterministically causes columns
+    #    to swap!
+    activeCellTop = document.querySelector(".active-cell-border").getBoundingClientRect().top
+    rowMarginEl = document.elementFromPoint(0, activeCellTop)
+    # I'm not sure why this offset needs to be +20. Just using activeCellTop selects the row prior to the
+    # current row. "20" was chosen empirically to work.
+    KeyboardUtils.simulateClick(rowMarginEl, 0, activeCellTop + 20)
 
   selectColumn: ->
-    UI.typeKey(KeyboardUtils.keyCodes.space, control: true)
+    # Sheets allows you to type Alt+Space to select a column. Similar to `selectRow`, using that shortcut
+    # has issues, so here we click on the appropriate column.
+    activeCellLeft = document.querySelector(".active-cell-border").getBoundingClientRect().left
+    c = 25
+    # The column header is at the top of the grid portion of the UI (the waffle container).
+    gridTop = document.getElementById("waffle-grid-container").getBoundingClientRect().top
+    colMarginEl = document.elementFromPoint(activeCellLeft + c, gridTop)
+    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft + c, gridTop + 1) # +1 was chosen here empirically
 
   unselectRow: ->
     oldY = @cellCursorY()
