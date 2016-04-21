@@ -335,4 +335,8 @@ window.SheetActions =
     message.value
 
   # Opens a new tab using the current cell's value as the URL.
-  openCellAsUrl: -> window.open(@getCellValue(), "_blank")
+  openCellAsUrl: ->
+    url = @getCellValue().trim()
+    # If there's leading or trailing whitespace in the cell, then the URL will contain quotes around it.
+    url = url.replace(/"/g, '').trim()
+    window.open(url, "_blank")
