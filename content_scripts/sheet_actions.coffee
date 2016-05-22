@@ -63,7 +63,16 @@ window.SheetActions =
   # Returns the color palette button corresponding to the given color name.
   # type: either "font" or "cell", depending on which color you want to change.
   getColorButton: (color, type) ->
-    buttons = document.querySelectorAll("*[aria-label='#{color}']")
+    selector = "*[aria-label='#{color}']"
+    buttons = document.querySelectorAll(selector)
+    # The divs for a color can disappear from the DOM. To reactivate them, click on the color palettes button.
+    if buttons.length == 0
+      paletteButton = document.querySelector("*[aria-label='Fill color']")
+      KeyboardUtils.simulateClick(paletteButton)
+      KeyboardUtils.simulateClick(paletteButton) # Click twice to show and then hide the pallete popup.
+    buttons = document.querySelectorAll(selector)
+    console.log("Error: unable to find element:", selector) unless buttons.length > 0
+
     # There are 3 color palettes in the document. The first one is for fonts, the second for cell background
     # colors. The third is for an undiscovered use.
     switch type
