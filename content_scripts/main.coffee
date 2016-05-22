@@ -237,6 +237,16 @@ window.UI =
     else
       @autoHider.pause()
       @autoHider.showElement()
+    @reflowGrid()
+
+  # TODO(philc): Consider moving this and toggleChromeVisibility to SheetActions.
+  reflowGrid: ->
+    # When you hide a DOM element, Google's Waffle grid doesn't know to reflow and take up the full viewport.
+    # You can trigger a reflow by resizing the browser or by clicking on the Explore button in the lower-left
+    # corner.
+    exploreButton = document.querySelector(".waffle-assistant-entry [role=button]")
+    KeyboardUtils.simulateClick(exploreButton)
+    KeyboardUtils.simulateClick(exploreButton) # Click twice to show and then hide.
 
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
