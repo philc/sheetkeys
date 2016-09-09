@@ -88,21 +88,29 @@ window.SheetActions =
      @clickMenu(@menuItems.deleteRow)
      # Clear any row-level selections we might've had.
      @unselectRow()
+  preserveSelectedColumn: -> @previousColumnLeft = @selectedCellCoords().left
 
-  selectRow: ->
+  restoreSelectedColumn: ->
+    left = @previousColumnLeft
+    top = @selectedCellCoords().top
+    el = document.elementFromPoint(left, top)
+    KeyboardUtils.simulateClick(el, left, top)
+
+  selectedCellCoords: ->
+    box = document.querySelector(".active-cell-border").getBoundingClientRect()
+    # Offset this box by 1 so we don't select the borders around the selected cell.
+    {top: box.top + 1, left: box.left + 1}
     # Sheets allows you to type Shift+Space to select a row, but its behavior is buggy:
     # 1. Sometimes it doesn't select the whole row, so you need to type it twice.
     # 2. In some sheets, moving a row after selecting a row with shift+space deterministically causes columns
     #    to swap!
-    activeCellTop = document.querySelector(".active-cell-border").getBoundingClientRect().top
+
     # xOffset is 15px from the left edge of the cell border because we don't to mistakenly click on the
     # "unhide" arrow icon which is present when spreadsheet rows are hidden.
     xOffset = 15
-    # yOffset is 1 because otherwise, when adjacent to a frozen row, we will select the thick border around
-    # the frozen row rather than the actual cell.
-    yOffset = 1
-    rowMarginEl = document.elementFromPoint(xOffset, activeCellTop + yOffset)
-    KeyboardUtils.simulateClick(rowMarginEl, xOffset, activeCellTop + yOffset)
+    y = @selectedCellCoords().top
+    rowMarginEl = document.elementFromPoint(xOffset, y)
+    KeyboardUtils.simulateClick(rowMarginEl, xOffset, y)
 
   selectColumn: ->
     # Sheets allows you to type Alt+Space to select a column. Similar to `selectRow`, using that shortcut

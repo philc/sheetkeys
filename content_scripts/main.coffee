@@ -87,12 +87,13 @@ window.UI =
     @mode = mode
     @keyQueue = []
 
-  enterVisualMode: -> @setMode("visual")
+  enterVisualMode: -> @setMode("visualLine")
 
   # In this mode, entire lines are selected.
   enterVisualLineMode: ->
+    SheetActions.preserveSelectedColumn()
     SheetActions.selectRow()
-    @setMode("visual")
+    @setMode("visualLine")
 
   enterVisualColumnMode: ->
     SheetActions.selectColumn()
@@ -100,6 +101,11 @@ window.UI =
 
   exitVisualMode: ->
     SheetActions.unselectRow()
+    @setMode("normal")
+
+  exitVisualLineMode: ->
+    SheetActions.unselectRow()
+    SheetActions.restoreSelectedColumn()
     @setMode("normal")
 
   # We inject the page_script into the page so that we can simulate keypress events, which must be done by a
@@ -344,5 +350,8 @@ keyBindings.visual = extend clone(keyBindings.normal),
   "y": SheetActions.copy.bind(SheetActions)
   "y,y": null # Unbind "copy row", because it's superceded by "copy"
   "esc": UI.exitVisualMode.bind(UI)
+
+keyBindings.visualLine = extend clone(keyBindings.visual),
+  "esc": UI.exitVisualLineMode.bind(UI)
 
 UI.init()
