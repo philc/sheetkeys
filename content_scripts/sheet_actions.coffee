@@ -98,10 +98,10 @@ window.SheetActions =
     # xOffset is 15px from the left edge of the cell border because we don't to mistakenly click on the
     # "unhide" arrow icon which is present when spreadsheet rows are hidden.
     xOffset = 15
-    # A yOffset of 10 was chosen empirically to work. Just using activeCellTop selects the row prior to the
-    # current row.
-    yOffset = 10
-    rowMarginEl = document.elementFromPoint(xOffset, activeCellTop)
+    # yOffset is 1 because otherwise, when adjacent to a frozen row, we will select the thick border around
+    # the frozen row rather than the actual cell.
+    yOffset = 1
+    rowMarginEl = document.elementFromPoint(xOffset, activeCellTop + yOffset)
     KeyboardUtils.simulateClick(rowMarginEl, xOffset, activeCellTop + yOffset)
 
   selectColumn: ->
