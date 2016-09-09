@@ -100,6 +100,8 @@ window.SheetActions =
     box = document.querySelector(".active-cell-border").getBoundingClientRect()
     # Offset this box by 1 so we don't select the borders around the selected cell.
     {top: box.top + 1, left: box.left + 1}
+
+  selectRow: ->
     # Sheets allows you to type Shift+Space to select a row, but its behavior is buggy:
     # 1. Sometimes it doesn't select the whole row, so you need to type it twice.
     # 2. In some sheets, moving a row after selecting a row with shift+space deterministically causes columns
@@ -108,7 +110,9 @@ window.SheetActions =
     # xOffset is 15px from the left edge of the cell border because we don't to mistakenly click on the
     # "unhide" arrow icon which is present when spreadsheet rows are hidden.
     xOffset = 15
-    y = @selectedCellCoords().top
+    # yOffset is set to 10 because empirically it correctly selects the row even when the page is zoomed.
+    yOffset = 10
+    y = @selectedCellCoords().top + yOffset
     rowMarginEl = document.elementFromPoint(xOffset, y)
     KeyboardUtils.simulateClick(rowMarginEl, xOffset, y)
 
