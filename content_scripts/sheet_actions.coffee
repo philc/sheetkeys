@@ -339,6 +339,7 @@ window.SheetActions =
   # Opens a new tab using the current cell's value as the URL.
   openCellAsUrl: ->
     url = @getCellValue().trim()
-    # If there's leading or trailing whitespace in the cell, then the URL will contain quotes around it.
-    url = url.replace(/"/g, '').trim()
+    # Some cells can contain a HYPERLINK("url", "caption") value. If so, assume that's the URL we want to open
+    match = url.match(/HYPERLINK\("(.+?),.+?"\)/)
+    url = match[1] if match
     window.open(url, "_blank")
