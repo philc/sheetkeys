@@ -91,14 +91,18 @@ window.SheetActions =
 
   selectRow: ->
     # Sheets allows you to type Shift+Space to select a row, but its behavior is buggy:
-    # 1. Sometimes it doesn't select the whole row, so you need to do type it twice.
+    # 1. Sometimes it doesn't select the whole row, so you need to type it twice.
     # 2. In some sheets, moving a row after selecting a row with shift+space deterministically causes columns
     #    to swap!
     activeCellTop = document.querySelector(".active-cell-border").getBoundingClientRect().top
-    rowMarginEl = document.elementFromPoint(0, activeCellTop)
-    # I'm not sure why this offset needs to be +20. Just using activeCellTop selects the row prior to the
-    # current row. "20" was chosen empirically to work.
-    KeyboardUtils.simulateClick(rowMarginEl, 0, activeCellTop + 20)
+    # xOffset is 15px from the left edge of the cell border because we don't to mistakenly click on the
+    # "unhide" arrow icon which is present when spreadsheet rows are hidden.
+    xOffset = 15
+    # A yOffset of 10 was chosen empirically to work. Just using activeCellTop selects the row prior to the
+    # current row.
+    yOffset = 10
+    rowMarginEl = document.elementFromPoint(xOffset, activeCellTop)
+    KeyboardUtils.simulateClick(rowMarginEl, xOffset, activeCellTop + yOffset)
 
   selectColumn: ->
     # Sheets allows you to type Alt+Space to select a column. Similar to `selectRow`, using that shortcut
