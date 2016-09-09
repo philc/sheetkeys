@@ -248,6 +248,8 @@ window.UI =
     KeyboardUtils.simulateClick(exploreButton)
     KeyboardUtils.simulateClick(exploreButton) # Click twice to show and then hide.
 
+  reloadPage: -> window.location.reload()
+
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
 keyBindings =
@@ -322,6 +324,8 @@ keyBindings =
     # Misc
     ";,w,m": UI.toggleChromeVisibility.bind(UI) # Mnemonic for "window maximize"
     ";,o": SheetActions.openCellAsUrl.bind(SheetActions)
+    # For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
+    "<M-r>": UI.reloadPage.bind(UI)
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
@@ -330,6 +334,7 @@ keyBindings =
     # In form fields on Mac, C-e takes you to the end of the field. For some reason C-e doesn't work in
     # Sheets. Here, we fix that.
     "<C-e>": SheetActions.moveCursorToCellLineEnd.bind(SheetActions)
+    "<M-r>": UI.reloadPage.bind(UI)
 
 keyBindings.visual = extend clone(keyBindings.normal),
   "j": SheetActions.moveDownAndSelect.bind(SheetActions)
