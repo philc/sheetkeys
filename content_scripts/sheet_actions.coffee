@@ -152,12 +152,21 @@ window.SheetActions =
   # Row movement
   #
   moveRowsUp: ->
+    # In normal mode, where we have just a single cell selected, restore the column after moving the row.
+    @preserveSelectedColumn() if UI.mode == "normal"
     @selectRow()
     @clickMenu(@menuItems.moveRowUp)
+    if UI.mode == "normal"
+      SheetActions.unselectRow()
+      @restoreSelectedColumn()
 
   moveRowsDown: ->
+    @preserveSelectedColumn() if UI.mode == "normal"
     @selectRow()
     @clickMenu(@menuItems.moveRowDown)
+    if UI.mode == "normal"
+      SheetActions.unselectRow()
+      @restoreSelectedColumn()
 
   moveColumnsLeft: ->
     @selectColumn()
