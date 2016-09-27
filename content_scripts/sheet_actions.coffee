@@ -99,8 +99,10 @@ window.SheetActions =
 
   selectedCellCoords: ->
     box = document.querySelector(".active-cell-border").getBoundingClientRect()
-    # Offset this box by 1 so we don't select the borders around the selected cell.
-    {top: box.top + 1, left: box.left + 1}
+    # Offset this box by > 0 so we don't select the borders around the selected cell.
+    # NOTE(philc): I've chosen 5 here instead of 1 because > 1 is required when the document is zoomed.
+    margin = 5
+    {top: box.top + margin, left: box.left + margin}
 
   selectRow: ->
     # Sheets allows you to type Shift+Space to select a row, but its behavior is buggy:
