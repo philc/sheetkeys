@@ -5,65 +5,12 @@ extend = (o, properties) ->
     o[key] = val
   o
 
-# This makes the chrome at the top auto-hide onmouseover.
-# The chrome takes up a lot of screen real estate and doesn't add much utility when you have shortcuts for
-# everything, and the sheet's name is already shown in the tab title.
-window.AutoHider = class
-  collapsedHeight: 7
-
-  constructor: (@elementSelector) ->
-    @injectCss()
-    @paused = false
-    @element = document.querySelector(@elementSelector)
-    @element.addEventListener "mouseenter", (e) => @onMouseEnter(e)
-    @element.addEventListener "mouseleave", (e) => @onMouseLeave(e)
-
-  injectCss: ->
-    # Set all child elements to opacity 0 so the top-level element is shown as a single collapsed bar of gray.
-    css = "
-      #{@elementSelector} {
-        height: #{@collapsedHeight}px;
-        background-color: #aaa;
-        overflow: hidden;
-      }
-      #{@elementSelector} * { opacity: 0; }"
-    @style = document.createElement("style")
-    @style.type = "text/css"
-    @style.appendChild(document.createTextNode(css))
-    # document.head is not yet available in the DOM
-    document.documentElement.appendChild(@style)
-
-  onMouseEnter: ->
-    if @hideTimer?
-      clearTimeout(@hideTimer)
-      return
-    @showTimer = setTimeout((=>
-      return if @paused
-      @showTimer = null
-      @showElement()),
-      300)
-
-  onMouseLeave: ->
-    # TODO(philc): Also listen mouseenter/leave events on .goog-menu elements, so that the chrome bar doesn't
-    # autohide if you're mousing over a menu.
-    if @showTimer?
-      # The user just quickly moved their mouse over the element, so don't expand it.
-      clearTimeout(@showTimer)
-      return
-    @hideTimer = setTimeout((=>
-      return if @paused
-      @hideTimer = null
-      @hideElement()),
-      3000)
-
-  showElement: ->
-    @style.remove()
-
-  hideElement: ->
-    document.documentElement.appendChild(@style)
-
-  pause: -> @paused = true
-  resume: -> @paused = false
+# Add an event listener which removes itself once the event is fired once.
+addOneTimeListener = (dispatcher, eventType, listenerFn) ->
+  handlerFn = (e) ->
+    dispatcher.removeEventListener(eventType, handlerFn, true)
+    listenerFn(e)
+  dispatcher.addEventListener(eventType, handlerFn, true)
 
 window.UI =
   # An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
@@ -152,11 +99,15 @@ window.UI =
   init: ->
     @injectPageScript()
     window.addEventListener("focus", ((e) => @onFocus(e)), true)
+    # When we first focus the spreadsheet, in case we're in fullscreen mode, dismiss the popup message
+    # Chrome shows. We have to wait 1s because the DOM is not yet ready to be clicked on.
+    addOneTimeListener(window, "focus", =>
+      setTimeout((=> SheetActions.dismissFullScreenNotificationMessage()), 1000))
+
     # Key event handlers fire on window before they do on document. Prefer window for key events so the page
     # can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", ((e) => @onKeydown(e)), true)
     @keyBindingPrefixes = @buildKeyBindingPrefixes()
-    @autoHider = new AutoHider("#docs-chrome")
 
   # Returns a map of (partial keyString) => is_bound?
   # Note that the keys only include partial keystrings for bindings. So the binding "dap" will add "d" and
@@ -236,16 +187,7 @@ window.UI =
 
   replaceChar: -> @setMode("replace")
 
-  toggleChromeVisibility: ->
-    if @autoHider.paused
-      @autoHider.resume()
-      @autoHider.hideElement()
-    else
-      @autoHider.pause()
-      @autoHider.showElement()
-    @reflowGrid()
-
-  # TODO(philc): Consider moving this and toggleChromeVisibility to SheetActions.
+  # TODO(philc): Consider moving this to SheetActions.
   reflowGrid: ->
     # When you hide a DOM element, Google's Waffle grid doesn't know to reflow and take up the full viewport.
     # You can trigger a reflow by resizing the browser or by clicking on the Explore button in the lower-left
@@ -328,7 +270,8 @@ keyBindings =
     ";,f,s": SheetActions.setFontSize8.bind(SheetActions) # Font size small
 
     # Misc
-    ";,w,m": UI.toggleChromeVisibility.bind(UI) # Mnemonic for "window maximize"
+    ";,w,m": SheetActions.toggleFullScreen.bind(SheetActions) # Mnemonic for "window maximize"
+    ";,w,f": SheetActions.toggleFullScreen.bind(SheetActions) # Mnemonic for "window full screen"
     ";,o": SheetActions.openCellAsUrl.bind(SheetActions)
     # For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
     "<M-r>": UI.reloadPage.bind(UI)

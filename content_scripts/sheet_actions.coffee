@@ -12,6 +12,7 @@ window.SheetActions =
     paste: "Paste"
     undo: "Undo"
     redo: "Redo"
+    fullScreen: "Full screen"
 
   buttons:
     center: ["Horizontal align", "Center"]
@@ -357,6 +358,19 @@ window.SheetActions =
   #
   # Misc
   #
+
+  toggleFullScreen: ->
+    @clickMenu(@menuItems.fullScreen)
+    # After entering full-screen mode, immediately dismiss the notification the Google Docs shows.
+    # Note that the DOM element is only available a second after toggling fullscreen.
+    setTimeout((=> @dismissFullScreenNotificationMessage()), 250)
+
+  dismissFullScreenNotificationMessage: ->
+    dismissButton = document.querySelector("#docs-butterbar-container .docs-butterbar-link")
+    # Ensure we don't accidentally find and click on another HUD notification which is not for dismissing
+    # the full screen notification.
+    if dismissButton && dismissButton.innerText == "Dismiss"
+      KeyboardUtils.simulateClick(dismissButton)
 
   # Returns the value of the current cell.
   getCellValue: -> document.querySelector("#t-formula-bar-input-container").textContent
