@@ -197,6 +197,8 @@ window.UI =
     KeyboardUtils.simulateClick(exploreButton) # Click twice to show and then hide.
 
   reloadPage: -> window.location.reload()
+  # A bindable function which effectively swallows the keypress it's bound to.
+  doNothing: ->
 
 # Default keybindings.
 # TODO(philc): Make these bindings customizable via preferences.
@@ -275,6 +277,9 @@ keyBindings =
     ";,o": SheetActions.openCellAsUrl.bind(SheetActions)
     # For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
     "<M-r>": UI.reloadPage.bind(UI)
+    # Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
+    # happen. If you mistakenly type it in Sheets, you will exit full screen mode.
+    "esc": UI.doNothing
 
   "insert":
     # In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
