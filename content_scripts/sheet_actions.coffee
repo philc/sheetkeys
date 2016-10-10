@@ -5,10 +5,15 @@ window.SheetActions =
     deleteValues: "Delete values"
     rowAbove: "Row above"
     rowBelow: "Row below"
+    # The "moveRowUp" menu item won't yet exist if multiple rows are selected.
     moveRowUp: "Move row up"
     moveRowDown: "Move row down"
+    moveRowsUp: "Move rows up"
+    moveRowsDown: "Move rows down"
     moveColumnLeft: "Move column left"
     moveColumnRight: "Move column right"
+    moveColumnsLeft: "Move columns left"
+    moveColumnsRight: "Move columns right"
     paste: "Paste"
     undo: "Undo"
     redo: "Redo"
@@ -44,12 +49,14 @@ window.SheetActions =
         return
       KeyboardUtils.simulateClick(el)
 
-  getMenuItem: (caption) ->
+  # Returns the DOM element of the menu item with the given caption. Prints a warning if a menu item isn't
+  # found (since this is a common source of errors in SheetKeys) unless silenceWarning = true.
+  getMenuItem: (caption, silenceWarning = false) ->
     item = @menuItemElements[caption]
     return item if item
     item = @findMenuItem(caption)
     unless item
-      console.log("Warning: could not find menu item with caption #{caption}")
+      console.log("Warning: could not find menu item with caption #{caption}") unless silenceWarning
       return null
     return @menuItemElements[caption] = item
 
@@ -162,7 +169,10 @@ window.SheetActions =
     # In normal mode, where we have just a single cell selected, restore the column after moving the row.
     @preserveSelectedColumn() if UI.mode == "normal"
     @selectRow()
-    @clickMenu(@menuItems.moveRowUp)
+    if @getMenuItem(@menuItems.moveRowUp, true)
+      @clickMenu(@menuItems.moveRowUp)
+    else
+      @clickMenu(@menuItems.moveRowsUp)
     if UI.mode == "normal"
       SheetActions.unselectRow()
       @restoreSelectedColumn()
@@ -170,18 +180,28 @@ window.SheetActions =
   moveRowsDown: ->
     @preserveSelectedColumn() if UI.mode == "normal"
     @selectRow()
-    @clickMenu(@menuItems.moveRowDown)
+    if @getMenuItem(@menuItems.moveRowDown, true)
+      @clickMenu(@menuItems.moveRowDown)
+    else
+      @clickMenu(@menuItems.moveRowsDown)
+
     if UI.mode == "normal"
       SheetActions.unselectRow()
       @restoreSelectedColumn()
 
   moveColumnsLeft: ->
     @selectColumn()
-    @clickMenu(@menuItems.moveColumnLeft)
+    if @getMenuItem(@menuItems.moveColumnLeft, true)
+      @clickMenu(@menuItems.moveColumnLeft)
+    else
+      @clickMenu(@menuItems.moveColumnsLeft)
 
   moveColumnsRight: ->
     @selectColumn()
-    @clickMenu(@menuItems.moveColumnRight)
+    if @getMenuItem(@menuItems.moveColumnRight, true)
+      @clickMenu(@menuItems.moveColumnRight)
+    else
+      @clickMenu(@menuItems.moveColumnsRight)
 
   #
   # Editing
