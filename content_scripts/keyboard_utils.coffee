@@ -42,7 +42,17 @@ window.KeyboardUtils =
 
   # Returns the string "<A-f>" if F is pressed.
   getKeyString: (event) ->
-    keyString = KeyboardUtils.getKeyChar(event)
+    keyString = if event.keyCode of @keyNames
+                  @keyNames[event.keyCode]
+                else if event.key.length == 1
+                  event.key
+                else if event.key.length == 2 and "F1" <= event.key <= "F9"
+                  event.key.toLowerCase() # F1 to F9.
+                else if event.key.length == 3 and "F10" <= event.key <= "F12"
+                  event.key.toLowerCase() # F10 to F12.
+                else
+                  ""
+
     # Ignore modifiers by themselves.
     return if keyString == ""
     modifiers = []
@@ -61,26 +71,6 @@ window.KeyboardUtils =
 
     keyString = "<#{keyString}>" if (modifiers.length > 0)
     keyString
-
-  getKeyChar: (event) ->
-    return @keyNames[event.keyCode] if (@keyNames[event.keyCode])
-
-    # Not a letter
-    if (event.keyIdentifier.slice(0, 2) != "U+")
-      # F-key
-      if (event.keyCode >= @keyCodes.f1 && event.keyCode <= @keyCodes.f12)
-        return "f" + (1 + event.keyCode - keyCodes.f1)
-      return ""
-
-    keyIdentifier = event.keyIdentifier
-    # On Windows, the keyIdentifiers for non-letter keys are incorrect. See
-    # https://bugs.webkit.org/show_bug.cgi?id=19906 for more details.
-    if ((@platform == "Windows" || @platform == "Linux") && @keyIdentifierCorrectionMap[keyIdentifier])
-      correctedIdentifiers = @keyIdentifierCorrectionMap[keyIdentifier]
-      keyIdentifier = if event.shiftKey then correctedIdentifiers[1] else correctedIdentifiers[0]
-    unicodeKeyInHex = "0x" + keyIdentifier.substring(2)
-    character = String.fromCharCode(parseInt(unicodeKeyInHex)).toLowerCase()
-    if event.shiftKey then character.toUpperCase() else character
 
   createSimulatedKeyEvent: (el, type, keyCode, keyIdentifier) ->
     # How to do this in Chrome: http://stackoverflow.com/q/10455626/46237
