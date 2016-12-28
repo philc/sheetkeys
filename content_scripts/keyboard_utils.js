@@ -96,19 +96,19 @@ window.KeyboardUtils = {
     // console.log ">>>> simulating keypress on:", el, keyCode, keyIdentifier
     el.dispatchEvent(this.createSimulatedKeyEvent(el, "keydown", keyCode, keyIdentifier));
     el.dispatchEvent(this.createSimulatedKeyEvent(el, "keypress", keyCode, keyIdentifier));
-    return el.dispatchEvent(this.createSimulatedKeyEvent(el, "keyup", keyCode, keyIdentifier));
+    el.dispatchEvent(this.createSimulatedKeyEvent(el, "keyup", keyCode, keyIdentifier));
   },
 
   simulateClick(el, x, y) {
-    let event;
     if (x == null) { x = 0; }
     if (y == null) { y = 0; }
     const eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
-    return Array.from(eventSequence).map((eventName) =>
-      (event = document.createEvent("MouseEvents"),
+    for (let eventName of eventSequence) {
+      let event = document.createEvent("MouseEvents");
       // eventName, bubbles, cancelable, view, event-detail, screenX, screenY, clientX, clientY, ctrl, alt,
       // shift, meta, button, relatedTarget
-      event.initMouseEvent(eventName, true, true, window, 1, x, y, x, y, false, false, false, false, 0, null),
-      el.dispatchEvent(event)));
+      event.initMouseEvent(eventName, true, true, window, 1, x, y, x, y, false, false, false, false, 0, null);
+      el.dispatchEvent(event);
+    }
   }
 };

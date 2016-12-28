@@ -1,4 +1,4 @@
-window.SheetActions = {
+SheetActions = {
   menuItems: {
     copy: "Copy",
     deleteRow: "Delete row",
@@ -102,23 +102,24 @@ window.SheetActions = {
     }
   },
 
-  changeFontColor(color) { return KeyboardUtils.simulateClick(this.getColorButton(color, "font")); },
-  changeCellColor(color) { return KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
+  changeFontColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "font")); },
+  changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
-  clickMenu(itemCaption) { return KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
+  clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
 
   deleteRows() {
      this.clickMenu(this.menuItems.deleteRow);
      // Clear any row-level selections we might've had.
-     return this.unselectRow();
+     this.unselectRow();
    },
-  preserveSelectedColumn() { return this.previousColumnLeft = this.selectedCellCoords().left; },
+
+  preserveSelectedColumn() { this.previousColumnLeft = this.selectedCellCoords().left; },
 
   restoreSelectedColumn() {
     const left = this.previousColumnLeft;
     const { top } = this.selectedCellCoords();
     const el = document.elementFromPoint(left, top);
-    return KeyboardUtils.simulateClick(el, left, top);
+    KeyboardUtils.simulateClick(el, left, top);
   },
 
   selectedCellCoords() {
@@ -142,7 +143,7 @@ window.SheetActions = {
     const yOffset = 10;
     const y = this.selectedCellCoords().top + yOffset;
     const rowMarginEl = document.elementFromPoint(xOffset, y);
-    return KeyboardUtils.simulateClick(rowMarginEl, xOffset, y);
+    KeyboardUtils.simulateClick(rowMarginEl, xOffset, y);
   },
 
   selectColumn() {
@@ -153,7 +154,7 @@ window.SheetActions = {
     // The column header is at the top of the grid portion of the UI (the waffle container).
     const gridTop = document.getElementById("waffle-grid-container").getBoundingClientRect().top;
     const colMarginEl = document.elementFromPoint(activeCellLeft + c, gridTop);
-    return KeyboardUtils.simulateClick(colMarginEl, activeCellLeft + c, gridTop + 1); // +1 was chosen here empirically
+    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft + c, gridTop + 1); // +1 was chosen here empirically
   },
 
   unselectRow() {
@@ -162,7 +163,7 @@ window.SheetActions = {
     UI.typeKey(KeyboardUtils.keyCodes.downArrow);
     // If the cursor moved after we typed our arrow key, undo this selection change.
     if (oldY !== this.cellCursorY()) {
-      return UI.typeKey(KeyboardUtils.keyCodes.upArrow);
+      UI.typeKey(KeyboardUtils.keyCodes.upArrow);
     }
   },
 
@@ -175,15 +176,15 @@ window.SheetActions = {
   //
   // Movement
   //
-  moveUp() { return UI.typeKey(KeyboardUtils.keyCodes.upArrow); },
-  moveDown() { return UI.typeKey(KeyboardUtils.keyCodes.downArrow); },
-  moveLeft() { return UI.typeKey(KeyboardUtils.keyCodes.leftArrow); },
-  moveRight() { return UI.typeKey(KeyboardUtils.keyCodes.rightArrow); },
+  moveUp() { UI.typeKey(KeyboardUtils.keyCodes.upArrow); },
+  moveDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow); },
+  moveLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow); },
+  moveRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow); },
 
-  moveDownAndSelect() { return UI.typeKey(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
-  moveUpAndSelect() { return UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
-  moveLeftAndSelect() { return UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
-  moveRightAndSelect() { return UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
+  moveDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
+  moveUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
+  moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
+  moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
 
   //
   // Row movement
@@ -199,7 +200,7 @@ window.SheetActions = {
     }
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
-      return this.restoreSelectedColumn();
+      this.restoreSelectedColumn();
     }
   },
 
@@ -214,66 +215,66 @@ window.SheetActions = {
 
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
-      return this.restoreSelectedColumn();
+      this.restoreSelectedColumn();
     }
   },
 
   moveColumnsLeft() {
     this.selectColumn();
     if (this.getMenuItem(this.menuItems.moveColumnLeft, true)) {
-      return this.clickMenu(this.menuItems.moveColumnLeft);
+      this.clickMenu(this.menuItems.moveColumnLeft);
     } else {
-      return this.clickMenu(this.menuItems.moveColumnsLeft);
+      this.clickMenu(this.menuItems.moveColumnsLeft);
     }
   },
 
   moveColumnsRight() {
     this.selectColumn();
     if (this.getMenuItem(this.menuItems.moveColumnRight, true)) {
-      return this.clickMenu(this.menuItems.moveColumnRight);
+      this.clickMenu(this.menuItems.moveColumnRight);
     } else {
-      return this.clickMenu(this.menuItems.moveColumnsRight);
+      this.clickMenu(this.menuItems.moveColumnsRight);
     }
   },
 
   //
   // Editing
   //
-  undo() { return this.clickMenu(this.menuItems.undo); },
-  redo() { return this.clickMenu(this.menuItems.redo); },
+  undo() { this.clickMenu(this.menuItems.undo); },
+  redo() { this.clickMenu(this.menuItems.redo); },
 
-  clear() { return this.clickMenu(this.menuItems.deleteValues); },
+  clear() { this.clickMenu(this.menuItems.deleteValues); },
 
   // Creates a row below and begins editing it.
   openRowBelow() {
     this.clickMenu(this.menuItems.rowBelow);
-    return UI.typeKey(KeyboardUtils.keyCodes.enter);
+    UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
     this.clickMenu(this.menuItems.rowAbove);
-    return UI.typeKey(KeyboardUtils.keyCodes.enter);
+    UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   // Like openRowBelow, but does not enter insert mode.
-  insertRowBelow() { return this.clickMenu(this.menuItems.rowBelow); },
-  insertRowAbove() { return this.clickMenu(this.menuItems.rowAbove); },
+  insertRowBelow() { this.clickMenu(this.menuItems.rowBelow); },
+  insertRowAbove() { this.clickMenu(this.menuItems.rowAbove); },
 
   changeCell() {
     this.clear();
-    return UI.typeKey(KeyboardUtils.keyCodes.enter);
+    UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   // Put the cursor at the beginning of the cell.
   editCell() {
     UI.typeKey(KeyboardUtils.keyCodes.enter);
     // Note that just typing the "home" key here doesn't work, for unknown reasons.
-    return this.moveCursorToCellStart();
+    this.moveCursorToCellStart();
   },
 
   editCellAppend() {
     // Note that appending to the cell's contents is the default behavior of the Enter key in Sheets.
-    return UI.typeKey(KeyboardUtils.keyCodes.enter);
+    UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   moveCursorToCellStart() {
@@ -283,33 +284,33 @@ window.SheetActions = {
     range.setStart(range.startContainer, 0);
     range.collapse(true);
     selection.removeAllRanges();
-    return selection.addRange(range);
+    selection.addRange(range);
   },
 
   moveCursorToCellLineEnd() {
-    return UI.typeKey(KeyboardUtils.keyCodes.end);
+    UI.typeKey(KeyboardUtils.keyCodes.end);
   },
 
   commitCellChanges() {
     UI.typeKey(KeyboardUtils.keyCodes.enter);
-    // Enter in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
-    return UI.typeKey(KeyboardUtils.keyCodes.upArrow);
+    // "Enter" in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
+    UI.typeKey(KeyboardUtils.keyCodes.upArrow);
   },
 
   copyRow() {
     this.selectRow();
     this.clickMenu(this.menuItems.copy);
-    return this.unselectRow();
+    this.unselectRow();
   },
 
   copy() {
     this.clickMenu(this.menuItems.copy);
-    return this.unselectRow();
+    this.unselectRow();
   },
 
   paste() {
     this.clickMenu(this.menuItems.paste);
-    return this.unselectRow();
+    this.unselectRow();
   },
 
   //
@@ -326,23 +327,27 @@ window.SheetActions = {
 
   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown() {
-    return __range__(0, (Math.floor(this.visibleRowCount() / 2)), true).map((_) =>
-      UI.typeKey(KeyboardUtils.keyCodes.downArrow));
+    var rowCount = Math.floor(this.visibleRowCount() / 2);
+    for (let i = 0; i < rowCount; i++) {
+      UI.typeKey(KeyboardUtils.keyCodes.downArrow)
+    }
   },
 
   scrollHalfPageUp() {
-    return __range__(0, (Math.floor(this.visibleRowCount() / 2)), true).map((_) =>
-      UI.typeKey(KeyboardUtils.keyCodes.upArrow));
+    var rowCount = Math.floor(this.visibleRowCount() / 2);
+    for (let i = 0; i < rowCount; i++) {
+      UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+    }
   },
 
   scrollToTop() {
     // TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
     // those platforms?
-    return UI.typeKey(KeyboardUtils.keyCodes.home, {meta: true});
+    UI.typeKey(KeyboardUtils.keyCodes.home, {meta: true});
   },
 
   scrollToBottom() {
-    return UI.typeKey(KeyboardUtils.keyCodes.end, {meta: true});
+    UI.typeKey(KeyboardUtils.keyCodes.end, {meta: true});
   },
 
   //
@@ -358,21 +363,21 @@ window.SheetActions = {
     return null;
   },
 
-  moveTabRight() { return this.clickTabButton("Move right"); },
-  moveTabLeft() { return this.clickTabButton("Move left"); },
+  moveTabRight() { this.clickTabButton("Move right"); },
+  moveTabLeft() { this.clickTabButton("Move left"); },
 
   prevTab() {
     const tabs = this.getTabEls();
     const prev = this.getActiveTabIndex() - 1;
     if (prev < 0) { return; }
-    return KeyboardUtils.simulateClick(tabs[prev]);
+    KeyboardUtils.simulateClick(tabs[prev]);
   },
 
   nextTab() {
     const tabs = this.getTabEls();
     const next = this.getActiveTabIndex() + 1;
     if (next >= tabs.length) { return; }
-    return KeyboardUtils.simulateClick(tabs[next]);
+    KeyboardUtils.simulateClick(tabs[next]);
   },
 
   clickTabButton(buttonCaption) {
@@ -392,7 +397,7 @@ window.SheetActions = {
       console.log(`Couldn't find a tab menu item with the caption ${buttonCaption}`);
       return;
     }
-    return KeyboardUtils.simulateClick(result);
+    KeyboardUtils.simulateClick(result);
   },
 
   // Shows and then hides the tab menu for the currently selected tab.
@@ -401,7 +406,7 @@ window.SheetActions = {
     const menuButton = document.querySelector(".docs-sheet-active-tab .docs-icon-arrow-dropdown");
     // Show and then hide the tab menu.
     KeyboardUtils.simulateClick(menuButton);
-    return KeyboardUtils.simulateClick(menuButton);
+    KeyboardUtils.simulateClick(menuButton);
   },
 
   //
@@ -414,31 +419,31 @@ window.SheetActions = {
   activateFontSizeMenu() {
      KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
      // It's been shown; hide it again.
-     return this.getFontSizeMenu().style.display = "none";
+     this.getFontSizeMenu().style.display = "none";
    },
 
   setFontSize10() {
     this.activateFontSizeMenu();
-    return KeyboardUtils.simulateClick(this.getMenuItem("10"));
+    KeyboardUtils.simulateClick(this.getMenuItem("10"));
   },
 
   setFontSize8() {
     this.activateFontSizeMenu();
-    return KeyboardUtils.simulateClick(this.getMenuItem("8"));
+    KeyboardUtils.simulateClick(this.getMenuItem("8"));
   },
 
-  wrap() { return this.clickToolbarButton(this.buttons.wrap); },
-  overflow() { return this.clickToolbarButton(this.buttons.overflow); },
-  clip() { return this.clickToolbarButton(this.buttons.clip); },
-  alignLeft() { return this.clickToolbarButton(this.buttons.left); },
-  alignCenter() { return this.clickToolbarButton(this.buttons.center); },
-  alignRight() { return this.clickToolbarButton(this.buttons.right); },
-  colorCellWhite() { return this.changeCellColor(this.colors.white); },
-  colorCellLightYellow3() { return this.changeCellColor(this.colors.lightYellow3); },
-  colorCellLightCornflowerBlue3() { return this.changeCellColor(this.colors.lightCornflowBlue3); },
-  colorCellLightPurple() { return this.changeCellColor(this.colors.lightPurple3); },
-  colorCellLightRed3() { return this.changeCellColor(this.colors.lightRed3); },
-  colorCellLightGray2() { return this.changeCellColor(this.colors.lightGray2); },
+  wrap() { this.clickToolbarButton(this.buttons.wrap); },
+  overflow() { this.clickToolbarButton(this.buttons.overflow); },
+  clip() { this.clickToolbarButton(this.buttons.clip); },
+  alignLeft() { this.clickToolbarButton(this.buttons.left); },
+  alignCenter() { this.clickToolbarButton(this.buttons.center); },
+  alignRight() { this.clickToolbarButton(this.buttons.right); },
+  colorCellWhite() { this.changeCellColor(this.colors.white); },
+  colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
+  colorCellLightCornflowerBlue3() { this.changeCellColor(this.colors.lightCornflowBlue3); },
+  colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
+  colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
+  colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
 
   //
   // Misc
@@ -448,7 +453,7 @@ window.SheetActions = {
     this.clickMenu(this.menuItems.fullScreen);
     // After entering full-screen mode, immediately dismiss the notification the Google Docs shows.
     // Note that the DOM element is only available a second after toggling fullscreen.
-    return setTimeout((() => this.dismissFullScreenNotificationMessage()), 250);
+    setTimeout(() => this.dismissFullScreenNotificationMessage(), 250);
   },
 
   dismissFullScreenNotificationMessage() {
@@ -456,7 +461,7 @@ window.SheetActions = {
     // Ensure we don't accidentally find and click on another HUD notification which is not for dismissing
     // the full screen notification.
     if (dismissButton && dismissButton.innerText === "Dismiss") {
-      return KeyboardUtils.simulateClick(dismissButton);
+      KeyboardUtils.simulateClick(dismissButton);
     }
   },
 
@@ -469,16 +474,6 @@ window.SheetActions = {
     // Some cells can contain a HYPERLINK("url", "caption") value. If so, assume that's the URL we want to open
     const match = url.match(/HYPERLINK\("(.+?),.+?"\)/);
     if (match) { url = match[1]; }
-    return window.open(url, "_blank");
+    window.open(url, "_blank");
   }
 };
-
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

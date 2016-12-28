@@ -16,7 +16,7 @@ const simulateKeyEvent = function(eventType, el, args) {
     false, args.mods.control, null, args.mods.shift, args.mods.meta, args.keyCode, args.keyCode);
   event.keyCodeVal = args.keyCode;
   // console.log "Simulating keyboard event:", args.keyCode, args, event
-  return el.dispatchEvent(event);
+  el.dispatchEvent(event);
 };
 
 const jsonEl = document.createElement("div");
@@ -31,5 +31,5 @@ window.addEventListener("sheetkeys-simulate-key-event", function(e) {
   // sheets (in particular, the Enter key).
   simulateKeyEvent("keydown", editorEl, args);
   simulateKeyEvent("keypress", editorEl, args);
-  return simulateKeyEvent("keyup", editorEl, args);
+  simulateKeyEvent("keyup", editorEl, args);
 });

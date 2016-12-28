@@ -17,7 +17,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
   return dispatcher.addEventListener(eventType, handlerFn, true);
 };
 
-window.UI = {
+UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxBindingLength: 3,
   // Mode can be one of:
@@ -46,23 +46,23 @@ window.UI = {
   enterVisualLineMode() {
     SheetActions.preserveSelectedColumn();
     SheetActions.selectRow();
-    return this.setMode("visualLine");
+    this.setMode("visualLine");
   },
 
   enterVisualColumnMode() {
     SheetActions.selectColumn();
-    return this.setMode("visual");
+    this.setMode("visual");
   },
 
   exitVisualMode() {
     SheetActions.unselectRow();
-    return this.setMode("normal");
+    this.setMode("normal");
   },
 
   exitVisualLineMode() {
     SheetActions.unselectRow();
     SheetActions.restoreSelectedColumn();
-    return this.setMode("normal");
+    this.setMode("normal");
   },
 
   // We inject the page_script into the page so that we can simulate keypress events, which must be done by a
@@ -75,7 +75,8 @@ window.UI = {
   },
 
   isEditable(el) {
-    const tagName = __guard__(el.tagName, x => x.toLowerCase()); // Note that the window object doesn't have a tagname.
+    // Note that the window object doesn't have a tagname.
+    const tagName = (el.tagName? el.tagName.toLowerCase() : null);
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
   },
 
@@ -83,9 +84,11 @@ window.UI = {
     if (!this.editor) { this.setupEditor(); }
     const el = event.target;
     if (el.id === this.richTextEditorId) {
-      if (this.mode === "disabled") { return this.setMode("normal"); }
+      if (this.mode === "disabled") {
+        this.setMode("normal");
+      }
     } else if (this.isEditable(el)) {
-      return this.setMode("disabled");
+      this.setMode("disabled");
     }
   },
 
@@ -122,13 +125,13 @@ window.UI = {
     // When we first focus the spreadsheet, in case we're in fullscreen mode, dismiss the popup message
     // Chrome shows. We have to wait 1s because the DOM is not yet ready to be clicked on.
     addOneTimeListener(window, "focus", () => {
-      return setTimeout((() => SheetActions.dismissFullScreenNotificationMessage()), 1000);
+      return setTimeout(() => SheetActions.dismissFullScreenNotificationMessage(), 1000);
     });
 
     // Key event handlers fire on window before they do on document. Prefer window for key events so the page
     // can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
-    return this.keyBindingPrefixes = this.buildKeyBindingPrefixes();
+    this.keyBindingPrefixes = this.buildKeyBindingPrefixes();
   },
 
   // Returns a map of (partial keyString) => is_bound?
@@ -144,7 +147,7 @@ window.UI = {
         const action = modeKeyBindings[keyString];
         if (!action) { continue; }
         const keys = keyString.split(",");
-        for (let i of __range__(0, keys.length-1, false)) {
+        for (let i = 0; i < keys.length - 1; i++) {
           keyString = keys.slice(0, i+1).join(",");
           prefixes[mode][keyString] = true;
         }
@@ -155,7 +158,7 @@ window.UI = {
 
   cancelEvent(e) {
     e.preventDefault();
-    return e.stopPropagation();
+    e.stopPropagation();
   },
 
   onKeydown(e) {
@@ -184,7 +187,7 @@ window.UI = {
     const modePrefixes = this.keyBindingPrefixes[this.mode] || [];
     // See if a bound command matches the typed key sequence. If so, execute it.
     // Prioritize longer bindings over shorter bindings.
-    for (let i of __range__(Math.min(this.maxBindingLength, this.keyQueue.length), 1, true)) {
+    for (let i = Math.min(this.maxBindingLength, this.keyQueue.length); i >= 1; i--) {
       var fn;
       const keySequence = this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(",");
       // If this key could be part of one of the bound key bindings, don't pass it through to the page.
@@ -193,14 +196,14 @@ window.UI = {
       if (modePrefixes[keySequence]) {
         this.cancelEvent(e);
         return;
-      } else if (fn = modeBindings[keySequence]) {
+      }
+
+      if (fn = modeBindings[keySequence]) {
         this.keyQueue = [];
         this.cancelEvent(e);
         fn();
-        return;
       }
     }
-    return null;
   },
 
   typeKey(keyCode, modifiers) {
@@ -213,16 +216,16 @@ window.UI = {
     document.getElementById("sheetkeys-json-message").innerText =
       JSON.stringify({keyCode, mods: modifiers});
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}));
-    return this.ignoreKeys = false;
+    this.ignoreKeys = false;
   },
 
   deleteRows() {
     SheetActions.deleteRows();
     // In case we're in visual mode, exit that mode and return to normal mode.
-    return this.setMode("normal");
+    this.setMode("normal");
   },
 
-  replaceChar() { return this.setMode("replace"); },
+  replaceChar() { this.setMode("replace"); },
 
   // TODO(philc): Consider moving this to SheetActions.
   reflowGrid() {
@@ -231,10 +234,10 @@ window.UI = {
     // corner.
     const exploreButton = document.querySelector(".waffle-assistant-entry [role=button]");
     KeyboardUtils.simulateClick(exploreButton);
-    return KeyboardUtils.simulateClick(exploreButton); // Click twice to show and then hide.
+    KeyboardUtils.simulateClick(exploreButton); // Click twice to show and then hide.
   },
 
-  reloadPage() { return window.location.reload(); },
+  reloadPage() { window.location.reload(); },
   // A bindable function which effectively swallows the keypress it's bound to.
   doNothing() {}
 };
@@ -340,23 +343,9 @@ keyBindings.visual = extend(clone(keyBindings.normal), {
   "y": SheetActions.copy.bind(SheetActions),
   "y,y": null, // Unbind "copy row", because it's superceded by "copy"
   "esc": UI.exitVisualMode.bind(UI)
-}
-);
+});
 
 keyBindings.visualLine = extend(clone(keyBindings.visual),
   {"esc": UI.exitVisualLineMode.bind(UI)});
 
 UI.init();
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}
