@@ -44,19 +44,28 @@ window.KeyboardUtils = {
 
   // Returns the string "<A-f>" if F is pressed.
   getKeyString(event) {
-    let keyString = event.keyCode in this.keyNames ?
-                  this.keyNames[event.keyCode]
-                : event.key.length === 1 ?
-                  event.key
-                : event.key.length === 2 && "F1" <= event.key && event.key <= "F9" ?
-                  event.key.toLowerCase() // F1 to F9.
-                : event.key.length === 3 && "F10" <= event.key && event.key <= "F12" ?
-                  event.key.toLowerCase() // F10 to F12.
-                :
-                  "";
+    let keyString;
+    if (event.keyCode in this.keyNames) {
+      keyString = this.keyNames[event.keyCode];
+    } else if (event.altKey && event.key) {
+      // The pressed key is a non-ASCII printing character in the current layout, and is ASCII in en_US, so we
+      // use the corresponding ASCII character. We do this because event.key when modified with Alt may
+      // represent a character other than the key in the user's keyboard layout. E.g. on Mac, <A-v> comes
+      // through as <A-√>.
+      // See https://github.com/philc/vimium/issues/2147#issuecomment-230370011 for discussion.
+      keyString = String.fromCharCode(event.which).toLowerCase();
+    } else if (event.key.length === 1) {
+      keyString = event.key;
+    }
+    else if (event.key.length === 2 && "F1" <= event.key && event.key <= "F9") {
+      keyString = event.key.toLowerCase(); // F1 to F9.
+    } else if (event.key.length === 3 && "F10" <= event.key && event.key <= "F12") {
+      keyString = event.key.toLowerCase(); // F10 to F12.
+    } else {
+      // Ignore modifiers by themselves.
+      return;
+    }
 
-    // Ignore modifiers by themselves.
-    if (keyString === "") { return; }
     const modifiers = [];
 
     if (event.shiftKey) {
