@@ -207,10 +207,7 @@ UI = {
   },
 
   typeKey(keyCode, modifiers) {
-    if (keyCode == null) {
-      console.log("No keyCode provided to typeKey");
-      return;
-    }
+    if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;
     if (!modifiers) { modifiers = {}; }
     document.getElementById("sheetkeys-json-message").innerText =
