@@ -147,14 +147,13 @@ SheetActions = {
   },
 
   selectColumn() {
-    // Sheets allows you to type Alt+Space to select a column. Similar to `selectRow`, using that shortcut
-    // has issues, so here we click on the appropriate column.
-    const activeCellLeft = document.querySelector(".active-cell-border").getBoundingClientRect().left;
-    const c = 25;
+    // Sheets allows you to type Alt+Space to select a column. Similar to `selectRow`, using that shortcut has
+    // issues, so here we click on the appropriate column.
+    const activeCellLeft = this.selectedCellCoords().left;
     // The column header is at the top of the grid portion of the UI (the waffle container).
     const gridTop = document.getElementById("waffle-grid-container").getBoundingClientRect().top;
-    const colMarginEl = document.elementFromPoint(activeCellLeft + c, gridTop);
-    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft + c, gridTop + 1); // +1 was chosen here empirically
+    const colMarginEl = document.elementFromPoint(activeCellLeft, gridTop);
+    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft, gridTop + 1); // +1 was chosen here empirically
   },
 
   unselectRow() {
