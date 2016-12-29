@@ -346,7 +346,9 @@ SheetActions = {
   },
 
   scrollToBottom() {
+    // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
     UI.typeKey(KeyboardUtils.keyCodes.end, {meta: true});
+    UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {meta: true});
   },
 
   //
