@@ -82,24 +82,41 @@ SheetActions = {
 
   // Returns the color palette button corresponding to the given color name.
   // type: either "font" or "cell", depending on which color you want to change.
+  // Note that the availability and use of the color palette buttons is a bit finicky.
   getColorButton(color, type) {
     const selector = `*[aria-label='${color}']`;
     let buttons = document.querySelectorAll(selector);
-    // The divs for a color can disappear from the DOM. To reactivate them, click on the color palettes button.
-    if (buttons.length === 0) {
-      const paletteButton = document.querySelector("*[aria-label='Fill color']");
-      KeyboardUtils.simulateClick(paletteButton);
-      KeyboardUtils.simulateClick(paletteButton); // Click twice to show and then hide the pallete popup.
-    }
-    buttons = document.querySelectorAll(selector);
-    if (buttons.length <= 0) { console.log("Error: unable to find element:", selector); }
 
-    // There are 3 color palettes in the document. The first one is for fonts, the second for cell background
-    // colors. The third is for an undiscovered use.
-    switch (type) {
-      case "font": return buttons[0];
-      case "cell": return buttons[1];
+    const togglePalette = (buttonSelector) => {
+      const button = document.querySelector(buttonSelector);
+      KeyboardUtils.simulateClick(button);
+      KeyboardUtils.simulateClick(button);
     }
+
+    // The divs for a color can disappear from the DOM. To reactivate them, we'll click on the color palettes
+    // buttons twice to hide and show each palette.
+    if (buttons.length < 2) {
+      togglePalette("*[aria-label='Text color']");
+      togglePalette("*[aria-label='Fill color']");
+    }
+
+    buttons = document.querySelectorAll(selector);
+    if (buttons.length < 2) { throw `Unable to find every color button for this selector: ${selector}`; }
+
+    // There are 3 color palettes in the DOM. The first one is for fonts, the second for cell background
+    // colors. The third is for an undiscovered use.
+    // The color palette swatche can appear in the DOM in any order (typically in the order in which they were
+    // used). You can distinguish which color palette a swatch div belongs to based on their IDs:
+    // jfk-palette-cell-1xx: text color
+    // jfk-palette-cell-2xx: cell (fill color)
+    var typeToSeries = { "font": "1", "cell": "2" };
+    for (let button of buttons) {
+      var series = button.id.match(/jfk-palette-cell-(.)../)[1];
+      if (series === typeToSeries[type]) { return button; }
+    }
+    const message = `Unable to find a button for color type "${type}".`
+    console.log(message + " in these buttons:", buttons)
+    throw message;
   },
 
   changeFontColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "font")); },
