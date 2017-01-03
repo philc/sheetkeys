@@ -33,6 +33,22 @@ UI = {
   keyBindingPrefixes: null,
   richTextEditorId: "waffle-rich-text-editor",
 
+  init() {
+    this.injectPageScript();
+    window.addEventListener("focus", (e => this.onFocus(e)), true);
+    // When we first focus the spreadsheet, if we're in fullscreen mode, dismiss Sheet's "info" message.
+    addOneTimeListener(window, "focus", () => {
+      // We have to wait 1 second because the DOM is not yet ready to be clicked on.
+      return setTimeout(() => SheetActions.dismissFullScreenNotificationMessage(), 1000);
+    });
+
+    // Key event handlers fire on window before they do on document. Prefer window for key events so the page
+    // can't set handlers to grab keys before this extension does.
+    window.addEventListener("keydown", (e => this.onKeydown(e)), true);
+
+    this.loadUserKeybindings();
+  },
+
   setMode(mode) {
     if (this.mode === mode) { return; }
     console.log(`Entering ${mode} mode.`);
@@ -67,11 +83,10 @@ UI = {
       SheetActions.restoreSelectedColumn();
       this.setMode("normal");
       break;
-    case "normal":
-      // Do nothing.
+    case "normal": // Do nothing.
       break;
     default:
-      throw `Trying to exit an unknown mode: this.mode`;
+      throw `Attempted to exit an unknown mode: ${this.mode}`;
       break;
     }
   },
@@ -128,22 +143,6 @@ UI = {
     // However, when this happens, the parent node of the editor gets a big long style attribute to portray
     // the cell editor input box.
     return (this.editor.parentNode.getAttribute("style") != null);
-  },
-
-  init() {
-    this.injectPageScript();
-    window.addEventListener("focus", (e => this.onFocus(e)), true);
-    // When we first focus the spreadsheet, if we're in fullscreen mode, dismiss Sheet's "info" message.
-    addOneTimeListener(window, "focus", () => {
-      // We have to wait 1 second because the DOM is not yet ready to be clicked on.
-      return setTimeout(() => SheetActions.dismissFullScreenNotificationMessage(), 1000);
-    });
-
-    // Key event handlers fire on window before they do on document. Prefer window for key events so the page
-    // can't set handlers to grab keys before this extension does.
-    window.addEventListener("keydown", (e => this.onKeydown(e)), true);
-
-    this.loadUserKeybindings();
   },
 
   loadUserKeybindings() {
