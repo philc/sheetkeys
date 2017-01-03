@@ -37,10 +37,10 @@ UI = {
     if (this.mode === mode) { return; }
     console.log(`Entering ${mode} mode.`);
     this.mode = mode;
-    return this.keyQueue = [];
+    this.keyQueue = [];
   },
 
-  enterVisualMode() { return this.setMode("visualLine"); },
+  enterVisualMode() { this.setMode("visualLine"); },
 
   // In this mode, entire lines are selected.
   enterVisualLineMode() {
@@ -99,7 +99,7 @@ UI = {
         // Listen for when the editor's style attribute changes. This indicates that a cell is now being
         // edited, perhaps due to double clicking into a cell.
         const observer = new MutationObserver(mutations => {
-          if (this.isEditorEditing()) { return this.setMode("insert"); } else { return this.setMode("normal"); }
+          this.isEditorEditing() ? this.setMode("insert") : this.setMode("normal");
         });
         observer.observe(this.editor.parentNode, {
           attributes: true,
@@ -122,9 +122,9 @@ UI = {
   init() {
     this.injectPageScript();
     window.addEventListener("focus", (e => this.onFocus(e)), true);
-    // When we first focus the spreadsheet, in case we're in fullscreen mode, dismiss the popup message
-    // Chrome shows. We have to wait 1s because the DOM is not yet ready to be clicked on.
+    // When we first focus the spreadsheet, if we're in fullscreen mode, dismiss Sheet's "info" message.
     addOneTimeListener(window, "focus", () => {
+      // We have to wait 1 second because the DOM is not yet ready to be clicked on.
       return setTimeout(() => SheetActions.dismissFullScreenNotificationMessage(), 1000);
     });
 
