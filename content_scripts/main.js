@@ -142,13 +142,28 @@ UI = {
     // Key event handlers fire on window before they do on document. Prefer window for key events so the page
     // can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
-    this.keyBindingPrefixes = this.buildKeyBindingPrefixes();
+
+    this.loadUserKeybindings();
+  },
+
+  loadUserKeybindings() {
+    chrome.storage.sync.get(null, (settings) => {
+      let userBindings = (settings && settings.keyMappings) ? Settings.parse(settings.keyMappings) : {};
+      let bindings = {};
+      // Perform a deep merge with the default keybindings.
+      for (let mode in defaultKeybindings) {
+        bindings[mode] = clone(defaultKeybindings[mode]);
+        extend(bindings[mode], userBindings[mode]);
+      }
+      this.keyBindings = bindings;
+      this.keyBindingPrefixes = this.buildKeyBindingPrefixes(bindings);
+    });
   },
 
   // Returns a map of (partial keyString) => is_bound?
   // Note that the keys only include partial keystrings for bindings. So the binding "dap" will add "d" and
   // "da" keys to this map, but not "dap".
-  buildKeyBindingPrefixes() {
+  buildKeyBindingPrefixes(keyBindings) {
     const prefixes = {};
     for (let mode in keyBindings) {
       prefixes[mode] = {};
@@ -323,7 +338,7 @@ var commands = {
   // Misc
   toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
   openCellAsUrl: { fn: SheetActions.openCellAsUrl.bind(SheetActions), },
-  reload: { fn: UI.reloadPage.bind(UI) },
+  reloadPage: { fn: UI.reloadPage.bind(UI) },
 };
 
 var defaultKeybindings = {
