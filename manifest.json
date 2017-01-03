@@ -14,7 +14,8 @@
       "js": ["content_scripts/keyboard_utils.js",
              "content_scripts/settings.js",
              "content_scripts/sheet_actions.js",
-             "content_scripts/main.js"],
+             "content_scripts/ui.js",
+             "content_scripts/commands.js"],
       "run_at": "document_end",
       "all_frames": false
     }],
