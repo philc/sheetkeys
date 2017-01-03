@@ -40,7 +40,7 @@ UI = {
     this.keyQueue = [];
   },
 
-  enterVisualMode() { this.setMode("visualLine"); },
+  enterVisualMode() { this.setMode("visual"); },
 
   // In this mode, entire lines are selected.
   enterVisualLineMode() {
@@ -51,18 +51,29 @@ UI = {
 
   enterVisualColumnMode() {
     SheetActions.selectColumn();
-    this.setMode("visual");
+    this.setMode("visualColumn");
   },
 
-  exitVisualMode() {
-    SheetActions.unselectRow();
-    this.setMode("normal");
-  },
-
-  exitVisualLineMode() {
-    SheetActions.unselectRow();
-    SheetActions.restoreSelectedColumn();
-    this.setMode("normal");
+  // Exits the current mode and transitions to normal mode.
+  exitMode() {
+    switch (this.mode) {
+    case "visual":
+      SheetActions.unselectRow();
+      this.setMode("normal");
+      break;
+    case "visualLine":
+    case "visualColumn":
+      SheetActions.unselectRow();
+      SheetActions.restoreSelectedColumn();
+      this.setMode("normal");
+      break;
+    case "normal":
+      // Do nothing.
+      break;
+    default:
+      throw `Trying to exit an unknown mode: this.mode`;
+      break;
+    }
   },
 
   // We inject the page_script into the page so that we can simulate keypress events, which must be done by a
@@ -235,8 +246,6 @@ UI = {
   },
 
   reloadPage() { window.location.reload(); },
-  // A bindable function which effectively swallows the keypress it's bound to.
-  doNothing() {}
 };
 
 var commands = {
@@ -268,6 +277,7 @@ var commands = {
   copyRow: { fn: SheetActions.copyRow.bind(SheetActions) },
   commitCellChanges: { fn: SheetActions.commitCellChanges.bind(SheetActions) },
   moveCursorToCellLineEnd: { fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions) },
+  exitMode: { fn: UI.exitMode.bind(UI) },
 
   // "Yank cell"
   copy: { fn: SheetActions.copy.bind(SheetActions) },
@@ -281,7 +291,6 @@ var commands = {
   moveUpAndSelect: { fn: SheetActions.moveUpAndSelect.bind(SheetActions) },
   moveLeftAndSelect: { fn: SheetActions.moveLeftAndSelect.bind(SheetActions) },
   moveRightAndSelect: { fn: SheetActions.moveRightAndSelect.bind(SheetActions) },
-  exitVisualLineMode: { fn: UI.exitVisualMode.bind(UI) },
 
   // Scrolling
   scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions) },
@@ -315,7 +324,6 @@ var commands = {
   toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
   openCellAsUrl: { fn: SheetActions.openCellAsUrl.bind(SheetActions), },
   reload: { fn: UI.reloadPage.bind(UI) },
-  doNothing: { fn: () => {} }
 };
 
 var defaultKeybindings = {
@@ -397,7 +405,7 @@ var defaultKeybindings = {
     "<M-r>": "reloadPage",
     // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
     // happen. If you mistakenly type it in Sheets, you will exit full screen mode.
-    "esc": "doNothing"
+    "esc": "exitMode"
   },
 
   "insert": {
@@ -417,12 +425,10 @@ defaultKeybindings.visual = extend(clone(defaultKeybindings.normal), {
   "h": "moveLeftAndSelect",
   "l": "moveRightAndSelect",
   "y": "copy",
-  "y,y": null, // Unbind "copy row", because it's superceded by "copy"
-  "esc": "exitVisualMode"
+  "y,y": null // Unbind "copy row", because it's superceded by "copy"
 });
 
-defaultKeybindings.visualLine = extend(clone(defaultKeybindings.visual), {
-  "esc": "exitVisualLineMode"
-});
+defaultKeybindings.visualLine = clone(defaultKeybindings.visual);
+defaultKeybindings.visualColumn = clone(defaultKeybindings.visual);
 
 UI.init();
