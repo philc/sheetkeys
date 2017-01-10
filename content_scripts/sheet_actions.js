@@ -104,15 +104,16 @@ SheetActions = {
     if (buttons.length < 2) { throw `Unable to find every color button for this selector: ${selector}`; }
 
     // There are 3 color palettes in the DOM. The first one is for fonts, the second for cell background
-    // colors. The third is for an undiscovered use.
-    // The color palette swatche can appear in the DOM in any order (typically in the order in which they were
-    // used). You can distinguish which color palette a swatch div belongs to based on their IDs:
-    // jfk-palette-cell-1xx: text color
-    // jfk-palette-cell-2xx: cell (fill color)
-    var typeToSeries = { "font": "1", "cell": "2" };
+    // colors, the third is for an undiscovered use.
+    // The color palette swatch can appear in the DOM in any order (typically in the order in which they were
+    // used). You can distinguish which color palette a swatch div belongs to based on the series number in
+    // the element's ID, e.g. jfk-palette-cell-xxx.
+    // I found these ID ranges by mousing over the color swatch divs in each color palette to see the IDs.
+    const typeToSeriesBounds = { "font": [90, 169], "cell": [180, 259] };
+    const seriesBounds = typeToSeriesBounds[type];
     for (let button of buttons) {
-      var series = button.id.match(/jfk-palette-cell-(.)../)[1];
-      if (series === typeToSeries[type]) { return button; }
+      let seriesId = Number(button.id.match(/jfk-palette-cell-(.+)/)[1]);
+      if (seriesId >= seriesBounds[0] && seriesId <= seriesBounds[1]) { return button; }
     }
     const message = `Unable to find a button for color type "${type}".`
     console.log(message + " in these buttons:", buttons)
