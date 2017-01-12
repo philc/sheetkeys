@@ -490,8 +490,8 @@ SheetActions = {
   // Opens a new tab using the current cell's value as the URL.
   openCellAsUrl() {
     let url = this.getCellValue().trim();
-    // Some cells can contain a HYPERLINK("url", "caption") value. If so, assume that's the URL we want to open
-    const match = url.match(/HYPERLINK\("(.+?),.+?"\)/i);
+    // Some cells can contain a HYPERLINK("url", "caption") value. If so, assume that's the URL to open.
+    const match = url.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
     if (match) { url = match[1]; }
     window.open(url, "_blank");
   }
