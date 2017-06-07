@@ -30,6 +30,12 @@ Commands = {
     moveCursorToCellLineEnd: { fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions) },
     exitMode: { fn: UI.exitMode.bind(UI) },
 
+    // Merging cells
+    mergeAllCells: { fn: SheetActions.mergeAllCells.bind(SheetActions) },
+    mergeCellsHorizontally: { fn: SheetActions.mergeCellsHorizontally.bind(SheetActions) },
+    mergeCellsVertically: { fn: SheetActions.mergeCellsVertically.bind(SheetActions) },
+    unmergeCells: { fn: SheetActions.unmergeCells.bind(SheetActions) },
+
     // "Yank cell"
     copy: { fn: SheetActions.copy.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
@@ -108,6 +114,12 @@ Commands = {
       "x": "clear",
       "c,c": "changeCell",
       "y,y": "copyRow",
+
+      // Merging cells
+      ";,m,a": "mergeAllCells",
+      ";,m,u": "unmergeCells",
+      ";,m,h": "mergeCellsHorizontally",
+      ";,m,v": "mergeCellsVertically",
 
       // "Yank cell"
       "y,c": "copy",

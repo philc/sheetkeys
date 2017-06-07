@@ -17,7 +17,11 @@ SheetActions = {
     paste: "Paste",
     undo: "Undo",
     redo: "Redo",
-    fullScreen: "Full screen"
+    fullScreen: "Full screen",
+    mergeAll: "Merge all",
+    mergeHorizontally: "Merge horizontally",
+    mergeVertically: "Merge vertically",
+    unmerge: "Unmerge"
   },
 
   buttons: {
@@ -48,7 +52,8 @@ SheetActions = {
     for (let caption of Array.from(captionList)) {
       const el = document.querySelector(`*[aria-label='${caption}']`);
       if (!el) {
-        console.log(`Couldn't find the element for the button labeled ${caption} in ${captionList}`);
+        console.log(`Couldn't find the element for the button labeled ${caption}.`);
+        console.log(captionList);
         return;
       }
       KeyboardUtils.simulateClick(el);
@@ -329,6 +334,12 @@ SheetActions = {
     this.clickMenu(this.menuItems.paste);
     this.unselectRow();
   },
+
+  // Merging cells
+  mergeAllCells() { this.clickMenu(this.menuItems.mergeAll); },
+  mergeCellsHorizontally() { this.clickMenu(this.menuItems.mergeHorizontally); },
+  mergeCellsVertically() { this.clickMenu(this.menuItems.mergeVertically); },
+  unmergeCells() { this.clickMenu(this.menuItems.unmerge); },
 
   //
   // Scrolling
