@@ -5,7 +5,8 @@
   "description": "TODO",
   "content_scripts": [
     {
-      "matches": ["https://docs.google.com/spreadsheets/*"],
+      "matches": ["https://docs.google.com/spreadsheets/*",
+                  "https://docs.google.com/a*/spreadsheets/*"],
       "js": ["content_scripts/keyboard_utils.js",
              "content_scripts/sheet_actions.js",
              "content_scripts/main.js"],
