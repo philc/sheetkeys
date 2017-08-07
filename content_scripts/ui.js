@@ -142,7 +142,8 @@ UI = {
     // There's no obvious way to determine directly that the cell editor is currently editing a cell.
     // However, when this happens, the parent node of the editor gets a big long style attribute to portray
     // the cell editor input box.
-    return (this.editor.parentNode.getAttribute("style") != null);
+    var style = this.editor.parentNode.getAttribute("style");
+    return style != null && style != "";
   },
 
   loadUserKeybindings() {
