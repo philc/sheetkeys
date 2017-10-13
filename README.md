@@ -38,9 +38,6 @@ Coming soon!
 
 ## Developer workflow
 
-* Run `cake autobuild` in the `sheetkeys` directory. This auto-rebuilds the extension's Javascript every time
-you change the coffeescript
-
 * You can use the
   [Extension Reloader](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid)
   which provides a quick shortcut for reloading all of your locally-developed extensions. See
