@@ -18,17 +18,17 @@ in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/m
 
 ## Install
 
-Coming soon: install from the Chrome Web Store.
+**Installing from the Chrome Web Store:**
 
-Installing from source:
+Coming soon!
+
+**Installing from source:**
 
 1. Check out this repository
-2. [Install coffeescript](http://coffeescript.org/#installation)
-3. Run `cake build` from within the sheetkeys folder
-4. Navigate to `chrome://extensions` in Chrome
-5. Toggle into Developer Mode
-6. Click on "Load Unpacked Extension..."
-7. Select the Sheetkeys folder
+2. Navigate to `chrome://extensions` in Chrome
+3. Toggle into Developer Mode
+4. Click on "Load Unpacked Extension..."
+5. Select the Sheetkeys folder
 
 ## Usage tips
 
