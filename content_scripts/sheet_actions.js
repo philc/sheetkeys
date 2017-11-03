@@ -284,7 +284,7 @@ SheetActions = {
   },
 
   moveCursorToCellStart() {
-    // http://stackoverflow.com/q/6249095/46237
+    // See http://stackoverflow.com/q/6249095/46237
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     range.setStart(range.startContainer, 0);
@@ -294,7 +294,14 @@ SheetActions = {
   },
 
   moveCursorToCellLineEnd() {
-    UI.typeKey(KeyboardUtils.keyCodes.end);
+    // See https://stackoverflow.com/a/3866442
+    const editorEl = document.getElementById("waffle-rich-text-editor");
+    const selection = window.getSelection();
+    const range = document.createRange();//Create a range (a range is a like the selection but invisible)
+    range.selectNodeContents(editorEl);//Select the entire contents of the element with the range
+    range.collapse(false); // Collapse the range on the end point.
+    selection.removeAllRanges();
+    selection.addRange(range);
   },
 
   commitCellChanges() {
