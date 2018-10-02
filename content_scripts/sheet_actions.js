@@ -1,7 +1,9 @@
 SheetActions = {
   menuItems: {
     copy: "Copy",
-    deleteRow: "Delete row",
+    // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
+    // There is also a "Delete rows/columns" button which we do not want to match.
+    deleteRow: "Delete row ",
     deleteValues: "Delete values",
     rowAbove: "Row above",
     rowBelow: "Row below",
