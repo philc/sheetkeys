@@ -5,7 +5,7 @@ spirit of the Vim text editor. It's written by one of the authors of
 ## Keyboard Bindings
 
 Documentation for these shortcuts is Coming Soon. For now, you can see all of the bindings provided by looking
-in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/main.coffee)
+in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/commands.js#L88).
 
 **Other UI improvements**
 
