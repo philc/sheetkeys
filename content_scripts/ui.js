@@ -78,9 +78,12 @@ UI = {
       this.setMode("normal");
       break;
     case "visualLine":
-    case "visualColumn":
       SheetActions.unselectRow();
       SheetActions.restoreSelectedColumn();
+      this.setMode("normal");
+      break;
+    case "visualColumn":
+      SheetActions.unselectRow();
       this.setMode("normal");
       break;
     case "normal": // Do nothing.
