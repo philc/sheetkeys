@@ -161,8 +161,9 @@ SheetActions = {
     const activeCellLeft = this.selectedCellCoords().left;
     // The column header is at the top of the grid portion of the UI (the waffle container).
     const gridTop = document.getElementById("waffle-grid-container").getBoundingClientRect().top;
-    const colMarginEl = document.elementFromPoint(activeCellLeft, gridTop);
-    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft, gridTop + 1); // +1 was chosen here empirically
+    const yOffset = gridTop + 1; // +1 was chosen empirically, and is necessary when the document is zoomed.
+    const colMarginEl = document.elementFromPoint(activeCellLeft, yOffset);
+    KeyboardUtils.simulateClick(colMarginEl, activeCellLeft, yOffset);
   },
 
   unselectRow() {
