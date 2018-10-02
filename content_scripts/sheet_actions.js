@@ -7,6 +7,9 @@ SheetActions = {
     deleteValues: "Delete values",
     rowAbove: "Row above",
     rowBelow: "Row below",
+    freeze: "Freeze", // Clicking this creates a sub-menu.
+    freezeRow: "Up to current row", // This is a sub-item of the "Freeze" menu.
+    freezeColumn: "Up to current column", // This is a sub-item of the "Freeze" menu.
     // The "moveRowUp" menu item won't yet exist if multiple rows are selected.
     moveRowUp: "Move row up",
     moveRowDown: "Move row down",
@@ -468,6 +471,26 @@ SheetActions = {
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  freezeRow() {
+    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
+    const caption = this.menuItems.freezeRow;
+    this.clickMenu(caption);
+    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
+    const menuItem = this.getMenuItem(caption);
+    const menu = menuItem.closest(".goog-menu");
+    menu.style.display = "none";
+  },
+
+  freezeColumn() {
+    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
+    const caption = this.menuItems.freezeColumn;
+    this.clickMenu(caption);
+    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
+    const menuItem = this.getMenuItem(caption);
+    const menu = menuItem.closest(".goog-menu");
+    menu.style.display = "none";
+  },
 
   //
   // Misc

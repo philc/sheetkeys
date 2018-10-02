@@ -73,9 +73,11 @@ Commands = {
     colorCellLightCornflowerBlue3: { fn : SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions) },
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions) },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions) },
-    colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions), },
-    fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions), },
-    fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions), },
+    colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions) },
+    fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
+    fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions) },
+    freezeRow: { fn: SheetActions.freezeRow.bind(SheetActions) },
+    freezeColumn: { fn: SheetActions.freezeColumn.bind(SheetActions) },
 
     // Misc
     toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
@@ -159,6 +161,8 @@ Commands = {
       ";,c,g": "colorCellLightGray2",
       ";,f,n": "fontSizeNormal",
       ";,f,s": "fontSizeSmall",
+      ";,f,r": "freezeRow",
+      ";,f,c": "freezeColumn",
 
       // Misc
       ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
