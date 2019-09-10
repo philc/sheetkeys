@@ -246,8 +246,8 @@ UI = {
     this.ignoreKeys = false;
   },
 
-  deleteRows() {
-    SheetActions.deleteRows();
+  deleteRowsOrColumns() {
+    SheetActions.deleteRowsOrColumns();
     // In case we're in visual mode, exit that mode and return to normal mode.
     this.setMode("normal");
   },

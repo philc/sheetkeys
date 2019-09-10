@@ -4,6 +4,7 @@ SheetActions = {
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
     // There is also a "Delete rows/columns" button which we do not want to match.
     deleteRow: "Delete row ",
+    deleteColumn: "Delete column ",
     deleteValues: "Delete values",
     rowAbove: "Row above",
     rowBelow: "Row below",
@@ -119,11 +120,15 @@ SheetActions = {
 
   clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
 
-  deleteRows() {
-     this.clickMenu(this.menuItems.deleteRow);
-     // Clear any row-level selections we might've had.
-     this.unselectRow();
-   },
+  deleteRowsOrColumns() {
+    if (UI.mode == "visualColumn")
+      this.clickMenu(this.menuItems.deleteColumn);
+    else
+      this.clickMenu(this.menuItems.deleteRow);
+
+    // Clear any row-level selections we might've had.
+    this.unselectRow();
+  },
 
   preserveSelectedColumn() { this.previousColumnLeft = this.selectedCellCoords().left; },
 
