@@ -94,10 +94,10 @@ Commands = {
       "l": "moveRight",
 
       // Row & column movement
-      "<C-J>": "moveRowsDown",
-      "<C-K>": "moveRowsUp",
-      "<C-H>": "moveColumnsLeft",
-      "<C-L>": "moveColumnsRight",
+      "<C-j>": "moveRowsDown",
+      "<C-k>": "moveRowsUp",
+      "<C-h>": "moveColumnsLeft",
+      "<C-l>": "moveColumnsRight",
 
       // TODO(philc): remove this because it's custom to my configuration
       "BACKSPACE": "moveColumnsLeft",
