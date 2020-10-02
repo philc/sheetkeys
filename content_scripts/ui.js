@@ -231,7 +231,20 @@ UI = {
         this.keyQueue = [];
         this.cancelEvent(e);
         Commands.commands[commandName].fn();
+        return;
       }
+    }
+
+    // Cancel the event if the mode matches "normal" or "visual*",
+    // to prevent accidentally input an unassigned character like "w" or "b".
+    // Ensure that the key is not pressed with ctrl or meta,
+    // not to mask Google Sheets' default shortcuts such as ⌘-F.
+    if (
+      !e.ctrlKey &&
+      !e.metaKey &&
+      ["normal", "visual", "visualLine", "visualColumn"].includes(this.mode)
+    ) {
+      this.cancelEvent(e);
     }
   },
 
