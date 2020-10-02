@@ -92,6 +92,10 @@ Commands = {
       "j": "moveDown",
       "h": "moveLeft",
       "l": "moveRight",
+      "up": "moveUp",
+      "down": "moveDown",
+      "left": "moveLeft",
+      "right": "moveRight",
 
       // Row & column movement
       "<C-J>": "moveRowsDown",
