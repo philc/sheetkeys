@@ -265,11 +265,13 @@ SheetActions = {
   // Creates a row below and begins editing it.
   openRowBelow() {
     this.clickMenu(this.menuItems.rowBelow);
+    UI.typeKey(KeyboardUtils.keyCodes.home);
     UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
     this.clickMenu(this.menuItems.rowAbove);
+    UI.typeKey(KeyboardUtils.keyCodes.home);
     UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
