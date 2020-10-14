@@ -3,6 +3,7 @@
   "name": "Sheetkeys",
   "version": "0.1",
   "description": "TODO",
+  "default_locale": "en",
   "permissions": [
     "storage"
   ],
