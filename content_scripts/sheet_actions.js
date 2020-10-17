@@ -420,17 +420,22 @@ SheetActions = {
     KeyboardUtils.simulateClick(tabs[next]);
   },
 
-  clickTabButton(buttonCaption) {
+  clickTabButton(captionOrI18nMessageKey) {
+    KeyboardUtils.simulateClick(this.getTabButton(captionOrI18nMessageKey));
+  },
+
+  getTabButton(captionOrI18nMessageKey) {
+    const caption = this.getI18nMessag(captionOrI18nMessageKey);
     const menu = document.querySelector(".docs-sheet-tab-menu");
     // This tab menu element gets created the first time the user clicks on it, so it may not yet be available
     // in the DOM.
     if (!menu) { this.activateTabMenu(); }
-    const result = this.findItem(".docs-sheet-tab-menu .goog-menuitem", buttonCaption);
+    const result = this.findItem(".docs-sheet-tab-menu .goog-menuitem", caption);
     if (!result) {
       console.log(`Couldn't find a tab menu item with the caption ${buttonCaption}`);
       return;
     }
-    KeyboardUtils.simulateClick(result);
+    return result;
   },
 
   // Shows and then hides the tab menu for the currently selected tab.
