@@ -83,7 +83,11 @@ SheetActions = {
   },
 
   findMenuItem(caption) {
-    const menuItems = document.querySelectorAll(".goog-menuitem");
+    return this.findItem(".goog-menuitem", caption);
+  },
+
+  findItem(selector, caption) {
+    const menuItems = document.querySelectorAll(selector);
     const regexp = new RegExp(caption);
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
@@ -421,14 +425,7 @@ SheetActions = {
     // This tab menu element gets created the first time the user clicks on it, so it may not yet be available
     // in the DOM.
     if (!menu) { this.activateTabMenu(); }
-    const menuItems = document.querySelectorAll(".docs-sheet-tab-menu .goog-menuitem");
-    let result = null;
-    for (let item of Array.from(menuItems)) {
-      if (item.innerText.indexOf(buttonCaption) === 0) {
-        result = item;
-        break;
-      }
-    }
+    const result = this.findItem(".docs-sheet-tab-menu .goog-menuitem", buttonCaption);
     if (!result) {
       console.log(`Couldn't find a tab menu item with the caption ${buttonCaption}`);
       return;
