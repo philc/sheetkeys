@@ -1,61 +1,65 @@
 SheetActions = {
   menuItems: {
-    copy: "Copy",
+    copy: "MenuItemsCopy",
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
     // There is also a "Delete rows/columns" button which we do not want to match.
-    deleteRow: "Delete row ",
-    deleteColumn: "Delete column ",
-    deleteValues: "Delete values",
-    rowAbove: "Row above",
-    rowBelow: "Row below",
-    freeze: "Freeze", // Clicking this creates a sub-menu.
-    freezeRow: "Up to current row", // This is a sub-item of the "Freeze" menu.
-    freezeColumn: "Up to current column", // This is a sub-item of the "Freeze" menu.
+    deleteRow: "MenuItemsDeleteRow",
+    deleteColumn: "MenuItemsDeleteColumn",
+    deleteValues: "MenuItemsDeleteValues",
+    rowAbove: "MenuItemsRowAbove",
+    rowBelow: "MenuItemsRowBelow",
+    freeze: "MenuItemsFreeze", // Clicking this creates a sub-menu.
+
+    freezeRow: "MenuItemsUpToCurrentRow", // This is a sub-item of the "Freeze" menu.
+
+    freezeColumn: "MenuItemsUpToCurrentColumn", // This is a sub-item of the "Freeze" menu.
+
     // The "moveRowUp" menu item won't yet exist if multiple rows are selected.
-    moveRowUp: "Move row up",
-    moveRowDown: "Move row down",
-    moveRowsUp: "Move rows up",
-    moveRowsDown: "Move rows down",
-    moveColumnLeft: "Move column left",
-    moveColumnRight: "Move column right",
-    moveColumnsLeft: "Move columns left",
-    moveColumnsRight: "Move columns right",
-    paste: "Paste",
-    undo: "Undo",
-    redo: "Redo",
-    fullScreen: "Full screen",
-    mergeAll: "Merge all",
-    mergeHorizontally: "Merge horizontally",
-    mergeVertically: "Merge vertically",
-    unmerge: "Unmerge"
+    moveRowUp: "MenuItemsMoveRowUp",
+    moveRowDown: "MenuItemsMoveRowDown",
+    moveRowsUp: "MenuItemsMoveRowsUp",
+    moveRowsDown: "MenuItemsMoveRowsDown",
+    moveColumnLeft: "MenuItemsMoveColumnLeft",
+    moveColumnRight: "MenuItemsMoveColumnRight",
+    moveColumnsLeft: "MenuItemsMoveColumnsLeft",
+    moveColumnsRight: "MenuItemsMoveColumnsRight",
+    paste: "MenuItemsPaste",
+    undo: "MenuItemsUndo",
+    redo: "MenuItemsRedo",
+    fullScreen: "MenuItemsFullScreen",
+    mergeAll: "MenuItemsMergeAll",
+    mergeHorizontally: "MenuItemsMergeHorizontally",
+    mergeVertically: "MenuItemsMergeVertically",
+    unmerge: "MenuItemsUnmerge",
   },
 
   buttons: {
-    center: ["Horizontal align", "Center"],
-    clip: ["Text wrapping", "Clip"],
-    left: ["Horizontal align", "Left"],
-    right: ["Horizontal align", "Right"],
-    overflow: ["Text wrapping", "Overflow"],
-    wrap: ["Text wrapping", "Wrap"]
+    center: ["ButtonsHorizontalAlign", "Center"],
+    clip: ["ButtonsTextWrapping", "Clip"],
+    left: ["ButtonsHorizontalAlign", "Left"],
+    right: ["ButtonsHorizontalAlign", "Right"],
+    overflow: ["ButtonsTextWrapping", "Overflow"],
+    wrap: ["ButtonsTextWrapping", "Wrap"]
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
   colors: {
-    white: "white",
-    lightYellow3: "light yellow 3",
-    lightCornflowBlue3: "light cornflower blue 3",
-    lightPurple3: "light purple 3",
-    lightRed3: "light red 3",
-    lightGray2: "light gray 2"
+    white: "ColorWhite",
+    lightYellow3: "ColorLightYellow3",
+    lightCornflowBlue3: "ColorLightCornflowerBlue3",
+    lightPurple3: "ColorLightPurple3",
+    lightRed3: "ColorLightRed3",
+    lightGray2: "ColorLightGray2"
   },
 
   // A mapping of button-caption to DOM element.
   menuItemElements: {},
-
+  
   clickToolbarButton(captionList) {
     // Sometimes a toolbar button won't exist in the DOM until its parent has been clicked, so we click all of
     // its parents in sequence.
-    for (let caption of Array.from(captionList)) {
+    for (let captionOrI18nMessage of Array.from(captionList)) {
+      const caption = this.getI18nMessag(captionOrI18nMessage);
       const el = document.querySelector(`*[aria-label='${caption}']`);
       if (!el) {
         console.log(`Couldn't find the element for the button labeled ${caption}.`);
@@ -68,7 +72,8 @@ SheetActions = {
 
   // Returns the DOM element of the menu item with the given caption. Prints a warning if a menu item isn't
   // found (since this is a common source of errors in SheetKeys) unless silenceWarning = true.
-  getMenuItem(caption, silenceWarning) {
+  getMenuItem(captionOrI18nMessageKey, silenceWarning) {
+    const caption = this.getI18nMessag(captionOrI18nMessageKey);
     if (silenceWarning == null) { silenceWarning = false; }
     let item = this.menuItemElements[caption];
     if (item) { return item; }
@@ -81,10 +86,15 @@ SheetActions = {
   },
 
   findMenuItem(caption) {
-    const menuItems = document.querySelectorAll(".goog-menuitem");
+    return this.findItem(".goog-menuitem", caption);
+  },
+
+  findItem(selector, caption) {
+    const menuItems = document.querySelectorAll(selector);
+    const regexp = new RegExp(caption);
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      if (label && label.indexOf(caption) === 0) {
+      if( label && label.search(regexp) === 0 ) {
         return menuItem;
       }
     }
@@ -94,11 +104,12 @@ SheetActions = {
   // Returns the color palette button corresponding to the given color name.
   // type: either "font" or "cell", depending on which color you want to change.
   // Note that the availability and use of the color palette buttons is a bit finicky.
-  getColorButton(color, type) {
+  getColorButton(colorOrI18nMessageKey, type) {
+    const color = this.getI18nMessag(colorOrI18nMessageKey);
     // First we must open the palette; only then can we reliably get the color button that pertains to that
     // color palette.
     const paletteButton = document.querySelector(
-      (type == "cell") ? "*[aria-label='Fill color']": "*[aria-label='Text color']");
+      (type == "cell") ? `*[aria-label='${this.getI18nMessag("ButtonsFillColor")}']`: `*[aria-label='${this.getI18nMessag("ButtonsTextColor")}']`);
     KeyboardUtils.simulateClick(paletteButton);
 
     const rect = paletteButton.getBoundingClientRect();
@@ -395,8 +406,8 @@ SheetActions = {
     return null;
   },
 
-  moveTabRight() { this.clickTabButton("Move right"); },
-  moveTabLeft() { this.clickTabButton("Move left"); },
+  moveTabRight() { this.clickTabButton("TabMoveRight"); },
+  moveTabLeft() { this.clickTabButton("TabMoveLeft"); },
 
   prevTab() {
     const tabs = this.getTabEls();
@@ -412,24 +423,22 @@ SheetActions = {
     KeyboardUtils.simulateClick(tabs[next]);
   },
 
-  clickTabButton(buttonCaption) {
+  clickTabButton(captionOrI18nMessageKey) {
+    KeyboardUtils.simulateClick(this.getTabButton(captionOrI18nMessageKey));
+  },
+
+  getTabButton(captionOrI18nMessageKey) {
+    const caption = this.getI18nMessag(captionOrI18nMessageKey);
     const menu = document.querySelector(".docs-sheet-tab-menu");
     // This tab menu element gets created the first time the user clicks on it, so it may not yet be available
     // in the DOM.
     if (!menu) { this.activateTabMenu(); }
-    const menuItems = document.querySelectorAll(".docs-sheet-tab-menu .goog-menuitem");
-    let result = null;
-    for (let item of Array.from(menuItems)) {
-      if (item.innerText.indexOf(buttonCaption) === 0) {
-        result = item;
-        break;
-      }
-    }
+    const result = this.findItem(".docs-sheet-tab-menu .goog-menuitem", caption);
     if (!result) {
       console.log(`Couldn't find a tab menu item with the caption ${buttonCaption}`);
       return;
     }
-    KeyboardUtils.simulateClick(result);
+    return result;
   },
 
   // Shows and then hides the tab menu for the currently selected tab.
@@ -449,19 +458,19 @@ SheetActions = {
   // implement increaes font / decrease font commands.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
   activateFontSizeMenu() {
-     KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+     KeyboardUtils.simulateClick(this.getMenuItem("FontSize"));
      // It's been shown; hide it again.
      this.getFontSizeMenu().style.display = "none";
    },
 
   setFontSize10() {
     this.activateFontSizeMenu();
-    KeyboardUtils.simulateClick(this.getMenuItem("10"));
+    KeyboardUtils.simulateClick(this.getMenuItem("^10$"));
   },
 
   setFontSize8() {
     this.activateFontSizeMenu();
-    KeyboardUtils.simulateClick(this.getMenuItem("8"));
+    KeyboardUtils.simulateClick(this.getMenuItem("^8$"));
   },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
@@ -527,5 +536,10 @@ SheetActions = {
     const match = url.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
     if (match) { url = match[1]; }
     window.open(url, "_blank");
+  },
+
+  getI18nMessag(captionOrKey) {
+    return chrome.i18n.getMessage(captionOrKey) || captionOrKey
   }
+
 };

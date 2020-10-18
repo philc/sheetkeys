@@ -1,0 +1,135 @@
+{
+  "MenuItemsCopy": {    
+    "message": "Copy"
+  },
+  "MenuItemsDeleteRow": {    
+    "message": "Delete row"
+  },
+  "MenuItemsDeleteColumn": {    
+    "message": "Delete column"
+  },
+  "MenuItemsDeleteValues": {    
+    "message": "Delete values"
+  },
+  "MenuItemsRowAbove": {    
+    "message": "Row above"
+  },
+  "MenuItemsRowBelow": {    
+    "message": "Row below"
+  },
+  "MenuItemsFreeze": {    
+    "message": "Freeze"
+  },
+  "MenuItemsUpToCurrentRow": {    
+    "message": "Up to current row"
+  },
+  "MenuItemsUpToCurrentColumn": {    
+    "message": "Up to current column"
+  },
+  "MenuItemsMoveRowUp": {    
+    "message": "Move row up"
+  },
+  "MenuItemsMoveRowDown": {    
+    "message": "Move row down"
+  },
+  "MenuItemsMoveRowsUp": {    
+    "message": "Move rows up"
+  },
+  "MenuItemsMoveRowsDown": {    
+    "message": "Move rows down"
+  },
+  "MenuItemsMoveColumnLeft": {    
+    "message": "Move column left"
+  },
+  "MenuItemsMoveColumnRight": {    
+    "message": "Move column right"
+  },
+  "MenuItemsMoveColumnsLeft": {    
+    "message": "Move columns left"
+  },
+  "MenuItemsMoveColumnsRight": {    
+    "message": "Move columns right"
+  },
+  "MenuItemsPaste": {    
+    "message": "Paste"
+  },
+  "MenuItemsUndo": {    
+    "message": "Undo"
+  },
+  "MenuItemsRedo": {    
+    "message": "Redo"
+  },
+  "MenuItemsFullScreen": {    
+    "message": "Full screen"
+  },
+  "MenuItemsMergeAll": {    
+    "message": "Merge all"
+  },
+  "MenuItemsMergeHorizontally": {    
+    "message": "Merge horizontally"
+  },
+  "MenuItemsMergeVertically": {    
+    "message": "Merge vertically"
+  },
+  "MenuItemsUnmerge": {    
+    "message": "Unmerge"
+  },
+  "ButtonsHorizontalAlign": {
+    "message": "Horizontal align"
+  },
+  "ButtonsTextWrapping": {
+    "message": "Text wrapping"
+  },
+  "ButtonsFillColor": {
+    "message": "Fill color"
+  },
+  "ButtonsTextColor": {
+    "message": "Text color"
+  },
+  "Center": {
+    "message": "Center"
+  },
+  "Clip": {
+    "message": "Clip"
+  },
+  "Left": {
+    "message": "Left"
+  },
+  "Right": {
+    "message": "Right"
+  },
+  "Overflow": {
+    "message": "Overflow"
+  },
+  "Wrap": {
+    "message": "Wrap"
+  },
+  "ColorWhite": {
+    "message": "white"
+  },
+  "ColorLightYellow3": {
+    "message": "light yellow 3"
+  },
+  "ColorLightCornflowerBlue3": {
+    "message": "light cornflower blue 3"
+  },
+  "ColorLightPurple3": {
+    "message": "light purple 3"
+  },
+  "ColorLightRed3": {
+    "message": "light red 3"
+  },
+  "ColorLightGray2": {
+    "message": "light gray 2"
+  },
+  "FontSize": {
+    "message": "Font size"
+  },
+  "TabMoveRight": {
+    "message": "Move right"
+  },
+  "TabMoveLeft": {
+    "message": "Move left"
+  }
+}
+
