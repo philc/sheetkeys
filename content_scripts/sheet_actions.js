@@ -8,9 +8,12 @@ SheetActions = {
     deleteValues: "MenuItemsDeleteValues",
     rowAbove: "MenuItemsRowAbove",
     rowBelow: "MenuItemsRowBelow",
-    freeze: "MenuItemsFreeze",
-    freezeRow: "MenuItemsUpToCurrentRow",
-    freezeColumn: "MenuItemsUpToCurrentColumn",
+    freeze: "MenuItemsFreeze", // Clicking this creates a sub-menu.
+
+    freezeRow: "MenuItemsUpToCurrentRow", // This is a sub-item of the "Freeze" menu.
+
+    freezeColumn: "MenuItemsUpToCurrentColumn", // This is a sub-item of the "Freeze" menu.
+
     // The "moveRowUp" menu item won't yet exist if multiple rows are selected.
     moveRowUp: "MenuItemsMoveRowUp",
     moveRowDown: "MenuItemsMoveRowDown",
