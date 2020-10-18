@@ -124,6 +124,11 @@
   },
   "FontSize": {
     "message": "フォント サイズ"
+  },
+  "TabMoveRight": {
+    "message": "右に移動"
+  },
+  "TabMoveLeft": {
+    "message": "左に移動"
   }
-
 }

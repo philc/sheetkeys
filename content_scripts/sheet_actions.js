@@ -403,8 +403,8 @@ SheetActions = {
     return null;
   },
 
-  moveTabRight() { this.clickTabButton("Move right"); },
-  moveTabLeft() { this.clickTabButton("Move left"); },
+  moveTabRight() { this.clickTabButton("TabMoveRight"); },
+  moveTabLeft() { this.clickTabButton("TabMoveLeft"); },
 
   prevTab() {
     const tabs = this.getTabEls();

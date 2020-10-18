@@ -124,6 +124,12 @@
   },
   "FontSize": {
     "message": "Font size"
+  },
+  "TabMoveRight": {
+    "message": "Move right"
+  },
+  "TabMoveLeft": {
+    "message": "Move left"
   }
 }
 
