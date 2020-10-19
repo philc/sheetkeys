@@ -172,13 +172,15 @@ Commands = {
       "<M-r>": "reloadPage",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
       // happen. If you mistakenly type it in Sheets, you will exit full screen mode.
-      "esc": "exitMode"
+      "esc": "exitMode",
+      "<C-[>": "exitMode"
     },
 
     "insert": {
       // In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
       // people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
       "esc": "commitCellChanges",
+      "<C-[>": "commitCellChanges",
       // In form fields on Mac, C-e takes you to the end of the field. For some reason C-e doesn't work in
       // Sheets. Here, we fix that.
       "<C-e>": "moveCursorToCellLineEnd",
