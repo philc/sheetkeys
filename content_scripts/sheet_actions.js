@@ -21,13 +21,14 @@ SheetActions = {
     moveColumnsLeft: "Move columns left",
     moveColumnsRight: "Move columns right",
     paste: "Paste",
+    pasteFormatOnly: "Paste without formatting⌘+Shift+V",
     undo: "Undo",
     redo: "Redo",
     fullScreen: "Full screen",
     mergeAll: "Merge all",
     mergeHorizontally: "Merge horizontally",
     mergeVertically: "Merge vertically",
-    unmerge: "Unmerge"
+    unmerge: "Unmerge",
   },
 
   buttons: {
@@ -46,7 +47,12 @@ SheetActions = {
     lightCornflowBlue3: "light cornflower blue 3",
     lightPurple3: "light purple 3",
     lightRed3: "light red 3",
-    lightGray2: "light gray 2"
+    lightGray2: "light gray 2",
+    blue: "blue",
+    red: "red",
+    blue: "blue",
+    black: "black",
+    yellow: "yellow",
   },
 
   // A mapping of button-caption to DOM element.
@@ -84,7 +90,10 @@ SheetActions = {
     const menuItems = document.querySelectorAll(".goog-menuitem");
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      if (label && label.indexOf(caption) === 0) {
+      // if (label && label.indexOf(caption) === 0) {
+      //   return menuItem;
+      // }
+      if (label && caption == label) {
         return menuItem;
       }
     }
@@ -337,6 +346,12 @@ SheetActions = {
     this.unselectRow();
   },
 
+  pasteFormatOnly() {
+    console.log('paste format only!');
+    this.clickMenu(this.menuItems.pasteFormatOnly);
+    this.unselectRow();
+  },
+
   // Merging cells
   mergeAllCells() { this.clickMenu(this.menuItems.mergeAll); },
   mergeCellsHorizontally() { this.clickMenu(this.menuItems.mergeHorizontally); },
@@ -449,7 +464,8 @@ SheetActions = {
   // implement increaes font / decrease font commands.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
   activateFontSizeMenu() {
-     KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+    //  KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+     KeyboardUtils.simulateClick(this.getMenuItem("Font size►"));
      // It's been shown; hide it again.
      this.getFontSizeMenu().style.display = "none";
    },
@@ -457,11 +473,19 @@ SheetActions = {
   setFontSize10() {
     this.activateFontSizeMenu();
     KeyboardUtils.simulateClick(this.getMenuItem("10"));
+    console.log('Font size 10');
   },
 
   setFontSize8() {
     this.activateFontSizeMenu();
     KeyboardUtils.simulateClick(this.getMenuItem("8"));
+    console.log('Font size 8');
+  },
+
+  setFontSize12() {
+    this.activateFontSizeMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("12"));
+    console.log('Font size 12');
   },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
@@ -472,10 +496,16 @@ SheetActions = {
   alignRight() { this.clickToolbarButton(this.buttons.right); },
   colorCellWhite() { this.changeCellColor(this.colors.white); },
   colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
+  colorCellYellow() { this.changeCellColor(this.colors.yellow); },
   colorCellLightCornflowerBlue3() { this.changeCellColor(this.colors.lightCornflowBlue3); },
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  // Font color
+  colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
+  colorCellFontColorBlue() { this.changeFontColor(this.colors.blue); },
+  colorCellFontColorBlack() { this.changeFontColor(this.colors.black); },
 
   freezeRow() {
     this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
@@ -488,6 +518,16 @@ SheetActions = {
   },
 
   freezeColumn() {
+    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
+    const caption = this.menuItems.freezeColumn;
+    this.clickMenu(caption);
+    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
+    const menuItem = this.getMenuItem(caption);
+    const menu = menuItem.closest(".goog-menu");
+    menu.style.display = "none";
+  },
+
+  openCommandPalette() {
     this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
     const caption = this.menuItems.freezeColumn;
     this.clickMenu(caption);

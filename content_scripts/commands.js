@@ -39,6 +39,7 @@ Commands = {
     // "Yank cell"
     copy: { fn: SheetActions.copy.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
+    pasteFormatOnly: { fn: SheetActions.pasteFormatOnly.bind(SheetActions) },
 
     // Selection
     enterVisualMode: { fn: UI.enterVisualMode.bind(UI) },
@@ -70,10 +71,15 @@ Commands = {
     alignRight: { fn: SheetActions.alignRight.bind(SheetActions) },
     colorCellWhite: { fn : SheetActions.colorCellWhite.bind(SheetActions) },
     colorCellLightYellow3: { fn : SheetActions.colorCellLightYellow3.bind(SheetActions) },
+    colorCellLightYellow: { fn : SheetActions.colorCellYellow.bind(SheetActions) },
     colorCellLightCornflowerBlue3: { fn : SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions) },
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions) },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions) },
     colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions) },
+    colorCellFontColorRed: { fn : SheetActions.colorCellFontColorRed.bind(SheetActions) },
+    colorCellFontColorBlue: { fn : SheetActions.colorCellFontColorBlue.bind(SheetActions) },
+    colorCellFontColorBlack: { fn : SheetActions.colorCellFontColorBlack.bind(SheetActions) },
+    fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions) },
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
     fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions) },
     freezeRow: { fn: SheetActions.freezeRow.bind(SheetActions) },
@@ -107,6 +113,7 @@ Commands = {
       "a": "editCellAppend",
       "u": "undo",
       "<C-r>": "redo",
+      ";,r": "redo",
       "r": "replaceChar",
       "o": "openRowBelow",
       "O": "openRowAbove",
@@ -126,6 +133,7 @@ Commands = {
       // "Yank cell"
       "y,c": "copy",
       "p": "paste",
+      "t": "pasteFormatOnly",
 
       // Selection
       "v": "enterVisualMode",
@@ -147,27 +155,40 @@ Commands = {
       "K": "nextTab",
 
       // Formatting
-      ";,w,w": "wrap",
-      ";,w,o": "overflow",
-      ";,w,c": "clip",
-      ";,a,l": "alignLeft",
-      ";,a,c": "alignCenter",
-      ";,a,r": "alignRight",
+      // ";,w,w": "wrap",
+      // ";,w,o": "overflow",
+      // ";,w,c": "clip",
+      // ";,a,l": "alignLeft",
+      // ";,a,c": "alignCenter",
+      // ";,a,r": "alignRight",
+      ";,a": "alignLeft",
+      ";,s": "alignCenter",
+      ";,d": "alignRight",
+
       ";,c,w": "colorCellWhite",
-      ";,c,y": "colorCellLightYellow3",
+      ";,c,y": "colorCellLightYellow",
       ";,c,b": "colorCellLightCornflowerBlue3",
       ";,c,p": "colorCellLightPurple",
       ";,c,r": "colorCellLightRed3",
       ";,c,g": "colorCellLightGray2",
+      // Customized
+      ";,u": "colorCellFontColorBlue",
+      ";,i": "colorCellFontColorBlack",
+      ";,o": "colorCellFontColorRed",
+      ";,o": "colorCellFontColorRed",
+      ";,p": "colorCellLightYellow",
+
       ";,f,n": "fontSizeNormal",
       ";,f,s": "fontSizeSmall",
-      ";,f,r": "freezeRow",
-      ";,f,c": "freezeColumn",
+      ";,f,l": "fontSizeLarge",
+
+      // ";,f,r": "freezeRow",
+      // ";,f,c": "freezeColumn",
 
       // Misc
-      ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
-      ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
-      ";,o": "openCellAsUrl",
+      // ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
+      // ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
+      // ";,o": "openCellAsUrl",
       // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
       "<M-r>": "reloadPage",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
