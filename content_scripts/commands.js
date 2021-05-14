@@ -81,7 +81,18 @@ Commands = {
     colorCellFontColorBlack: { fn : SheetActions.colorCellFontColorBlack.bind(SheetActions) },
     fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions) },
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
-    fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions) },
+    fontSizeSmall: { fn: SheetActions.setFontSize8.bind(SheetActions) },
+
+    // borderTop: { fn : SheetActions.borderTop.bind(SheetActions) },
+    // borderBottom: { fn : SheetActions.borderBottom.bind(SheetActions) },
+    // borderRight: { fn : SheetActions.borderRight.bind(SheetActions) },
+    // borderLeft: { fn : SheetActions.borderLeft.bind(SheetActions) },
+    // borderClear: { fn : SheetActions.borderClear.bind(SheetActions) },
+
+    zoom100: { fn: SheetActions.setZoom100.bind(SheetActions) },
+    zoom90: { fn: SheetActions.setZoom90.bind(SheetActions) },
+    zoom80: { fn: SheetActions.setZoom75.bind(SheetActions) },
+
     freezeRow: { fn: SheetActions.freezeRow.bind(SheetActions) },
     freezeColumn: { fn: SheetActions.freezeColumn.bind(SheetActions) },
 
@@ -181,6 +192,20 @@ Commands = {
       ";,f,n": "fontSizeNormal",
       ";,f,s": "fontSizeSmall",
       ";,f,l": "fontSizeLarge",
+
+      ";,0": "zoom100",
+      ";,9": "zoom90",
+      ";,8": "zoom80",
+
+      // "b,t": "borderTop",
+      // "b,b": "borderBottom",
+      // "b,r": "borderRight",
+      // "b,l": "borderLeft",
+      // "b,c": "borderClear",
+
+      // "0,0": "zoom100",
+      // "9,9": "zoom90",
+      // "8,8": "zoom80",
 
       // ";,f,r": "freezeRow",
       // ";,f,c": "freezeColumn",

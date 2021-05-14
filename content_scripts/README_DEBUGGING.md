@@ -7,9 +7,21 @@ textItems = menuItems.map(item => item.innerText)
 
 var searchItems = menuItems.filter(item => item.innerText == "Font size")
 
+// Print all itmes that match partial
+var searchTerm = "Delete row"
 textItems
     .filter(item => item != undefined)
-    .filter(item => item.includes('Font size'))
+    .filter(item => item.includes(searchTerm))
+    .map(item => {
+        console.log(item);
+        return item;
+    })
+
+
+var searchTerm = "border"
+textItems
+    .filter(item => item != undefined)
+    .filter(item => item.match(searchTerm))
     .map(item => {
         console.log(item);
         return item;
@@ -18,7 +30,27 @@ textItems
 
 
 KeyboardUtils.simulateClick(
-    SheetActions.getMenuItem("10")
+    SheetActions.getMenuItem("90%")
 )
 
+
+
+var toolbarItems = document.querySelectorAll(".goog-toolbar-menu-button");
+var toolbarItems = document.querySelectorAll(".toolbar-icon");
+var toolbarItems = Array.from(toolbarItems);
+
+var searchTerm = "Top border"
+toolbarItems
+    // .map(item => item.attributes['data-tooltip'])
+    .filter(item => item.attributes['data-tooltip'] != undefined)
+    .filter(item => item.attributes['data-tooltip'].nodeValue.includes(searchTerm))
+    .map(item => {
+        // console.log(item);
+        console.log(item.attributes['data-tooltip'].nodeValue);
+        return item;
+    })
+
+
+
 ```
+

@@ -22,8 +22,10 @@ SheetActions = {
     moveColumnsRight: "Move columns right",
     paste: "Paste",
     pasteFormatOnly: "Paste without formatting⌘+Shift+V",
-    undo: "Undo",
-    redo: "Redo",
+    // undo: "Undo",
+    undo: "Undo⌘Z",
+    // redo: "Redo",
+    redo: "Redo⌘Y",
     fullScreen: "Full screen",
     mergeAll: "Merge all",
     mergeHorizontally: "Merge horizontally",
@@ -37,7 +39,12 @@ SheetActions = {
     left: ["Horizontal align", "Left"],
     right: ["Horizontal align", "Right"],
     overflow: ["Text wrapping", "Overflow"],
-    wrap: ["Text wrapping", "Wrap"]
+    wrap: ["Text wrapping", "Wrap"],
+    // borderTop: ["Top border"],
+    // borderBottom: ["Bottom border"],
+    // borderLeft: ["Left border"],
+    // borderRight: ["Right border"],
+    // borderClear: ["Clear borders"]
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -76,8 +83,12 @@ SheetActions = {
   // found (since this is a common source of errors in SheetKeys) unless silenceWarning = true.
   getMenuItem(caption, silenceWarning) {
     if (silenceWarning == null) { silenceWarning = false; }
+
+    // If already cached, return it
     let item = this.menuItemElements[caption];
     if (item) { return item; }
+
+    // Otherwise find it
     item = this.findMenuItem(caption);
     if (!item) {
       if (!silenceWarning) { console.log(`Warning: could not find menu item with caption ${caption}`); }
@@ -90,10 +101,16 @@ SheetActions = {
     const menuItems = document.querySelectorAll(".goog-menuitem");
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
+      // 1 - Starts with match
       // if (label && label.indexOf(caption) === 0) {
       //   return menuItem;
       // }
+      // 2 - Exact string match
       if (label && caption == label) {
+        return menuItem;
+      }
+      // 3 - Regex match
+      if (label && label.match(caption)) {
         return menuItem;
       }
     }
@@ -127,7 +144,10 @@ SheetActions = {
   changeFontColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "font")); },
   changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
-  clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
+  clickMenu(itemCaption) {
+    console.log(`Clicking menu item: ${itemCaption}`)
+    KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
+  },
 
   deleteRowsOrColumns() {
     if (UI.mode == "visualColumn")
@@ -274,12 +294,12 @@ SheetActions = {
   // Creates a row below and begins editing it.
   openRowBelow() {
     this.clickMenu(this.menuItems.rowBelow);
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    // UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
     this.clickMenu(this.menuItems.rowAbove);
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    // UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   // Like openRowBelow, but does not enter insert mode.
@@ -463,11 +483,19 @@ SheetActions = {
   // NOTE(philc): I couldn't reliably detect the selected font size for the current cell, and so I couldn't
   // implement increaes font / decrease font commands.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
+  getZoomMenu() { return this.getMenuItem("100%").parentNode; },
+
   activateFontSizeMenu() {
     //  KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
      KeyboardUtils.simulateClick(this.getMenuItem("Font size►"));
      // It's been shown; hide it again.
      this.getFontSizeMenu().style.display = "none";
+   },
+
+  activateZoomMenu() {
+     KeyboardUtils.simulateClick(this.getMenuItem("Zoom►"));
+     // It's been shown; hide it again.
+     this.getZoomMenu().style.display = "none";
    },
 
   setFontSize10() {
@@ -488,12 +516,32 @@ SheetActions = {
     console.log('Font size 12');
   },
 
+  setZoom75() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("75%"));
+    console.log('Zoom 75%');
+  },
+
+  setZoom90() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("90%"));
+    console.log('Zoom 90%');
+  },
+
+  setZoom100() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("100%"));
+    console.log('Zoom 100%');
+  },
+
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
   overflow() { this.clickToolbarButton(this.buttons.overflow); },
   clip() { this.clickToolbarButton(this.buttons.clip); },
+
   alignLeft() { this.clickToolbarButton(this.buttons.left); },
   alignCenter() { this.clickToolbarButton(this.buttons.center); },
   alignRight() { this.clickToolbarButton(this.buttons.right); },
+
   colorCellWhite() { this.changeCellColor(this.colors.white); },
   colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
   colorCellYellow() { this.changeCellColor(this.colors.yellow); },
@@ -501,6 +549,11 @@ SheetActions = {
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  // borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
+  // borderBottom() { this.clickToolbarButton(this.buttons.borderBottom); },
+  // borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
+  // borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
 
   // Font color
   colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
