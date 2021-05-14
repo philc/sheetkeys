@@ -40,11 +40,11 @@ SheetActions = {
     right: ["Horizontal align", "Right"],
     overflow: ["Text wrapping", "Overflow"],
     wrap: ["Text wrapping", "Wrap"],
-    // borderTop: ["Top border"],
-    // borderBottom: ["Bottom border"],
-    // borderLeft: ["Left border"],
-    // borderRight: ["Right border"],
-    // borderClear: ["Clear borders"]
+    borderTop: ["Top border"],
+    borderBottom: ["Bottom border"],
+    borderLeft: ["Left border"],
+    borderRight: ["Right border"],
+    borderClear: ["Clear borders"],
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -550,10 +550,11 @@ SheetActions = {
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
 
-  // borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
-  // borderBottom() { this.clickToolbarButton(this.buttons.borderBottom); },
-  // borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
-  // borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
+  borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
+  borderBottom() { this.clickToolbarButton(this.buttons.borderBottom); },
+  borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
+  borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
+  borderClear() { this.clickToolbarButton(this.buttons.borderClear); },
 
   // Font color
   colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
