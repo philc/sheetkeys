@@ -87,7 +87,10 @@ Commands = {
     borderBottom: { fn : SheetActions.borderBottom.bind(SheetActions) },
     borderRight: { fn : SheetActions.borderRight.bind(SheetActions) },
     borderLeft: { fn : SheetActions.borderLeft.bind(SheetActions) },
-    borderClear: { fn : SheetActions.borderClear.bind(SheetActions) },
+    borderClear: { fn: SheetActions.borderClear.bind(SheetActions) },
+
+    decimalIncrease: { fn : SheetActions.decimalIncrease.bind(SheetActions) },
+    decimalDecrease: { fn : SheetActions.decimalDecrease.bind(SheetActions) },
 
     zoom100: { fn: SheetActions.setZoom100.bind(SheetActions) },
     zoom90: { fn: SheetActions.setZoom90.bind(SheetActions) },
@@ -206,6 +209,9 @@ Commands = {
       "b,r": "borderRight",
       "b,l": "borderLeft",
       "b,c": "borderClear",
+
+      "n": "decimalIncrease",
+      "m": "decimalDecrease",
 
       // ";,f,r": "freezeRow",
       // ";,f,c": "freezeColumn",

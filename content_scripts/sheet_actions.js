@@ -45,6 +45,8 @@ SheetActions = {
     borderLeft: ["Left border"],
     borderRight: ["Right border"],
     borderClear: ["Clear borders"],
+    decimalDecrease: ["Decrease decimal places"],
+    decimalIncrease: ["Increase decimal places"],
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -555,6 +557,9 @@ SheetActions = {
   borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
   borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
   borderClear() { this.clickToolbarButton(this.buttons.borderClear); },
+
+  decimalDecrease() { this.clickToolbarButton(this.buttons.decimalDecrease); },
+  decimalIncrease() { this.clickToolbarButton(this.buttons.decimalIncrease); },
 
   // Font color
   colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
