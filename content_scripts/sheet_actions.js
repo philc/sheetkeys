@@ -234,6 +234,11 @@ SheetActions = {
   moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
   moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
 
+  moveEndDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true }); },
+  moveEndUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true, meta: true}); },
+  moveEndLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true, meta: true}); },
+  moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true, meta: true}); },
+
   openCommandPalette() {
     var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
     KeyboardUtils.simulateClick(el);
@@ -403,7 +408,12 @@ SheetActions = {
      return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
    },
 
-  // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
+  moveEndDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {meta: true}) },
+  moveEndUp() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {meta: true}) },
+  moveEndRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {meta: true}) },
+  moveEndLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {meta: true}) },
+
+   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {

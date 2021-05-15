@@ -6,6 +6,11 @@ Commands = {
     moveLeft: { fn: SheetActions.moveLeft.bind(SheetActions) },
     moveRight: { fn: SheetActions.moveRight.bind(SheetActions) },
 
+    moveEndDown: { fn: SheetActions.moveEndDown.bind(SheetActions) },
+    moveEndUp: { fn: SheetActions.moveEndUp.bind(SheetActions) },
+    moveEndRight: { fn: SheetActions.moveEndRight.bind(SheetActions) },
+    moveEndLeft: { fn: SheetActions.moveEndLeft.bind(SheetActions) },
+
     // Row & column movement
     moveRowsDown: { fn: SheetActions.moveRowsDown.bind(SheetActions) },
     moveRowsUp: { fn: SheetActions.moveRowsUp.bind(SheetActions) },
@@ -45,10 +50,16 @@ Commands = {
     enterVisualMode: { fn: UI.enterVisualMode.bind(UI) },
     enterVisualLineMode: { fn: UI.enterVisualLineMode.bind(UI) },
     enterVisualColumnMode: { fn: UI.enterVisualColumnMode.bind(UI) },
+
     moveDownAndSelect: { fn: SheetActions.moveDownAndSelect.bind(SheetActions) },
     moveUpAndSelect: { fn: SheetActions.moveUpAndSelect.bind(SheetActions) },
     moveLeftAndSelect: { fn: SheetActions.moveLeftAndSelect.bind(SheetActions) },
     moveRightAndSelect: { fn: SheetActions.moveRightAndSelect.bind(SheetActions) },
+
+    moveEndDownAndSelect: { fn: SheetActions.moveEndDownAndSelect.bind(SheetActions) },
+    moveEndUpAndSelect: { fn: SheetActions.moveEndUpAndSelect.bind(SheetActions) },
+    moveEndLeftAndSelect: { fn: SheetActions.moveEndLeftAndSelect.bind(SheetActions) },
+    moveEndRightAndSelect: { fn: SheetActions.moveEndRightAndSelect.bind(SheetActions) },
 
     // Scrolling
     scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions) },
@@ -115,6 +126,11 @@ Commands = {
       "j": "moveDown",
       "h": "moveLeft",
       "l": "moveRight",
+
+      "<M-j>": "moveEndDown",
+      "<M-k>": "moveEndUp",
+      "<M-l>": "moveEndRight",
+      "<M-h>": "moveEndLeft",
 
       // Row & column movement
       "<C-J>": "moveRowsDown",
@@ -251,6 +267,10 @@ Commands.defaultMappings.visual = extend(clone(Commands.defaultMappings.normal),
   "k": "moveUpAndSelect",
   "h": "moveLeftAndSelect",
   "l": "moveRightAndSelect",
+  "<M-j>": "moveEndDownAndSelect",
+  "<M-k>": "moveEndUpAndSelect",
+  "<M-h>": "moveEndLeftAndSelect",
+  "<M-l>": "moveEndRightAndSelect",
   "y": "copy",
   "y,y": null // Unbind "copy row", because it's superceded by "copy"
 });
