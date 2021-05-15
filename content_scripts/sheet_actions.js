@@ -234,6 +234,17 @@ SheetActions = {
   moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
   moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
 
+  openCommandPalette() {
+    var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
+    KeyboardUtils.simulateClick(el);
+  },
+
+  openSearch() {
+    // NOT WORKING
+    var el = document.querySelector(`*[placeholder='Find in sheet']`);
+    KeyboardUtils.simulateClick(el);
+  },
+
   //
   // Row movement
   //
@@ -577,16 +588,6 @@ SheetActions = {
   },
 
   freezeColumn() {
-    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
-    const caption = this.menuItems.freezeColumn;
-    this.clickMenu(caption);
-    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
-    const menuItem = this.getMenuItem(caption);
-    const menu = menuItem.closest(".goog-menu");
-    menu.style.display = "none";
-  },
-
-  openCommandPalette() {
     this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
     const caption = this.menuItems.freezeColumn;
     this.clickMenu(caption);

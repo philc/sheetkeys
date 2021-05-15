@@ -99,6 +99,9 @@ Commands = {
     freezeRow: { fn: SheetActions.freezeRow.bind(SheetActions) },
     freezeColumn: { fn: SheetActions.freezeColumn.bind(SheetActions) },
 
+    openCommandPalette: { fn: SheetActions.openCommandPalette.bind(SheetActions) },
+    openSearch: { fn: SheetActions.openSearch.bind(SheetActions) },
+
     // Misc
     toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
     openCellAsUrl: { fn: SheetActions.openCellAsUrl.bind(SheetActions), },
@@ -212,6 +215,10 @@ Commands = {
 
       "n": "decimalIncrease",
       "m": "decimalDecrease",
+
+      // ":": "openCommandPalette",
+      ":": "openCommandPalette",
+      // "/": "openSearch",
 
       // ";,f,r": "freezeRow",
       // ";,f,c": "freezeColumn",

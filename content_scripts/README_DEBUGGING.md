@@ -8,7 +8,8 @@ textItems = menuItems.map(item => item.innerText)
 var searchItems = menuItems.filter(item => item.innerText == "Font size")
 
 // Print all itmes that match partial
-var searchTerm = "Delete row"
+
+var searchTerm = "Search the menu"
 textItems
     .filter(item => item != undefined)
     .filter(item => item.includes(searchTerm))
@@ -34,6 +35,7 @@ KeyboardUtils.simulateClick(
 )
 
 
+// Toolbar icons
 
 var toolbarItems = document.querySelectorAll(".goog-toolbar-menu-button");
 var toolbarItems = document.querySelectorAll(".toolbar-icon");
@@ -51,6 +53,9 @@ toolbarItems
     })
 
 
+var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
+KeyboardUtils.simulateClick(el);
+el.focus();
 
 ```
 
