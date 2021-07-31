@@ -19,7 +19,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
 
 UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
-  maxBindingLength: 3,
+  maxBindingLength: 6,
   // Mode can be one of:
   // * normal
   // * insert: when editing a cell's contents

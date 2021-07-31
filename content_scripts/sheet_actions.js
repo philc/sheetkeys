@@ -39,16 +39,6 @@ SheetActions = {
     wrap: ["Text wrapping", "Wrap"]
   },
 
-  // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
-  colors: {
-    white: "white",
-    lightYellow3: "light yellow 3",
-    lightCornflowBlue3: "light cornflower blue 3",
-    lightPurple3: "light purple 3",
-    lightRed3: "light red 3",
-    lightGray2: "light gray 2"
-  },
-
   // A mapping of button-caption to DOM element.
   menuItemElements: {},
 
@@ -470,12 +460,9 @@ SheetActions = {
   alignLeft() { this.clickToolbarButton(this.buttons.left); },
   alignCenter() { this.clickToolbarButton(this.buttons.center); },
   alignRight() { this.clickToolbarButton(this.buttons.right); },
-  colorCellWhite() { this.changeCellColor(this.colors.white); },
-  colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
-  colorCellLightCornflowerBlue3() { this.changeCellColor(this.colors.lightCornflowBlue3); },
-  colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
-  colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
-  colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  // Cell Color
+  colorCell(color) { this.changeCellColor(color); },
 
   freezeRow() {
     this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
