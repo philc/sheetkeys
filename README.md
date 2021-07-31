@@ -104,7 +104,7 @@ in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/c
 |       |                                                          |                         |                
 
 
-**Other|UI improvements**
+**Other UI improvements**
 
 * In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your changes
   can't be brought back with "Undo". Sheetkeys fixes this. Now ESC will save your changes to the cell, and you
