@@ -38,6 +38,7 @@ Commands = {
 
     // "Yank cell"
     copy: { fn: SheetActions.copy.bind(SheetActions) },
+    cut: { fn: SheetActions.cut.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
 
     // Selection
@@ -125,6 +126,7 @@ Commands = {
 
       // "Yank cell"
       "y,c": "copy",
+      "y,x": "cut",
       "p": "paste",
 
       // Selection
