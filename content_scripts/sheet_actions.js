@@ -1,6 +1,7 @@
 SheetActions = {
   menuItems: {
     copy: "Copy",
+    cut: "Cut",
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
     // There is also a "Delete rows/columns" button which we do not want to match.
     deleteRow: "Delete row ",
@@ -98,7 +99,7 @@ SheetActions = {
     // First we must open the palette; only then can we reliably get the color button that pertains to that
     // color palette.
     const paletteButton = document.querySelector(
-      (type == "cell") ? "*[aria-label='Fill color']": "*[aria-label='Text color']");
+      (type == "cell") ? "*[aria-label='Fill color']" : "*[aria-label='Text color']");
     KeyboardUtils.simulateClick(paletteButton);
 
     const rect = paletteButton.getBoundingClientRect();
@@ -144,7 +145,7 @@ SheetActions = {
     // Offset this box by > 0 so we don't select the borders around the selected cell.
     // NOTE(philc): I've chosen 5 here instead of 1 because > 1 is required when the document is zoomed.
     const margin = 5;
-    return {top: box.top + margin, left: box.left + margin};
+    return { top: box.top + margin, left: box.left + margin };
   },
 
   selectRow() {
@@ -198,10 +199,10 @@ SheetActions = {
   moveLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow); },
   moveRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow); },
 
-  moveDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
-  moveUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
-  moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
-  moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
+  moveDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true }); },
+  moveUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, { shift: true }); },
+  moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, { shift: true }); },
+  moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { shift: true }); },
 
   //
   // Row movement
@@ -332,6 +333,11 @@ SheetActions = {
     this.unselectRow();
   },
 
+  cut() {
+    this.clickMenu(this.menuItems.cut);
+    this.unselectRow();
+  },
+
   paste() {
     this.clickMenu(this.menuItems.paste);
     this.unselectRow();
@@ -352,8 +358,8 @@ SheetActions = {
 
   // The approximate number of visible rows. It's probably possible to compute this precisely.
   visibleRowCount() {
-     return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
-   },
+    return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
+  },
 
   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown() {
@@ -373,13 +379,13 @@ SheetActions = {
   scrollToTop() {
     // TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
     // those platforms?
-    UI.typeKey(KeyboardUtils.keyCodes.home, {meta: true});
+    UI.typeKey(KeyboardUtils.keyCodes.home, { meta: true });
   },
 
   scrollToBottom() {
     // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
-    UI.typeKey(KeyboardUtils.keyCodes.end, {meta: true});
-    UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {meta: true});
+    UI.typeKey(KeyboardUtils.keyCodes.end, { meta: true });
+    UI.typeKey(KeyboardUtils.keyCodes.leftArrow, { meta: true });
   },
 
   //
@@ -449,10 +455,10 @@ SheetActions = {
   // implement increaes font / decrease font commands.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
   activateFontSizeMenu() {
-     KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
-     // It's been shown; hide it again.
-     this.getFontSizeMenu().style.display = "none";
-   },
+    KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+    // It's been shown; hide it again.
+    this.getFontSizeMenu().style.display = "none";
+  },
 
   setFontSize10() {
     this.activateFontSizeMenu();
