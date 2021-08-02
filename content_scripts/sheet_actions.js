@@ -1,6 +1,7 @@
 SheetActions = {
   menuItems: {
     copy: "Copy",
+    cut: "Cut",
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
     // There is also a "Delete rows/columns" button which we do not want to match.
     deleteRow: "Delete row ",
@@ -319,6 +320,11 @@ SheetActions = {
 
   copy() {
     this.clickMenu(this.menuItems.copy);
+    this.unselectRow();
+  },
+
+  cut() {
+    this.clickMenu(this.menuItems.cut);
     this.unselectRow();
   },
 
