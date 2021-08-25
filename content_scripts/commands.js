@@ -186,8 +186,11 @@ Commands = {
       "<,<": "moveTabLeft",
       "g,t": "nextTab",
       "g,T": "prevTab",
+
       "J": "prevTab",
       "K": "nextTab",
+      "[": "prevTab",
+      "]": "nextTab",
 
       // Formatting
       // ";,w,w": "wrap",

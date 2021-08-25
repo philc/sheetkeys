@@ -1,4 +1,5 @@
 SheetActions = {
+  // Text of items as the appear in the Google Sheets menus, used to search for DOM elements and then click programatically
   menuItems: {
     copy: "Copy",
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
@@ -243,7 +244,7 @@ SheetActions = {
   moveEndDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true }); },
   moveEndUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true, meta: true}); },
   moveEndLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true, meta: true}); },
-  moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true, meta: true}); },
+  moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { shift: true, meta: true }); },
 
   openCommandPalette() {
     var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
