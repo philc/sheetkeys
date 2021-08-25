@@ -27,6 +27,7 @@ Commands = {
     openRowAbove: { fn: SheetActions.openRowAbove.bind(SheetActions) },
     insertRowBelow: { fn: SheetActions.insertRowBelow.bind(SheetActions) },
     insertRowAbove: { fn: SheetActions.insertRowAbove.bind(SheetActions) },
+    deleteColumns: { fn: UI.deleteColumns.bind(UI) },
     deleteRowsOrColumns: { fn: UI.deleteRowsOrColumns.bind(UI) },
     clear: { fn: SheetActions.clear.bind(SheetActions) },
     changeCell: { fn: SheetActions.changeCell.bind(SheetActions) },
@@ -153,6 +154,7 @@ Commands = {
       "s": "insertRowBelow",
       "S": "insertRowAbove",
       "d,d": "deleteRowsOrColumns",
+      "D,D": "deleteColumns",
       "x": "clear",
       "c,c": "changeCell",
       "y,y": "copyRow",
@@ -207,7 +209,6 @@ Commands = {
       // Customized
       ";,u": "colorCellFontColorBlue",
       ";,i": "colorCellFontColorBlack",
-      ";,o": "colorCellFontColorRed",
       ";,o": "colorCellFontColorRed",
       ";,p": "colorCellLightYellow",
 

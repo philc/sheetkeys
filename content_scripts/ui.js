@@ -246,6 +246,12 @@ UI = {
     this.ignoreKeys = false;
   },
 
+  deleteColumns() {
+    SheetActions.deleteColumns();
+    // In case we're in visual mode, exit that mode and return to normal mode.
+    this.setMode("normal");
+  },
+
   deleteRowsOrColumns() {
     SheetActions.deleteRowsOrColumns();
     // In case we're in visual mode, exit that mode and return to normal mode.

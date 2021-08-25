@@ -151,6 +151,12 @@ SheetActions = {
     KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
   },
 
+  deleteColumns() {
+    this.clickMenu(this.menuItems.deleteColumn);
+    // Clear any row-level selections we might've had.
+    this.unselectRow();
+  },
+
   deleteRowsOrColumns() {
     if (UI.mode == "visualColumn")
       this.clickMenu(this.menuItems.deleteColumn);
