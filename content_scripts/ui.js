@@ -235,7 +235,7 @@ UI = {
     }
   },
 
-  // modifiers: optiona; an object with these boolean properties: meta, shift, control.
+  // modifiers: optiona; an object with these boolean properties: meta, alt, shift, control.
   typeKey(keyCode, modifiers) {
     if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;

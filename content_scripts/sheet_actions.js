@@ -22,7 +22,8 @@ SheetActions = {
     moveColumnsLeft: "Move columns left",
     moveColumnsRight: "Move columns right",
     paste: "Paste",
-    pasteFormatOnly: "Paste without formatting⌘+Shift+V",
+    pasteFormulaOnly: "Paste formula only",
+    // pasteFormatOnly: "Paste without formatting",
     // undo: "Undo",
     undo: "Undo⌘Z",
     // redo: "Redo",
@@ -41,11 +42,11 @@ SheetActions = {
     right: ["Horizontal align", "Right"],
     overflow: ["Text wrapping", "Overflow"],
     wrap: ["Text wrapping", "Wrap"],
-    borderTop: ["Top border"],
-    borderBottom: ["Bottom border"],
-    borderLeft: ["Left border"],
-    borderRight: ["Right border"],
-    borderClear: ["Clear borders"],
+    borderTop: ["Borders", "Top border"],
+    borderBottom: ["Borders", "Bottom border"],
+    borderLeft: ["Borders", "Left border"],
+    borderRight: ["Borders", "Right border"],
+    borderClear: ["Borders", "Clear borders"],
     decimalDecrease: ["Decrease decimal places"],
     decimalIncrease: ["Increase decimal places"],
   },
@@ -253,8 +254,9 @@ SheetActions = {
 
   openSearch() {
     // NOT WORKING
-    var el = document.querySelector(`*[placeholder='Find in sheet']`);
-    KeyboardUtils.simulateClick(el);
+    // var el = document.querySelector(`*[placeholder='Find in sheet']`);
+    // KeyboardUtils.simulateClick(el);
+    UI.typeKey(KeyboardUtils.keyCodes.f, { meta: true });
   },
 
   //
@@ -393,8 +395,7 @@ SheetActions = {
 
   pasteFormatOnly() {
     console.log('paste format only!');
-    this.clickMenu(this.menuItems.pasteFormatOnly);
-    this.unselectRow();
+    UI.typeKey(KeyboardUtils.keyCodes.v, { alt: true, meta: true });
   },
 
   // Merging cells
@@ -581,7 +582,10 @@ SheetActions = {
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
 
   borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
-  borderBottom() { this.clickToolbarButton(this.buttons.borderBottom); },
+  borderBottom() {
+    this.clickToolbarButton(this.buttons.borderBottom);
+    this.commitCellChanges()
+  },
   borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
   borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
   borderClear() { this.clickToolbarButton(this.buttons.borderClear); },

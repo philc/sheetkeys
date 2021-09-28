@@ -142,12 +142,14 @@ Commands = {
       // TODO(philc): remove this because it's custom to my configuration
       "BACKSPACE": "moveColumnsLeft",
 
+
+      "<C-r>": "redo",
+      ";,r": "redo",
+
       // Editing
       "i": "editCell",
       "a": "editCellAppend",
       "u": "undo",
-      "<C-r>": "redo",
-      ";,r": "redo",
       "r": "replaceChar",
       "o": "openRowBelow",
       "O": "openRowAbove",
@@ -157,6 +159,7 @@ Commands = {
       "D,D": "deleteColumns",
       "x": "clear",
       "c,c": "changeCell",
+      "C": "changeCell",
       "y,y": "copyRow",
 
       // Merging cells
@@ -238,7 +241,7 @@ Commands = {
 
       // ":": "openCommandPalette",
       ":": "openCommandPalette",
-      // "/": "openSearch",
+      "/": "openSearch",
 
       // ";,f,r": "freezeRow",
       // ";,f,c": "freezeColumn",

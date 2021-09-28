@@ -5,11 +5,12 @@ var menuItems = document.querySelectorAll(".goog-menuitem");
 var menuItems = Array.from(menuItems);
 textItems = menuItems.map(item => item.innerText)
 
-var searchItems = menuItems.filter(item => item.innerText == "Font size")
+var searchItems = menuItems.filter(item => item.innerText == "formatting⌘")
+var searchItems = menuItems.filter(item => item.innerText.includes('formatting⌘'))
 
 // Print all itmes that match partial
 
-var searchTerm = "Search the menu"
+var searchTerm = "Paste without formatting⌘+Shift+V"
 textItems
     .filter(item => item != undefined)
     .filter(item => item.includes(searchTerm))
@@ -41,7 +42,7 @@ var toolbarItems = document.querySelectorAll(".goog-toolbar-menu-button");
 var toolbarItems = document.querySelectorAll(".toolbar-icon");
 var toolbarItems = Array.from(toolbarItems);
 
-var searchTerm = "Top border"
+var searchTerm = "Paste without formatting⌘+Shift+V"
 toolbarItems
     // .map(item => item.attributes['data-tooltip'])
     .filter(item => item.attributes['data-tooltip'] != undefined)
@@ -54,6 +55,7 @@ toolbarItems
 
 
 var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
+var el = document.querySelector(`*[placeholder='Paste without formatting⌘+Shift+V']`);
 KeyboardUtils.simulateClick(el);
 el.focus();
 

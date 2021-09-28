@@ -21,7 +21,10 @@ window.KeyboardUtils = {
     deleteKey: 46,
     f1: 112,
     f12: 123,
-    slash: 191
+    slash: 191,
+    f: 70,
+    t: 84,
+    v: 86
   },
 
   keyNames:
