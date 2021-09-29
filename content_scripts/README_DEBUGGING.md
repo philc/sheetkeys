@@ -5,12 +5,12 @@ var menuItems = document.querySelectorAll(".goog-menuitem");
 var menuItems = Array.from(menuItems);
 textItems = menuItems.map(item => item.innerText)
 
-var searchItems = menuItems.filter(item => item.innerText == "formatting⌘")
-var searchItems = menuItems.filter(item => item.innerText.includes('formatting⌘'))
+var searchItems = menuItems.filter(item => item.innerText == "Edit")
+var searchItems = menuItems.filter(item => item.innerText.includes('Paste formula only'))
 
 // Print all itmes that match partial
 
-var searchTerm = "Paste without formatting⌘+Shift+V"
+var searchTerm = "Paste"
 textItems
     .filter(item => item != undefined)
     .filter(item => item.includes(searchTerm))
@@ -61,3 +61,14 @@ el.focus();
 
 ```
 
+
+
+
+
+```js
+
+// Past in entire sheet actions file after making edits
+SheetActions.clickToolbarButton(SheetActions.buttons.pasteFormulaOnly);
+
+
+```

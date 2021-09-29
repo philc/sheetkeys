@@ -46,6 +46,7 @@ Commands = {
     copy: { fn: SheetActions.copy.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
     pasteFormatOnly: { fn: SheetActions.pasteFormatOnly.bind(SheetActions) },
+    pasteFormulaOnly: { fn: SheetActions.pasteFormulaOnly.bind(SheetActions) },
 
     // Selection
     enterVisualMode: { fn: UI.enterVisualMode.bind(UI) },
@@ -172,6 +173,10 @@ Commands = {
       "y,c": "copy",
       "p": "paste",
       "t": "pasteFormatOnly",
+      "f": "pasteFormulaOnly",
+      "<C-t>": "pasteFormatOnly",
+      // DOES NOT WORK - blocked by a global shortcut, maybe emacs on karabiner
+      // "<C-f>": "pasteFormulaOnly",
 
       // Selection
       "v": "enterVisualMode",

@@ -22,8 +22,8 @@ SheetActions = {
     moveColumnsLeft: "Move columns left",
     moveColumnsRight: "Move columns right",
     paste: "Paste",
-    pasteFormulaOnly: "Paste formula only",
-    // pasteFormatOnly: "Paste without formatting",
+    // pasteFormulaOnly: "Paste formula only",
+    pasteFormulaOnly: "Paste special►",
     // undo: "Undo",
     undo: "Undo⌘Z",
     // redo: "Redo",
@@ -49,6 +49,7 @@ SheetActions = {
     borderClear: ["Borders", "Clear borders"],
     decimalDecrease: ["Decrease decimal places"],
     decimalIncrease: ["Increase decimal places"],
+    pasteFormulaOnly: ["Paste special s", "Paste formula only f"],
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -396,6 +397,20 @@ SheetActions = {
   pasteFormatOnly() {
     console.log('paste format only!');
     UI.typeKey(KeyboardUtils.keyCodes.v, { alt: true, meta: true });
+  },
+
+  // pasteFormulaOnly() {
+  //   this.clickMenu(this.menuItems.pasteFormulaOnly);
+  //   this.unselectRow();
+  //   console.log('pasteFormulaOnly');
+  // },
+
+  pasteFormulaOnly() {
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = document.getElementById("docs-edit-menu");
+    KeyboardUtils.simulateClick(el);
+    // Click the subment buttons
+    this.clickToolbarButton(this.buttons.pasteFormulaOnly);
   },
 
   // Merging cells
