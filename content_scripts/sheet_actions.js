@@ -33,6 +33,8 @@ SheetActions = {
     mergeHorizontally: "Merge horizontally",
     mergeVertically: "Merge vertically",
     unmerge: "Unmerge",
+    // Custom 'Rishi' menu formatting
+    numberDollar2: "$ $0.00",
   },
 
   buttons: {
@@ -132,9 +134,11 @@ SheetActions = {
       (type == "cell") ? "*[aria-label='Fill color']": "*[aria-label='Text color']");
     KeyboardUtils.simulateClick(paletteButton);
 
+    // Get the element for the palette dropdown
     const rect = paletteButton.getBoundingClientRect();
     const palette = document.elementFromPoint(rect.left, rect.bottom + 10);
-    if (!palette) { throw `Unable to find element for ${type} panel.` }
+    if (!palette) { throw `Unable to find element for ${ type } panel.` }
+
     const selector = `*[aria-label='${color}']`;
     const colorButton = palette.querySelector(selector);
     if (!colorButton) { throw `Couldn't find the color button with selector ${selector}`; }
@@ -579,6 +583,17 @@ SheetActions = {
     KeyboardUtils.simulateClick(this.getMenuItem("100%"));
     console.log('Zoom 100%');
   },
+
+  // Format numbers
+  numberFormatDollar2() {
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = Array.from(document.querySelectorAll(".menu-button"))
+      .find(el => el.textContent === 'Rishi');
+    KeyboardUtils.simulateClick(el);
+    // Click the submenu buttons
+    this.clickMenu(this.menuItems.numberDollar2);
+  },
+
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
   overflow() { this.clickToolbarButton(this.buttons.overflow); },

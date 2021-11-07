@@ -95,6 +95,8 @@ Commands = {
     fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions) },
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
     fontSizeSmall: { fn: SheetActions.setFontSize8.bind(SheetActions) },
+    // Formatting, numeric
+    numberFormatDollar2: { fn: SheetActions.numberFormatDollar2.bind(SheetActions) },
 
     borderTop: { fn : SheetActions.borderTop.bind(SheetActions) },
     borderBottom: { fn : SheetActions.borderBottom.bind(SheetActions) },
@@ -207,17 +209,30 @@ Commands = {
       // ";,a,l": "alignLeft",
       // ";,a,c": "alignCenter",
       // ";,a,r": "alignRight",
+
+      // Alignment
+      // ";,a": "alignLeft",
+      // ";,s": "alignCenter",
+      // ";,d": "alignRight",
       ";,a": "alignLeft",
       ";,s": "alignCenter",
       ";,d": "alignRight",
 
-      ";,c,w": "colorCellWhite",
-      ";,c,y": "colorCellLightYellow",
-      ";,c,b": "colorCellLightCornflowerBlue3",
-      ";,c,p": "colorCellLightPurple",
-      ";,c,r": "colorCellLightRed3",
-      ";,c,g": "colorCellLightGray2",
-      // Customized
+      // Background color
+      // ";,c,w": "colorCellWhite",
+      // ";,c,y": "colorCellLightYellow",
+      // ";,c,b": "colorCellLightCornflowerBlue3",
+      // ";,c,p": "colorCellLightPurple",
+      // ";,c,r": "colorCellLightRed3",
+      // ";,c,g": "colorCellLightGray2",
+      "c,w": "colorCellWhite",
+      "c,y": "colorCellLightYellow",
+      "c,b": "colorCellLightCornflowerBlue3",
+      "c,p": "colorCellLightPurple",
+      "c,r": "colorCellLightRed3",
+      "c,g": "colorCellLightGray2",
+
+      // Customized colors
       ";,u": "colorCellFontColorBlue",
       ";,i": "colorCellFontColorBlack",
       ";,o": "colorCellFontColorRed",
@@ -226,6 +241,8 @@ Commands = {
       ";,f,n": "fontSizeNormal",
       ";,f,s": "fontSizeSmall",
       ";,f,l": "fontSizeLarge",
+
+      ";,n,d": "numberFormatDollar2",
 
       ";,0": "zoom100",
       ";,9": "zoom90",
