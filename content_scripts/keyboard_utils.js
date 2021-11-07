@@ -7,6 +7,7 @@ window.KeyboardUtils = {
     enter: 13,
     shiftKey: 16,
     ctrlKey: 17,
+    optionLeft: 18,
     esc: 27,
     space: 32,
     pageUp: 33,
@@ -19,7 +20,11 @@ window.KeyboardUtils = {
     downArrow: 40,
     deleteKey: 46,
     f1: 112,
-    f12: 123
+    f12: 123,
+    slash: 191,
+    f: 70,
+    t: 84,
+    v: 86
   },
 
   keyNames:

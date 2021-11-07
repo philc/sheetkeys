@@ -235,7 +235,7 @@ UI = {
     }
   },
 
-  // modifiers: optiona; an object with these boolean properties: meta, shift, control.
+  // modifiers: optiona; an object with these boolean properties: meta, alt, shift, control.
   typeKey(keyCode, modifiers) {
     if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;
@@ -244,6 +244,12 @@ UI = {
       JSON.stringify({keyCode, mods: modifiers});
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}));
     this.ignoreKeys = false;
+  },
+
+  deleteColumns() {
+    SheetActions.deleteColumns();
+    // In case we're in visual mode, exit that mode and return to normal mode.
+    this.setMode("normal");
   },
 
   deleteRowsOrColumns() {

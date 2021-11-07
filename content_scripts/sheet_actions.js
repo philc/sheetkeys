@@ -1,4 +1,5 @@
 SheetActions = {
+  // Text of items as the appear in the Google Sheets menus, used to search for DOM elements and then click programatically
   menuItems: {
     copy: "Copy",
     // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
@@ -21,13 +22,19 @@ SheetActions = {
     moveColumnsLeft: "Move columns left",
     moveColumnsRight: "Move columns right",
     paste: "Paste",
-    undo: "Undo",
-    redo: "Redo",
+    // pasteFormulaOnly: "Paste formula only",
+    pasteFormulaOnly: "Paste special►",
+    // undo: "Undo",
+    undo: "Undo⌘Z",
+    // redo: "Redo",
+    redo: "Redo⌘Y",
     fullScreen: "Full screen",
     mergeAll: "Merge all",
     mergeHorizontally: "Merge horizontally",
     mergeVertically: "Merge vertically",
-    unmerge: "Unmerge"
+    unmerge: "Unmerge",
+    // Custom 'Rishi' menu formatting
+    numberDollar2: "$ $0.00",
   },
 
   buttons: {
@@ -36,7 +43,15 @@ SheetActions = {
     left: ["Horizontal align", "Left"],
     right: ["Horizontal align", "Right"],
     overflow: ["Text wrapping", "Overflow"],
-    wrap: ["Text wrapping", "Wrap"]
+    wrap: ["Text wrapping", "Wrap"],
+    borderTop: ["Borders", "Top border"],
+    borderBottom: ["Borders", "Bottom border"],
+    borderLeft: ["Borders", "Left border"],
+    borderRight: ["Borders", "Right border"],
+    borderClear: ["Borders", "Clear borders"],
+    decimalDecrease: ["Decrease decimal places"],
+    decimalIncrease: ["Increase decimal places"],
+    pasteFormulaOnly: ["Paste special s", "Paste formula only f"],
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -46,7 +61,12 @@ SheetActions = {
     lightCornflowBlue3: "light cornflower blue 3",
     lightPurple3: "light purple 3",
     lightRed3: "light red 3",
-    lightGray2: "light gray 2"
+    lightGray2: "light gray 2",
+    blue: "blue",
+    red: "red",
+    blue: "blue",
+    black: "black",
+    yellow: "yellow",
   },
 
   // A mapping of button-caption to DOM element.
@@ -70,8 +90,12 @@ SheetActions = {
   // found (since this is a common source of errors in SheetKeys) unless silenceWarning = true.
   getMenuItem(caption, silenceWarning) {
     if (silenceWarning == null) { silenceWarning = false; }
+
+    // If already cached, return it
     let item = this.menuItemElements[caption];
     if (item) { return item; }
+
+    // Otherwise find it
     item = this.findMenuItem(caption);
     if (!item) {
       if (!silenceWarning) { console.log(`Warning: could not find menu item with caption ${caption}`); }
@@ -84,7 +108,16 @@ SheetActions = {
     const menuItems = document.querySelectorAll(".goog-menuitem");
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      if (label && label.indexOf(caption) === 0) {
+      // 1 - Starts with match
+      // if (label && label.indexOf(caption) === 0) {
+      //   return menuItem;
+      // }
+      // 2 - Exact string match
+      if (label && caption == label) {
+        return menuItem;
+      }
+      // 3 - Regex match
+      if (label && label.match(caption)) {
         return menuItem;
       }
     }
@@ -101,9 +134,11 @@ SheetActions = {
       (type == "cell") ? "*[aria-label='Fill color']": "*[aria-label='Text color']");
     KeyboardUtils.simulateClick(paletteButton);
 
+    // Get the element for the palette dropdown
     const rect = paletteButton.getBoundingClientRect();
     const palette = document.elementFromPoint(rect.left, rect.bottom + 10);
-    if (!palette) { throw `Unable to find element for ${type} panel.` }
+    if (!palette) { throw `Unable to find element for ${ type } panel.` }
+
     const selector = `*[aria-label='${color}']`;
     const colorButton = palette.querySelector(selector);
     if (!colorButton) { throw `Couldn't find the color button with selector ${selector}`; }
@@ -118,7 +153,16 @@ SheetActions = {
   changeFontColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "font")); },
   changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
-  clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
+  clickMenu(itemCaption) {
+    console.log(`Clicking menu item: ${itemCaption}`)
+    KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
+  },
+
+  deleteColumns() {
+    this.clickMenu(this.menuItems.deleteColumn);
+    // Clear any row-level selections we might've had.
+    this.unselectRow();
+  },
 
   deleteRowsOrColumns() {
     if (UI.mode == "visualColumn")
@@ -203,6 +247,23 @@ SheetActions = {
   moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
   moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
 
+  moveEndDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true }); },
+  moveEndUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true, meta: true}); },
+  moveEndLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true, meta: true}); },
+  moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { shift: true, meta: true }); },
+
+  openCommandPalette() {
+    var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
+    KeyboardUtils.simulateClick(el);
+  },
+
+  openSearch() {
+    // NOT WORKING
+    // var el = document.querySelector(`*[placeholder='Find in sheet']`);
+    // KeyboardUtils.simulateClick(el);
+    UI.typeKey(KeyboardUtils.keyCodes.f, { meta: true });
+  },
+
   //
   // Row movement
   //
@@ -265,12 +326,12 @@ SheetActions = {
   // Creates a row below and begins editing it.
   openRowBelow() {
     this.clickMenu(this.menuItems.rowBelow);
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    // UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
     this.clickMenu(this.menuItems.rowAbove);
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    // UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   // Like openRowBelow, but does not enter insert mode.
@@ -337,6 +398,25 @@ SheetActions = {
     this.unselectRow();
   },
 
+  pasteFormatOnly() {
+    console.log('paste format only!');
+    UI.typeKey(KeyboardUtils.keyCodes.v, { alt: true, meta: true });
+  },
+
+  // pasteFormulaOnly() {
+  //   this.clickMenu(this.menuItems.pasteFormulaOnly);
+  //   this.unselectRow();
+  //   console.log('pasteFormulaOnly');
+  // },
+
+  pasteFormulaOnly() {
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = document.getElementById("docs-edit-menu");
+    KeyboardUtils.simulateClick(el);
+    // Click the subment buttons
+    this.clickToolbarButton(this.buttons.pasteFormulaOnly);
+  },
+
   // Merging cells
   mergeAllCells() { this.clickMenu(this.menuItems.mergeAll); },
   mergeCellsHorizontally() { this.clickMenu(this.menuItems.mergeHorizontally); },
@@ -355,7 +435,12 @@ SheetActions = {
      return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
    },
 
-  // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
+  moveEndDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {meta: true}) },
+  moveEndUp() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {meta: true}) },
+  moveEndRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {meta: true}) },
+  moveEndLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {meta: true}) },
+
+   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
@@ -448,34 +533,100 @@ SheetActions = {
   // NOTE(philc): I couldn't reliably detect the selected font size for the current cell, and so I couldn't
   // implement increaes font / decrease font commands.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
+  getZoomMenu() { return this.getMenuItem("100%").parentNode; },
+
   activateFontSizeMenu() {
-     KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+    //  KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
+     KeyboardUtils.simulateClick(this.getMenuItem("Font size►"));
      // It's been shown; hide it again.
      this.getFontSizeMenu().style.display = "none";
+   },
+
+  activateZoomMenu() {
+     KeyboardUtils.simulateClick(this.getMenuItem("Zoom►"));
+     // It's been shown; hide it again.
+     this.getZoomMenu().style.display = "none";
    },
 
   setFontSize10() {
     this.activateFontSizeMenu();
     KeyboardUtils.simulateClick(this.getMenuItem("10"));
+    console.log('Font size 10');
   },
 
   setFontSize8() {
     this.activateFontSizeMenu();
     KeyboardUtils.simulateClick(this.getMenuItem("8"));
+    console.log('Font size 8');
   },
+
+  setFontSize12() {
+    this.activateFontSizeMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("12"));
+    console.log('Font size 12');
+  },
+
+  setZoom75() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("75%"));
+    console.log('Zoom 75%');
+  },
+
+  setZoom90() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("90%"));
+    console.log('Zoom 90%');
+  },
+
+  setZoom100() {
+    this.activateZoomMenu();
+    KeyboardUtils.simulateClick(this.getMenuItem("100%"));
+    console.log('Zoom 100%');
+  },
+
+  // Format numbers
+  numberFormatDollar2() {
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = Array.from(document.querySelectorAll(".menu-button"))
+      .find(el => el.textContent === 'Rishi');
+    KeyboardUtils.simulateClick(el);
+    // Click the submenu buttons
+    this.clickMenu(this.menuItems.numberDollar2);
+  },
+
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
   overflow() { this.clickToolbarButton(this.buttons.overflow); },
   clip() { this.clickToolbarButton(this.buttons.clip); },
+
   alignLeft() { this.clickToolbarButton(this.buttons.left); },
   alignCenter() { this.clickToolbarButton(this.buttons.center); },
   alignRight() { this.clickToolbarButton(this.buttons.right); },
+
   colorCellWhite() { this.changeCellColor(this.colors.white); },
   colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
+  colorCellYellow() { this.changeCellColor(this.colors.yellow); },
   colorCellLightCornflowerBlue3() { this.changeCellColor(this.colors.lightCornflowBlue3); },
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
+  borderBottom() {
+    this.clickToolbarButton(this.buttons.borderBottom);
+    this.commitCellChanges()
+  },
+  borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
+  borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
+  borderClear() { this.clickToolbarButton(this.buttons.borderClear); },
+
+  decimalDecrease() { this.clickToolbarButton(this.buttons.decimalDecrease); },
+  decimalIncrease() { this.clickToolbarButton(this.buttons.decimalIncrease); },
+
+  // Font color
+  colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
+  colorCellFontColorBlue() { this.changeFontColor(this.colors.blue); },
+  colorCellFontColorBlack() { this.changeFontColor(this.colors.black); },
 
   freezeRow() {
     this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.

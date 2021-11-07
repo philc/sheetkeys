@@ -14,9 +14,13 @@
              "content_scripts/settings.js",
              "content_scripts/sheet_actions.js",
              "content_scripts/ui.js",
-             "content_scripts/commands.js"],
+             "content_scripts/commands.js",
+             "content_scripts/version.js"
+            ],
       "run_at": "document_end",
       "all_frames": false
     }],
-  "web_accessible_resources": ["page_scripts/page_script.js"]
+  "web_accessible_resources": [
+    "page_scripts/page_script.js"
+  ]
 }

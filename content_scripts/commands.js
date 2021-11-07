@@ -6,6 +6,11 @@ Commands = {
     moveLeft: { fn: SheetActions.moveLeft.bind(SheetActions) },
     moveRight: { fn: SheetActions.moveRight.bind(SheetActions) },
 
+    moveEndDown: { fn: SheetActions.moveEndDown.bind(SheetActions) },
+    moveEndUp: { fn: SheetActions.moveEndUp.bind(SheetActions) },
+    moveEndRight: { fn: SheetActions.moveEndRight.bind(SheetActions) },
+    moveEndLeft: { fn: SheetActions.moveEndLeft.bind(SheetActions) },
+
     // Row & column movement
     moveRowsDown: { fn: SheetActions.moveRowsDown.bind(SheetActions) },
     moveRowsUp: { fn: SheetActions.moveRowsUp.bind(SheetActions) },
@@ -22,6 +27,7 @@ Commands = {
     openRowAbove: { fn: SheetActions.openRowAbove.bind(SheetActions) },
     insertRowBelow: { fn: SheetActions.insertRowBelow.bind(SheetActions) },
     insertRowAbove: { fn: SheetActions.insertRowAbove.bind(SheetActions) },
+    deleteColumns: { fn: UI.deleteColumns.bind(UI) },
     deleteRowsOrColumns: { fn: UI.deleteRowsOrColumns.bind(UI) },
     clear: { fn: SheetActions.clear.bind(SheetActions) },
     changeCell: { fn: SheetActions.changeCell.bind(SheetActions) },
@@ -39,15 +45,23 @@ Commands = {
     // "Yank cell"
     copy: { fn: SheetActions.copy.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
+    pasteFormatOnly: { fn: SheetActions.pasteFormatOnly.bind(SheetActions) },
+    pasteFormulaOnly: { fn: SheetActions.pasteFormulaOnly.bind(SheetActions) },
 
     // Selection
     enterVisualMode: { fn: UI.enterVisualMode.bind(UI) },
     enterVisualLineMode: { fn: UI.enterVisualLineMode.bind(UI) },
     enterVisualColumnMode: { fn: UI.enterVisualColumnMode.bind(UI) },
+
     moveDownAndSelect: { fn: SheetActions.moveDownAndSelect.bind(SheetActions) },
     moveUpAndSelect: { fn: SheetActions.moveUpAndSelect.bind(SheetActions) },
     moveLeftAndSelect: { fn: SheetActions.moveLeftAndSelect.bind(SheetActions) },
     moveRightAndSelect: { fn: SheetActions.moveRightAndSelect.bind(SheetActions) },
+
+    moveEndDownAndSelect: { fn: SheetActions.moveEndDownAndSelect.bind(SheetActions) },
+    moveEndUpAndSelect: { fn: SheetActions.moveEndUpAndSelect.bind(SheetActions) },
+    moveEndLeftAndSelect: { fn: SheetActions.moveEndLeftAndSelect.bind(SheetActions) },
+    moveEndRightAndSelect: { fn: SheetActions.moveEndRightAndSelect.bind(SheetActions) },
 
     // Scrolling
     scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions) },
@@ -70,14 +84,38 @@ Commands = {
     alignRight: { fn: SheetActions.alignRight.bind(SheetActions) },
     colorCellWhite: { fn : SheetActions.colorCellWhite.bind(SheetActions) },
     colorCellLightYellow3: { fn : SheetActions.colorCellLightYellow3.bind(SheetActions) },
+    colorCellLightYellow: { fn : SheetActions.colorCellYellow.bind(SheetActions) },
     colorCellLightCornflowerBlue3: { fn : SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions) },
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions) },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions) },
     colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions) },
+    colorCellFontColorRed: { fn : SheetActions.colorCellFontColorRed.bind(SheetActions) },
+    colorCellFontColorBlue: { fn : SheetActions.colorCellFontColorBlue.bind(SheetActions) },
+    colorCellFontColorBlack: { fn : SheetActions.colorCellFontColorBlack.bind(SheetActions) },
+    fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions) },
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
-    fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions) },
+    fontSizeSmall: { fn: SheetActions.setFontSize8.bind(SheetActions) },
+    // Formatting, numeric
+    numberFormatDollar2: { fn: SheetActions.numberFormatDollar2.bind(SheetActions) },
+
+    borderTop: { fn : SheetActions.borderTop.bind(SheetActions) },
+    borderBottom: { fn : SheetActions.borderBottom.bind(SheetActions) },
+    borderRight: { fn : SheetActions.borderRight.bind(SheetActions) },
+    borderLeft: { fn : SheetActions.borderLeft.bind(SheetActions) },
+    borderClear: { fn: SheetActions.borderClear.bind(SheetActions) },
+
+    decimalIncrease: { fn : SheetActions.decimalIncrease.bind(SheetActions) },
+    decimalDecrease: { fn : SheetActions.decimalDecrease.bind(SheetActions) },
+
+    zoom100: { fn: SheetActions.setZoom100.bind(SheetActions) },
+    zoom90: { fn: SheetActions.setZoom90.bind(SheetActions) },
+    zoom80: { fn: SheetActions.setZoom75.bind(SheetActions) },
+
     freezeRow: { fn: SheetActions.freezeRow.bind(SheetActions) },
     freezeColumn: { fn: SheetActions.freezeColumn.bind(SheetActions) },
+
+    openCommandPalette: { fn: SheetActions.openCommandPalette.bind(SheetActions) },
+    openSearch: { fn: SheetActions.openSearch.bind(SheetActions) },
 
     // Misc
     toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
@@ -93,6 +131,11 @@ Commands = {
       "h": "moveLeft",
       "l": "moveRight",
 
+      "<M-j>": "moveEndDown",
+      "<M-k>": "moveEndUp",
+      "<M-l>": "moveEndRight",
+      "<M-h>": "moveEndLeft",
+
       // Row & column movement
       "<C-J>": "moveRowsDown",
       "<C-K>": "moveRowsUp",
@@ -102,19 +145,24 @@ Commands = {
       // TODO(philc): remove this because it's custom to my configuration
       "BACKSPACE": "moveColumnsLeft",
 
+
+      "<C-r>": "redo",
+      ";,r": "redo",
+
       // Editing
       "i": "editCell",
       "a": "editCellAppend",
       "u": "undo",
-      "<C-r>": "redo",
       "r": "replaceChar",
       "o": "openRowBelow",
       "O": "openRowAbove",
       "s": "insertRowBelow",
       "S": "insertRowAbove",
       "d,d": "deleteRowsOrColumns",
+      "D,D": "deleteColumns",
       "x": "clear",
       "c,c": "changeCell",
+      "C": "changeCell",
       "y,y": "copyRow",
 
       // Merging cells
@@ -126,6 +174,11 @@ Commands = {
       // "Yank cell"
       "y,c": "copy",
       "p": "paste",
+      "t": "pasteFormatOnly",
+      "f": "pasteFormulaOnly",
+      "<C-t>": "pasteFormatOnly",
+      // DOES NOT WORK - blocked by a global shortcut, maybe emacs on karabiner
+      // "<C-f>": "pasteFormulaOnly",
 
       // Selection
       "v": "enterVisualMode",
@@ -143,31 +196,82 @@ Commands = {
       "<,<": "moveTabLeft",
       "g,t": "nextTab",
       "g,T": "prevTab",
+
       "J": "prevTab",
       "K": "nextTab",
+      "[": "prevTab",
+      "]": "nextTab",
 
       // Formatting
-      ";,w,w": "wrap",
-      ";,w,o": "overflow",
-      ";,w,c": "clip",
-      ";,a,l": "alignLeft",
-      ";,a,c": "alignCenter",
-      ";,a,r": "alignRight",
-      ";,c,w": "colorCellWhite",
-      ";,c,y": "colorCellLightYellow3",
-      ";,c,b": "colorCellLightCornflowerBlue3",
-      ";,c,p": "colorCellLightPurple",
-      ";,c,r": "colorCellLightRed3",
-      ";,c,g": "colorCellLightGray2",
+      // ";,w,w": "wrap",
+      // ";,w,o": "overflow",
+      // ";,w,c": "clip",
+      // ";,a,l": "alignLeft",
+      // ";,a,c": "alignCenter",
+      // ";,a,r": "alignRight",
+
+      // Alignment
+      // ";,a": "alignLeft",
+      // ";,s": "alignCenter",
+      // ";,d": "alignRight",
+      ";,a": "alignLeft",
+      ";,s": "alignCenter",
+      ";,d": "alignRight",
+
+      // Background color
+      // ";,c,w": "colorCellWhite",
+      // ";,c,y": "colorCellLightYellow",
+      // ";,c,b": "colorCellLightCornflowerBlue3",
+      // ";,c,p": "colorCellLightPurple",
+      // ";,c,r": "colorCellLightRed3",
+      // ";,c,g": "colorCellLightGray2",
+      "c,w": "colorCellWhite",
+      "c,y": "colorCellLightYellow",
+      "c,b": "colorCellLightCornflowerBlue3",
+      "c,p": "colorCellLightPurple",
+      "c,r": "colorCellLightRed3",
+      "c,g": "colorCellLightGray2",
+
+      // Customized colors
+      ";,u": "colorCellFontColorBlue",
+      ";,i": "colorCellFontColorBlack",
+      ";,o": "colorCellFontColorRed",
+      ";,p": "colorCellLightYellow",
+
       ";,f,n": "fontSizeNormal",
       ";,f,s": "fontSizeSmall",
-      ";,f,r": "freezeRow",
-      ";,f,c": "freezeColumn",
+      ";,f,l": "fontSizeLarge",
+
+      ";,n,d": "numberFormatDollar2",
+
+      ";,0": "zoom100",
+      ";,9": "zoom90",
+      ";,8": "zoom80",
+
+      // "0,0": "zoom100",
+      // "9,9": "zoom90",
+      // "8,8": "zoom80",
+
+      "b,t": "borderTop",
+      "b,b": "borderBottom",
+      "b,r": "borderRight",
+      "b,l": "borderLeft",
+      "b,c": "borderClear",
+
+      "n": "decimalIncrease",
+      "m": "decimalDecrease",
+
+      // ":": "openCommandPalette",
+      ":": "openCommandPalette",
+      "/": "openSearch",
+
+      // ";,f,r": "freezeRow",
+      // ";,f,c": "freezeColumn",
 
       // Misc
-      ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
-      ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
-      ";,o": "openCellAsUrl",
+      // ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
+      // ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
+      // ";,o": "openCellAsUrl",
       // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
       "<M-r>": "reloadPage",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
@@ -192,6 +296,10 @@ Commands.defaultMappings.visual = extend(clone(Commands.defaultMappings.normal),
   "k": "moveUpAndSelect",
   "h": "moveLeftAndSelect",
   "l": "moveRightAndSelect",
+  "<M-j>": "moveEndDownAndSelect",
+  "<M-k>": "moveEndUpAndSelect",
+  "<M-h>": "moveEndLeftAndSelect",
+  "<M-l>": "moveEndRightAndSelect",
   "y": "copy",
   "y,y": null // Unbind "copy row", because it's superceded by "copy"
 });
