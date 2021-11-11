@@ -22,9 +22,10 @@ window.KeyboardUtils = {
     f1: 112,
     f12: 123,
     slash: 191,
+    d: 68,
     f: 70,
     t: 84,
-    v: 86
+    v: 86,
   },
 
   keyNames:

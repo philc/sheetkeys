@@ -63,6 +63,8 @@ Commands = {
     moveEndLeftAndSelect: { fn: SheetActions.moveEndLeftAndSelect.bind(SheetActions) },
     moveEndRightAndSelect: { fn: SheetActions.moveEndRightAndSelect.bind(SheetActions) },
 
+    copyEndDownAndCopy: { fn: SheetActions.copyEndDownAndCopy.bind(SheetActions) },
+
     // Scrolling
     scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions) },
     scrollHalfPageUp: { fn: SheetActions.scrollHalfPageUp.bind(SheetActions) },
@@ -164,6 +166,8 @@ Commands = {
       "c,c": "changeCell",
       "C": "changeCell",
       "y,y": "copyRow",
+
+      ";,j": "copyEndDownAndCopy",
 
       // Merging cells
       ";,m,a": "mergeAllCells",

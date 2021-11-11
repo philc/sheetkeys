@@ -252,6 +252,11 @@ SheetActions = {
   moveEndLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true, meta: true}); },
   moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { shift: true, meta: true }); },
 
+  copyEndDownAndCopy() {
+    UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true });
+    UI.typeKey(KeyboardUtils.keyCodes.d, { shift: false, meta: true });
+  },
+
   openCommandPalette() {
     var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
     KeyboardUtils.simulateClick(el);
