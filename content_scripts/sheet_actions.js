@@ -1,11 +1,13 @@
 SheetActions = {
+  // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
+  // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
   menuItems: {
     copy: "Copy",
-    // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
-    // There is also a "Delete rows/columns" button which we do not want to match.
-    deleteRow: "Delete row ",
-    deleteColumn: "Delete column ",
-    deleteValues: "Delete values",
+    // This string with a space at the end is meant to match the button "Row X(D)" where X is some number.
+    // When multiple rows are selected, the capture is "Rows X(D)".
+    deleteRow: /^Row[s]? \d+\(D\)/,
+    deleteColumn: /^Column[s]? (?!stats)/, // Avoid matching the menu item "Column stats".
+    deleteValues: "Values",
     rowAbove: "Row above",
     rowBelow: "Row below",
     freeze: "Freeze", // Clicking this creates a sub-menu.
@@ -39,7 +41,7 @@ SheetActions = {
     wrap: ["Text wrapping", "Wrap"]
   },
 
-  // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
+  // You can find the names of these color swatches by hovering over the swatches and seeing the tooltip.
   colors: {
     white: "white",
     lightYellow3: "light yellow 3",
@@ -74,7 +76,7 @@ SheetActions = {
     if (item) { return item; }
     item = this.findMenuItem(caption);
     if (!item) {
-      if (!silenceWarning) { console.log(`Warning: could not find menu item with caption ${caption}`); }
+      if (!silenceWarning) { console.log(`Error: could not find menu item with caption ${caption}`); }
       return null;
     }
     return this.menuItemElements[caption] = item;
@@ -82,10 +84,16 @@ SheetActions = {
 
   findMenuItem(caption) {
     const menuItems = document.querySelectorAll(".goog-menuitem");
+    const isRegexp = caption instanceof RegExp;
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      if (label && label.indexOf(caption) === 0) {
-        return menuItem;
+      if (!label) continue;
+      if (isRegexp) {
+        if (caption.test(label))
+          return menuItem;
+      } else {
+        if (label.indexOf(caption) === 0)
+          return menuItem;
       }
     }
     return null;
@@ -121,6 +129,7 @@ SheetActions = {
   clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
 
   deleteRowsOrColumns() {
+    this.activateMenu("Delete►");
     if (UI.mode == "visualColumn")
       this.clickMenu(this.menuItems.deleteColumn);
     else
@@ -260,7 +269,10 @@ SheetActions = {
   undo() { this.clickMenu(this.menuItems.undo); },
   redo() { this.clickMenu(this.menuItems.redo); },
 
-  clear() { this.clickMenu(this.menuItems.deleteValues); },
+  clear() {
+    this.activateMenu("Delete►");
+    this.clickMenu(this.menuItems.deleteValues);
+  },
 
   // Creates a row below and begins editing it.
   openRowBelow() {
@@ -430,6 +442,19 @@ SheetActions = {
       return;
     }
     KeyboardUtils.simulateClick(result);
+  },
+
+  // Shows and then hides a submenu in the File menu system. This triggers creation of the buttons in that
+  // submenu, so they can be clicked.
+  activateMenu(menuCaption) {
+    const menuButton = this.getMenuItem(menuCaption);
+    KeyboardUtils.simulateClick(menuButton);
+    // Once the submenu is shown, it can only be hidden by modifying its style attribute.
+    // It's not possible to identify and find the specific submenu DOM element that was created and shown as a
+    // result of clicking on the menuButton, so we brute force hide all menus.
+    const menus = Array.from(document.querySelectorAll(".goog-menu"));
+    for (const m of menus)
+      m.style.display = "none";
   },
 
   // Shows and then hides the tab menu for the currently selected tab.
