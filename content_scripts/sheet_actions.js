@@ -8,8 +8,8 @@ SheetActions = {
     deleteRow: /^Row[s]? \d+\(D\)/,
     deleteColumn: /^Column[s]? (?!stats)/, // Avoid matching the menu item "Column stats".
     deleteValues: "Values",
-    rowAbove: "Row above",
-    rowBelow: "Row below",
+    rowAbove: /^Insert \d+ row above/,
+    rowBelow: /^Insert \d+ row below/,
     freeze: "Freeze", // Clicking this creates a sub-menu.
     freezeRow: "Up to current row", // This is a sub-item of the "Freeze" menu.
     freezeColumn: "Up to current column", // This is a sub-item of the "Freeze" menu.
@@ -276,18 +276,25 @@ SheetActions = {
 
   // Creates a row below and begins editing it.
   openRowBelow() {
-    this.clickMenu(this.menuItems.rowBelow);
+    this.insertRowBelow();
     UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
-    this.clickMenu(this.menuItems.rowAbove);
+    this.insertRowAbove();
     UI.typeKey(KeyboardUtils.keyCodes.enter);
   },
 
   // Like openRowBelow, but does not enter insert mode.
-  insertRowBelow() { this.clickMenu(this.menuItems.rowBelow); },
-  insertRowAbove() { this.clickMenu(this.menuItems.rowAbove); },
+  insertRowBelow() {
+    this.activateMenu("Rows►");
+    this.clickMenu(this.menuItems.rowBelow);
+  },
+
+  insertRowAbove() {
+    this.activateMenu("Rows►");
+    this.clickMenu(this.menuItems.rowAbove);
+  },
 
   changeCell() {
     this.clear();
