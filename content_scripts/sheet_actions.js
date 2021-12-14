@@ -158,6 +158,23 @@ SheetActions = {
     KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
   },
 
+  clickRootMenuItem(rootMenuCaption, itemCaption) {
+    console.log(`Clicking root menu item: ${rootMenuCaption} → ${itemCaption}`)
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = Array.from(document.querySelectorAll(".menu-button"))
+      .find(el => el.textContent === rootMenuCaption);
+    KeyboardUtils.simulateClick(el);
+    // Click the submenu buttons
+    this.clickMenu(itemCaption);
+
+  },
+
+  clickRishiMenu(itemCaption) {
+    console.log(`Clicking Rishi menu item: ${itemCaption}`)
+    // Manually get the top level menu to open to prevent the hanging modal
+    this.clickRootMenuItem('Rishi', itemCaption);
+  },
+
   deleteColumns() {
     this.clickMenu(this.menuItems.deleteColumn);
     // Clear any row-level selections we might've had.
@@ -168,7 +185,13 @@ SheetActions = {
     if (UI.mode == "visualColumn")
       this.clickMenu(this.menuItems.deleteColumn);
     else
-      this.clickMenu(this.menuItems.deleteRow);
+      // TODO: This does not work yet
+      // this.clickMenu(this.menuItems.deleteRow);
+      // // Manually get the top level menu to open to prevent the hanging modal
+      // const el = document.getElementById("docs-edit-menu");
+      // KeyboardUtils.simulateClick(el);
+      // // Click the subment buttons
+      this.clickToolbarButton(this.buttons.deleteRows);
 
     // Clear any row-level selections we might've had.
     this.unselectRow();
@@ -590,15 +613,17 @@ SheetActions = {
   },
 
   // Format numbers
-  numberFormatDollar2() {
-    // Manually get the top level menu to open to prevent the hanging modal
-    const el = Array.from(document.querySelectorAll(".menu-button"))
-      .find(el => el.textContent === 'Rishi');
-    KeyboardUtils.simulateClick(el);
-    // Click the submenu buttons
-    this.clickMenu(this.menuItems.numberDollar2);
+  numberFormatNumber2() {
+    UI.typeKey(KeyboardUtils.keyCodes.number1, { shift: true, control: true });
   },
 
+  numberFormatDollar2() {
+    UI.typeKey(KeyboardUtils.keyCodes.number4, { shift: true, control: true });
+  },
+
+  numberFormatPercent2() {
+    UI.typeKey(KeyboardUtils.keyCodes.number5, { shift: true, control: true });s
+  },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
   overflow() { this.clickToolbarButton(this.buttons.overflow); },

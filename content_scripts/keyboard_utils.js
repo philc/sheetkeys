@@ -1,5 +1,6 @@
 window.KeyboardUtils = {
   // TODO(philc): keyNames should just be the inverse of this map.
+  // https://keycode.info/
   keyCodes: {
     backspace: 8,
     tab: 9,
@@ -26,6 +27,9 @@ window.KeyboardUtils = {
     f: 70,
     t: 84,
     v: 86,
+    number1: 49,
+    number4: 52,
+    number5: 53,
   },
 
   keyNames:

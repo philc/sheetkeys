@@ -98,7 +98,9 @@ Commands = {
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions) },
     fontSizeSmall: { fn: SheetActions.setFontSize8.bind(SheetActions) },
     // Formatting, numeric
+    numberFormatNumber2: { fn: SheetActions.numberFormatNumber2.bind(SheetActions) },
     numberFormatDollar2: { fn: SheetActions.numberFormatDollar2.bind(SheetActions) },
+    numberFormatPercent2: { fn: SheetActions.numberFormatPercent2.bind(SheetActions) },
 
     borderTop: { fn : SheetActions.borderTop.bind(SheetActions) },
     borderBottom: { fn : SheetActions.borderBottom.bind(SheetActions) },
@@ -246,7 +248,9 @@ Commands = {
       ";,f,s": "fontSizeSmall",
       ";,f,l": "fontSizeLarge",
 
-      ";,n,d": "numberFormatDollar2",
+      ";,1": "numberFormatNumber2",
+      ";,4": "numberFormatDollar2",
+      ";,5": "numberFormatPercent2",
 
       ";,0": "zoom100",
       ";,9": "zoom90",
