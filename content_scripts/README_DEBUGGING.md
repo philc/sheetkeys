@@ -4,9 +4,18 @@
 var menuItems = document.querySelectorAll(".goog-menuitem");
 var menuItems = Array.from(menuItems);
 textItems = menuItems.map(item => item.innerText)
+textItems.filter(item => item.includes('Paste'))
 
 var searchItems = menuItems.filter(item => item.innerText == "Edit")
-var searchItems = menuItems.filter(item => item.innerText.includes('Paste formula only'))
+var searchItems = menuItems.filter(item => item.innerText.includes('$ $0.00'))
+
+textItems.filter(item => item.includes('Paste '))
+
+for (const a of document.querySelectorAll("div")) {
+  if (a.textContent.includes("0.00")) {
+    console.log(a.textContent)
+  }
+}
 
 // Print all itmes that match partial
 

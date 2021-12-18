@@ -23,6 +23,8 @@ window.KeyboardUtils = {
     f1: 112,
     f12: 123,
     slash: 191,
+    slash: 191,
+    c: 67,
     d: 68,
     f: 70,
     t: 84,

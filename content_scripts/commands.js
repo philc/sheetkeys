@@ -46,6 +46,7 @@ Commands = {
     copy: { fn: SheetActions.copy.bind(SheetActions) },
     paste: { fn: SheetActions.paste.bind(SheetActions) },
     pasteFormatOnly: { fn: SheetActions.pasteFormatOnly.bind(SheetActions) },
+    pasteValuesOnly: { fn: SheetActions.pasteValuesOnly.bind(SheetActions) },
     pasteFormulaOnly: { fn: SheetActions.pasteFormulaOnly.bind(SheetActions) },
 
     // Selection
@@ -182,6 +183,7 @@ Commands = {
       "p": "paste",
       "t": "pasteFormatOnly",
       "f": "pasteFormulaOnly",
+      "e": "pasteValuesOnly",
       "<C-t>": "pasteFormatOnly",
       // DOES NOT WORK - blocked by a global shortcut, maybe emacs on karabiner
       // "<C-f>": "pasteFormulaOnly",

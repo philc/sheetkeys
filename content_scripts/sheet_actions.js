@@ -22,8 +22,8 @@ SheetActions = {
     moveColumnsLeft: "Move columns left",
     moveColumnsRight: "Move columns right",
     paste: "Paste",
-    // pasteFormulaOnly: "Paste formula only",
-    pasteFormulaOnly: "Paste special►",
+    pasteFormulaOnly: "Paste without formatting⌘+Shift+V",
+    // pasteFormulaOnly: "Paste special►",
     // undo: "Undo",
     undo: "Undo⌘Z",
     // redo: "Redo",
@@ -51,7 +51,7 @@ SheetActions = {
     borderClear: ["Borders", "Clear borders"],
     decimalDecrease: ["Decrease decimal places"],
     decimalIncrease: ["Increase decimal places"],
-    pasteFormulaOnly: ["Paste special s", "Paste formula only f"],
+    pasteFormulaOnly: ["Paste special s", "Formula only"],
   },
 
   // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
@@ -78,7 +78,7 @@ SheetActions = {
     for (let caption of Array.from(captionList)) {
       const el = document.querySelector(`*[aria-label='${caption}']`);
       if (!el) {
-        console.log(`Couldn't find the element for the button labeled ${caption}.`);
+        console.log(`Couldn't find the element for the button labeled "${caption}".`);
         console.log(captionList);
         return;
       }
@@ -98,7 +98,7 @@ SheetActions = {
     // Otherwise find it
     item = this.findMenuItem(caption);
     if (!item) {
-      if (!silenceWarning) { console.log(`Warning: could not find menu item with caption ${caption}`); }
+      if (!silenceWarning) { console.log(`Warning: could not find menu item with caption "${ caption }"`); }
       return null;
     }
     return this.menuItemElements[caption] = item;
@@ -154,7 +154,7 @@ SheetActions = {
   changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
   clickMenu(itemCaption) {
-    console.log(`Clicking menu item: ${itemCaption}`)
+    console.log(`Clicking menu item: "${itemCaption}"`)
     KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
   },
 
@@ -286,10 +286,12 @@ SheetActions = {
   },
 
   openSearch() {
-    // NOT WORKING
-    // var el = document.querySelector(`*[placeholder='Find in sheet']`);
-    // KeyboardUtils.simulateClick(el);
+    // NOT WORKING -- Attempted to prepopulate search with active call
+    // this.clickMenu(this.menuItems.copy);
+    // UI.typeKey(KeyboardUtils.keyCodes.c, { meta: true });
     UI.typeKey(KeyboardUtils.keyCodes.f, { meta: true });
+    // document.getElementsByClassName('docs-findinput-input')[0].click()
+    // UI.typeKey(KeyboardUtils.keyCodes.v, { meta: true });
   },
 
   //
@@ -431,18 +433,24 @@ SheetActions = {
     UI.typeKey(KeyboardUtils.keyCodes.v, { alt: true, meta: true });
   },
 
-  // pasteFormulaOnly() {
-  //   this.clickMenu(this.menuItems.pasteFormulaOnly);
-  //   this.unselectRow();
-  //   console.log('pasteFormulaOnly');
-  // },
+  pasteValuesOnly() {
+    console.log('Paste values only!');
+    UI.typeKey(KeyboardUtils.keyCodes.v, { shift: true, meta: true });
+  },
 
   pasteFormulaOnly() {
     // Manually get the top level menu to open to prevent the hanging modal
-    const el = document.getElementById("docs-edit-menu");
-    KeyboardUtils.simulateClick(el);
+    // const el = document.getElementById("docs-edit-menu");
+    // KeyboardUtils.simulateClick(el);
     // Click the subment buttons
-    this.clickToolbarButton(this.buttons.pasteFormulaOnly);
+    // this.clickToolbarButton(this.buttons.pasteFormulaOnly);
+    this.clickMenu(this.menuItems.pasteFormulaOnly);
+
+    // var menuItems = document.querySelectorAll(".goog-menuitem");
+    // var menuItems = Array.from(menuItems);
+    // var textItems = menuItems.map(item => item.innerText)
+    // var textItems = textItems.filter(item => item.includes('Paste '))
+    // console.log(textItems);
   },
 
   // Merging cells
@@ -619,6 +627,7 @@ SheetActions = {
 
   numberFormatDollar2() {
     UI.typeKey(KeyboardUtils.keyCodes.number4, { shift: true, control: true });
+    // this.clickMenu(this.menuItems.numberDollar2);
   },
 
   numberFormatPercent2() {
