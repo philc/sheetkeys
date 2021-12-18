@@ -294,6 +294,12 @@ SheetActions = {
     // UI.typeKey(KeyboardUtils.keyCodes.v, { meta: true });
   },
 
+  openTabsList() {
+    console.log('Opening tabs list')
+    var el = document.querySelectorAll(".docs-sheet-all")[0];
+    KeyboardUtils.simulateClick(el);
+  },
+
   //
   // Row movement
   //

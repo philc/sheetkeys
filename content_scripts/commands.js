@@ -121,6 +121,7 @@ Commands = {
 
     openCommandPalette: { fn: SheetActions.openCommandPalette.bind(SheetActions) },
     openSearch: { fn: SheetActions.openSearch.bind(SheetActions) },
+    openTabsList: { fn: SheetActions.openTabsList.bind(SheetActions) },
 
     // Misc
     toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions) },
@@ -258,10 +259,6 @@ Commands = {
       ";,9": "zoom90",
       ";,8": "zoom80",
 
-      // "0,0": "zoom100",
-      // "9,9": "zoom90",
-      // "8,8": "zoom80",
-
       "b,t": "borderTop",
       "b,b": "borderBottom",
       "b,r": "borderRight",
@@ -274,6 +271,8 @@ Commands = {
       // ":": "openCommandPalette",
       ":": "openCommandPalette",
       "/": "openSearch",
+      "P": "openTabsList",
+      "T": "openTabsList",
 
       // ";,f,r": "freezeRow",
       // ";,f,c": "freezeColumn",
