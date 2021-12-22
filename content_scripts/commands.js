@@ -5,6 +5,14 @@ Commands = {
     moveDown: { fn: SheetActions.moveDown.bind(SheetActions) },
     moveLeft: { fn: SheetActions.moveLeft.bind(SheetActions) },
     moveRight: { fn: SheetActions.moveRight.bind(SheetActions) },
+	  
+    // Word movement
+    moveRightward: { fn: SheetActions.moveRightward.bind(SheetActions) },
+    moveLeftward: { fn: SheetActions.moveLeftward.bind(SheetActions) },
+
+    // Jump movement
+    jumpStart: { fn: SheetActions.jumpStart.bind(SheetActions) },
+    jumpStartward: { fn: SheetActions.jumpStartward.bind(SheetActions) },
 
     // Row & column movement
     moveRowsDown: { fn: SheetActions.moveRowsDown.bind(SheetActions) },
@@ -92,6 +100,14 @@ Commands = {
       "j": "moveDown",
       "h": "moveLeft",
       "l": "moveRight",
+
+      // Word-level movement
+      "w": "moveRightward",
+      "W": "moveRightward",
+      "b": "moveLeftward",
+      "B": "moveLeftward",
+      "0": "jumpStart",
+      "^": "jumpStartward",
 
       // Row & column movement
       "<C-J>": "moveRowsDown",
