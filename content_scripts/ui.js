@@ -192,7 +192,7 @@ UI = {
 
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
-    // console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
+    // console.log("keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e);
     if (this.ignoreKeys) { return; }
 
     if (!keyString) { return; } // Ignore key presses which are just modifiers.

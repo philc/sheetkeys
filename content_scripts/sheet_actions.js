@@ -1,3 +1,7 @@
+
+const DEFAULT_MAX_RIGHTWARD_MOVES = 3;
+const DEFAULT_MAX_LEFTWARD_MOVES = DEFAULT_MAX_RIGHTWARD_MOVES;
+
 SheetActions = {
   // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
   // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
@@ -199,6 +203,21 @@ SheetActions = {
     return document.querySelector(".autofill-cover").getBoundingClientRect().top;
   },
 
+  cellContent() {
+    return document.querySelector(".cell-input").innerText.trim();
+  },
+
+  cellPosition() {
+  let cellPos = /* AE5, B2, etc.*/ document.querySelector('.jfk-textinput.waffle-name-box').value;
+    let match = /([A-Z]+)(\d+)/.exec(cellPos);
+
+    // TODO(Johnny): Handle range for 'A:A', '1:1', and 'A1:B2'.
+  if (match < 3) return {row: 'A', column: '1'};
+  
+    let [_, row, column] = match;
+    return {row: row, column: column};
+  }
+
   //
   // Movement
   //
@@ -206,6 +225,43 @@ SheetActions = {
   moveDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow); },
   moveLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow); },
   moveRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow); },
+
+  moveRightward: function(max_runs) {
+    max_runs = undefined === max_runs 
+      ? DEFAULT_MAX_RIGHTWARD_MOVES
+      : max_runs;
+
+    // Move right.
+    this.moveRight();
+
+    // If the cell is empty, content: '\n'
+    if (this.cellContent().length)  return;
+    if (! max_runs)                 return;
+
+    this.moveRightward(max_runs - 1);
+  },
+
+  moveLeftward: function(max_runs) {
+    max_runs = undefined === max_runs 
+      ? DEFAULT_MAX_LEFTWARD_MOVES
+      : max_runs;
+
+    // Move right.
+    this.moveLeft();
+
+    // If the cell is empty, content: '\n'
+    if (this.cellContent().length)  return;
+    if (! max_runs)                 return;
+
+    this.moveLeftward(max_runs - 1);
+  },
+
+
+  jumpStart() { 
+    // Johnny: Hacky but it works.
+    this.selectRow();
+    this.moveLeft();
+  },
 
   moveDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
   moveUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
