@@ -12,6 +12,7 @@ Commands = {
 
     // Jump movement
     jumpStart: { fn: SheetActions.jumpStart.bind(SheetActions) },
+    jumpStartward: { fn: SheetActions.jumpStartward.bind(SheetActions) },
 
     // Row & column movement
     moveRowsDown: { fn: SheetActions.moveRowsDown.bind(SheetActions) },
@@ -106,7 +107,7 @@ Commands = {
       "b": "moveLeftward",
       "B": "moveLeftward",
       "0": "jumpStart",
-      "^": "jumpStart",
+      "^": "jumpStartward",
 
       // Row & column movement
       "<C-J>": "moveRowsDown",
