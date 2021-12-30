@@ -59,6 +59,7 @@ SheetActions = {
     white: "white",
     lightYellow3: "light yellow 3",
     lightCornflowBlue3: "light cornflower blue 3",
+    lightBlue3: "light blue 3",
     lightPurple3: "light purple 3",
     lightRed3: "light red 3",
     lightGray2: "light gray 2",
@@ -296,7 +297,7 @@ SheetActions = {
 
   openTabsList() {
     console.log('Opening tabs list')
-    var el = document.querySelectorAll(".docs-sheet-all")[0];
+    var el = document.querySelectorAll(".docs-sheet-all").item(0)
     KeyboardUtils.simulateClick(el);
   },
 
@@ -652,6 +653,7 @@ SheetActions = {
   colorCellLightYellow3() { this.changeCellColor(this.colors.lightYellow3); },
   colorCellYellow() { this.changeCellColor(this.colors.yellow); },
   colorCellLightCornflowerBlue3() { this.changeCellColor(this.colors.lightCornflowBlue3); },
+  colorCellLightBlue3() { this.changeCellColor(this.colors.lightBlue3); },
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
