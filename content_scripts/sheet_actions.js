@@ -190,8 +190,11 @@ SheetActions = {
 
   cellCursorY() {
     // This is an approximate estimation of where the cell cursor is relative to the upper left corner of the
-    // sptreasheet canvas.
-    return document.querySelector(".autofill-cover").getBoundingClientRect().top;
+    // spreadsheet canvas.
+    // Under some conditions, this selectionBox element doesn't exist. One such case is when selecting a
+    // column and then moving the column.
+    const selectionBox = document.querySelector(".autofill-cover");
+    return selectionBox ? selectionBox.getBoundingClientRect().top : null;
   },
 
   //
