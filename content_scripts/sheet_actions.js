@@ -13,15 +13,10 @@ SheetActions = {
     freeze: "Freeze", // Clicking this creates a sub-menu.
     freezeRow: "Up to current row", // This is a sub-item of the "Freeze" menu.
     freezeColumn: "Up to current column", // This is a sub-item of the "Freeze" menu.
-    // The "moveRowUp" menu item won't yet exist if multiple rows are selected.
-    moveRowUp: "Move row up",
-    moveRowDown: "Move row down",
-    moveRowsUp: "Move rows up",
-    moveRowsDown: "Move rows down",
-    moveColumnLeft: "Move column left",
-    moveColumnRight: "Move column right",
-    moveColumnsLeft: "Move columns left",
-    moveColumnsRight: "Move columns right",
+    moveRowUp: /Rows? up/,
+    moveRowDown: /Rows? down/,
+    moveColumnLeft: /Columns? left/,
+    moveColumnRight: /Columns? right/,
     paste: "Paste",
     undo: "Undo",
     redo: "Redo",
@@ -218,12 +213,9 @@ SheetActions = {
   moveRowsUp() {
     // In normal mode, where we have just a single cell selected, restore the column after moving the row.
     if (UI.mode === "normal") { this.preserveSelectedColumn(); }
-    this.selectRow();
-    if (this.getMenuItem(this.menuItems.moveRowUp, true)) {
-      this.clickMenu(this.menuItems.moveRowUp);
-    } else {
-      this.clickMenu(this.menuItems.moveRowsUp);
-    }
+    this.selectRow(); // A row has to be selected before the "Move>" menu becomes enabled.
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveRowUp);
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
@@ -233,12 +225,8 @@ SheetActions = {
   moveRowsDown() {
     if (UI.mode === "normal") { this.preserveSelectedColumn(); }
     this.selectRow();
-    if (this.getMenuItem(this.menuItems.moveRowDown, true)) {
-      this.clickMenu(this.menuItems.moveRowDown);
-    } else {
-      this.clickMenu(this.menuItems.moveRowsDown);
-    }
-
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveRowDown);
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
@@ -247,20 +235,14 @@ SheetActions = {
 
   moveColumnsLeft() {
     this.selectColumn();
-    if (this.getMenuItem(this.menuItems.moveColumnLeft, true)) {
-      this.clickMenu(this.menuItems.moveColumnLeft);
-    } else {
-      this.clickMenu(this.menuItems.moveColumnsLeft);
-    }
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveColumnLeft);
   },
 
   moveColumnsRight() {
     this.selectColumn();
-    if (this.getMenuItem(this.menuItems.moveColumnRight, true)) {
-      this.clickMenu(this.menuItems.moveColumnRight);
-    } else {
-      this.clickMenu(this.menuItems.moveColumnsRight);
-    }
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveColumnRight);
   },
 
   //
