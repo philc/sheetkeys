@@ -10,6 +10,7 @@ SheetActions = {
     deleteValues: "Values",
     rowAbove: /^Insert \d+ row above/,
     rowBelow: /^Insert \d+ row below/,
+    fontSizeMenu: "Font size►",
     freezeRow: /Up to row \d+/, // This is a sub-item of the "Freeze" menu.
     freezeColumn: /Up to column [A-Z]+/, // This is a sub-item of the "Freeze" menu.
     moveRowUp: /Rows? up/,
@@ -463,21 +464,17 @@ SheetActions = {
 
   // NOTE(philc): I couldn't reliably detect the selected font size for the current cell, and so I couldn't
   // implement increaes font / decrease font commands.
+  // TODO(philc): I believe this is now possible. It's held in #docs-font-size.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
-  activateFontSizeMenu() {
-     KeyboardUtils.simulateClick(this.getMenuItem("Font size"));
-     // It's been shown; hide it again.
-     this.getFontSizeMenu().style.display = "none";
-   },
 
   setFontSize10() {
-    this.activateFontSizeMenu();
-    KeyboardUtils.simulateClick(this.getMenuItem("10"));
+    this.activateMenu(this.menuItems.fontSizeMenu);
+    KeyboardUtils.simulateClick(this.getMenuItem(/^10$/));
   },
 
   setFontSize8() {
-    this.activateFontSizeMenu();
-    KeyboardUtils.simulateClick(this.getMenuItem("8"));
+    this.activateMenu(this.menuItems.fontSizeMenu);
+    KeyboardUtils.simulateClick(this.getMenuItem(/^8$/));
   },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
