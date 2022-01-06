@@ -515,12 +515,12 @@ SheetActions = {
   },
 
   dismissFullScreenNotificationMessage() {
-    const dismissButton = document.querySelector("#docs-butterbar-container .docs-butterbar-link");
-    // Ensure we don't accidentally find and click on another HUD notification which is not for dismissing
-    // the full screen notification.
-    if (dismissButton && dismissButton.innerText === "Dismiss") {
-      KeyboardUtils.simulateClick(dismissButton);
-    }
+    // There should only be one dismiss button, but just in case there's ever multiple, click on all of them.
+    // Another reasonable behavior is to click on none of them, since one of these buttons is likely for a
+    // notification that's not the fullscreen dismiss button.
+    const dismissButtons = document.querySelectorAll(".docs-butterbar-dismiss");
+    for (let button of dismissButtons)
+      KeyboardUtils.simulateClick(button);
   },
 
   // Returns the value of the current cell.
