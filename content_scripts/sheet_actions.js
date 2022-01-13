@@ -18,8 +18,7 @@ SheetActions = {
     moveColumnLeft: /Columns? left/,
     moveColumnRight: /Columns? right/,
     paste: "Paste",
-    pasteFormulaOnly: "Paste without formatting⌘+Shift+V",
-    // pasteFormulaOnly: "Paste special►",
+    pasteFormulaOnly: "Formula only",
     // undo: "Undo",
     undo: "Undo⌘Z",
     // redo: "Redo",
@@ -47,7 +46,7 @@ SheetActions = {
     borderClear: ["Borders", "Clear borders"],
     decimalDecrease: ["Decrease decimal places"],
     decimalIncrease: ["Increase decimal places"],
-    pasteFormulaOnly: ["Paste special s", "Formula only"],
+    // pasteFormulaOnly: ["Paste special s", "Formula only"],
   },
 
   // You can find the names of these color swatches by hovering over the swatches and seeing the tooltip.
@@ -434,19 +433,10 @@ SheetActions = {
   },
 
   pasteFormulaOnly() {
-    // Manually get the top level menu to open to prevent the hanging modal
-    // const el = document.getElementById("docs-edit-menu");
-    // KeyboardUtils.simulateClick(el);
-    // Click the subment buttons
-    // this.clickToolbarButton(this.buttons.pasteFormulaOnly);
+    this.activateMenu("Paste special►");
     this.clickMenu(this.menuItems.pasteFormulaOnly);
-
-    // var menuItems = document.querySelectorAll(".goog-menuitem");
-    // var menuItems = Array.from(menuItems);
-    // var textItems = menuItems.map(item => item.innerText)
-    // var textItems = textItems.filter(item => item.includes('Paste '))
-    // console.log(textItems);
   },
+
 
   // Merging cells
   mergeAllCells() { this.clickMenu(this.menuItems.mergeAll); },
