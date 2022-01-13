@@ -66,6 +66,12 @@ Commands = {
 
     copyEndDownAndCopy: { fn: SheetActions.copyEndDownAndCopy.bind(SheetActions) },
 
+    // Filtering
+    //NOTE: Only works if Rishi menu is installed
+    filterToggle:{ fn: SheetActions.filterToggle.bind(SheetActions) },
+    fitlerOnActiveCell:{ fn: SheetActions.fitlerOnActiveCell.bind(SheetActions) },
+    removeAllFilters:{ fn: SheetActions.removeAllFilters.bind(SheetActions) },
+
     // Scrolling
     scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions) },
     scrollHalfPageUp: { fn: SheetActions.scrollHalfPageUp.bind(SheetActions) },
@@ -194,6 +200,10 @@ Commands = {
       "v": "enterVisualMode",
       "V": "enterVisualLineMode",
       "<A-v>": "enterVisualColumnMode",
+
+      // Filtering
+      "q": "filterToggle",
+      "Q": "removeAllFilters",
 
       // Scrolling
       "<C-d>": "scrollHalfPageDown",

@@ -28,8 +28,11 @@ SheetActions = {
     mergeHorizontally: "Merge horizontally",
     mergeVertically: "Merge vertically",
     unmerge: "Unmerge",
-    // Custom 'Rishi' menu formatting
+    // Custom 'Rishi' menu
     numberDollar2: "$ $0.00",
+    filterToggle: "Filter toggle",
+    fitlerOnActiveCell: "Filter on active cell",
+    removeAllFilters: "Remove all filters",
   },
 
   buttons: {
@@ -117,6 +120,23 @@ SheetActions = {
     return null;
   },
 
+  findMenuRootButton(caption) {
+    const menuItems = document.querySelectorAll(".menu-button");
+    const isRegexp = caption instanceof RegExp;
+    for (let menuItem of Array.from(menuItems)) {
+      const label = menuItem.innerText;
+      if (!label) continue;
+      if (isRegexp) {
+        if (caption.test(label))
+          return menuItem;
+      } else {
+        if (label.indexOf(caption) === 0)
+          return menuItem;
+      }
+    }
+    return null;
+  },
+
   // Returns the color border button corresponding to the border name, ie "Bottom border"
   // ex: Top border
   // ex: Bottom border
@@ -185,10 +205,10 @@ SheetActions = {
 
   },
 
-  clickRishiMenu(itemCaption) {
-    console.log(`Clicking Rishi menu item: ${itemCaption}`)
-    // Manually get the top level menu to open to prevent the hanging modal
-    this.clickRootMenuItem('Rishi', itemCaption);
+  createRishiMenuSubMenu() {
+    // NOTE: Must double click the Rishi menu the first time to create the submenu
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
   },
 
   deleteColumns() {
@@ -466,6 +486,22 @@ SheetActions = {
   mergeCellsHorizontally() { this.clickMenu(this.menuItems.mergeHorizontally); },
   mergeCellsVertically() { this.clickMenu(this.menuItems.mergeVertically); },
   unmergeCells() { this.clickMenu(this.menuItems.unmerge); },
+
+  // Filtering
+  filterToggle() {
+    this.createRishiMenuSubMenu()
+    this.clickMenu(this.menuItems.filterToggle);
+  },
+
+  fitlerOnActiveCell() {
+    this.createRishiMenuSubMenu()
+    this.clickMenu(this.menuItems.fitlerOnActiveCell);
+  },
+
+  removeAllFilters() {
+    this.createRishiMenuSubMenu()
+    this.clickMenu(this.menuItems.removeAllFilters);
+  },
 
   //
   // Scrolling
