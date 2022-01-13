@@ -1,26 +1,22 @@
 SheetActions = {
-  // Text of items as the appear in the Google Sheets menus, used to search for DOM elements and then click programatically
+  // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
+  // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
   menuItems: {
     copy: "Copy",
-    // This string with a space at the end is meant to match the button "Delete row X" where x is some number.
-    // There is also a "Delete rows/columns" button which we do not want to match.
-    deleteRow: "Delete row ",
-    deleteColumn: "Delete column ",
-    deleteValues: "Delete values",
-    rowAbove: "Row above",
-    rowBelow: "Row below",
-    freeze: "Freeze", // Clicking this creates a sub-menu.
-    freezeRow: "Up to current row", // This is a sub-item of the "Freeze" menu.
-    freezeColumn: "Up to current column", // This is a sub-item of the "Freeze" menu.
-    // The "moveRowUp" menu item won't yet exist if multiple rows are selected.
-    moveRowUp: "Move row up",
-    moveRowDown: "Move row down",
-    moveRowsUp: "Move rows up",
-    moveRowsDown: "Move rows down",
-    moveColumnLeft: "Move column left",
-    moveColumnRight: "Move column right",
-    moveColumnsLeft: "Move columns left",
-    moveColumnsRight: "Move columns right",
+    // This string with a space at the end is meant to match the button "Row X(D)" where X is some number.
+    // When multiple rows are selected, the capture is "Rows X(D)".
+    deleteRow: /^Row[s]? \d+\(D\)/,
+    deleteColumn: /^Column[s]? (?!stats)/, // Avoid matching the menu item "Column stats".
+    deleteValues: "Values",
+    rowAbove: /^Insert \d+ row above/,
+    rowBelow: /^Insert \d+ row below/,
+    fontSizeMenu: "Font size►",
+    freezeRow: /Up to row \d+/, // This is a sub-item of the "Freeze" menu.
+    freezeColumn: /Up to column [A-Z]+/, // This is a sub-item of the "Freeze" menu.
+    moveRowUp: /Rows? up/,
+    moveRowDown: /Rows? down/,
+    moveColumnLeft: /Columns? left/,
+    moveColumnRight: /Columns? right/,
     paste: "Paste",
     pasteFormulaOnly: "Paste without formatting⌘+Shift+V",
     // pasteFormulaOnly: "Paste special►",
@@ -54,7 +50,7 @@ SheetActions = {
     pasteFormulaOnly: ["Paste special s", "Formula only"],
   },
 
-  // You can find the names of these color swatches by hoverig over the swatches and seeing the tooltip.
+  // You can find the names of these color swatches by hovering over the swatches and seeing the tooltip.
   colors: {
     white: "white",
     lightYellow3: "light yellow 3",
@@ -99,7 +95,7 @@ SheetActions = {
     // Otherwise find it
     item = this.findMenuItem(caption);
     if (!item) {
-      if (!silenceWarning) { console.log(`Warning: could not find menu item with caption "${ caption }"`); }
+      if (!silenceWarning) { console.log(`Error: could not find menu item with caption ${caption}`); }
       return null;
     }
     return this.menuItemElements[caption] = item;
@@ -107,19 +103,16 @@ SheetActions = {
 
   findMenuItem(caption) {
     const menuItems = document.querySelectorAll(".goog-menuitem");
+    const isRegexp = caption instanceof RegExp;
     for (let menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
-      // 1 - Starts with match
-      // if (label && label.indexOf(caption) === 0) {
-      //   return menuItem;
-      // }
-      // 2 - Exact string match
-      if (label && caption == label) {
-        return menuItem;
-      }
-      // 3 - Regex match
-      if (label && label.match(caption)) {
-        return menuItem;
+      if (!label) continue;
+      if (isRegexp) {
+        if (caption.test(label))
+          return menuItem;
+      } else {
+        if (label.indexOf(caption) === 0)
+          return menuItem;
       }
     }
     return null;
@@ -183,16 +176,11 @@ SheetActions = {
   },
 
   deleteRowsOrColumns() {
+    this.activateMenu("Delete►");
     if (UI.mode == "visualColumn")
       this.clickMenu(this.menuItems.deleteColumn);
     else
-      // TODO: This does not work yet
-      // this.clickMenu(this.menuItems.deleteRow);
-      // // Manually get the top level menu to open to prevent the hanging modal
-      // const el = document.getElementById("docs-edit-menu");
-      // KeyboardUtils.simulateClick(el);
-      // // Click the subment buttons
-      this.clickToolbarButton(this.buttons.deleteRows);
+      this.clickMenu(this.menuItems.deleteRow);
 
     // Clear any row-level selections we might've had.
     this.unselectRow();
@@ -254,8 +242,11 @@ SheetActions = {
 
   cellCursorY() {
     // This is an approximate estimation of where the cell cursor is relative to the upper left corner of the
-    // sptreasheet canvas.
-    return document.querySelector(".autofill-cover").getBoundingClientRect().top;
+    // spreadsheet canvas.
+    // Under some conditions, this selectionBox element doesn't exist. One such case is when selecting a
+    // column and then moving the column.
+    const selectionBox = document.querySelector(".autofill-cover");
+    return selectionBox ? selectionBox.getBoundingClientRect().top : null;
   },
 
   //
@@ -307,12 +298,9 @@ SheetActions = {
   moveRowsUp() {
     // In normal mode, where we have just a single cell selected, restore the column after moving the row.
     if (UI.mode === "normal") { this.preserveSelectedColumn(); }
-    this.selectRow();
-    if (this.getMenuItem(this.menuItems.moveRowUp, true)) {
-      this.clickMenu(this.menuItems.moveRowUp);
-    } else {
-      this.clickMenu(this.menuItems.moveRowsUp);
-    }
+    this.selectRow(); // A row has to be selected before the "Move>" menu becomes enabled.
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveRowUp);
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
@@ -322,12 +310,8 @@ SheetActions = {
   moveRowsDown() {
     if (UI.mode === "normal") { this.preserveSelectedColumn(); }
     this.selectRow();
-    if (this.getMenuItem(this.menuItems.moveRowDown, true)) {
-      this.clickMenu(this.menuItems.moveRowDown);
-    } else {
-      this.clickMenu(this.menuItems.moveRowsDown);
-    }
-
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveRowDown);
     if (UI.mode === "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
@@ -336,20 +320,14 @@ SheetActions = {
 
   moveColumnsLeft() {
     this.selectColumn();
-    if (this.getMenuItem(this.menuItems.moveColumnLeft, true)) {
-      this.clickMenu(this.menuItems.moveColumnLeft);
-    } else {
-      this.clickMenu(this.menuItems.moveColumnsLeft);
-    }
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveColumnLeft);
   },
 
   moveColumnsRight() {
     this.selectColumn();
-    if (this.getMenuItem(this.menuItems.moveColumnRight, true)) {
-      this.clickMenu(this.menuItems.moveColumnRight);
-    } else {
-      this.clickMenu(this.menuItems.moveColumnsRight);
-    }
+    this.activateMenu("Move►");
+    this.clickMenu(this.menuItems.moveColumnRight);
   },
 
   //
@@ -358,22 +336,32 @@ SheetActions = {
   undo() { this.clickMenu(this.menuItems.undo); },
   redo() { this.clickMenu(this.menuItems.redo); },
 
-  clear() { this.clickMenu(this.menuItems.deleteValues); },
+  clear() {
+    this.activateMenu("Delete►");
+    this.clickMenu(this.menuItems.deleteValues);
+  },
 
   // Creates a row below and begins editing it.
   openRowBelow() {
-    this.clickMenu(this.menuItems.rowBelow);
-    // UI.typeKey(KeyboardUtils.keyCodes.enter);
-  },
+      this.insertRowBelow();
+      // UI.typeKey(KeyboardUtils.keyCodes.enter);
+    },
 
   openRowAbove() {
-    this.clickMenu(this.menuItems.rowAbove);
-    // UI.typeKey(KeyboardUtils.keyCodes.enter);
-  },
+      this.insertRowAbove();
+      // UI.typeKey(KeyboardUtils.keyCodes.enter);
+    },
 
   // Like openRowBelow, but does not enter insert mode.
-  insertRowBelow() { this.clickMenu(this.menuItems.rowBelow); },
-  insertRowAbove() { this.clickMenu(this.menuItems.rowAbove); },
+  insertRowBelow() {
+    this.activateMenu("Rows►");
+    this.clickMenu(this.menuItems.rowBelow);
+  },
+
+  insertRowAbove() {
+    this.activateMenu("Rows►");
+    this.clickMenu(this.menuItems.rowAbove);
+  },
 
   changeCell() {
     this.clear();
@@ -560,6 +548,19 @@ SheetActions = {
     KeyboardUtils.simulateClick(result);
   },
 
+  // Shows and then hides a submenu in the File menu system. This triggers creation of the buttons in that
+  // submenu, so they can be clicked.
+  activateMenu(menuCaption) {
+    const menuButton = this.getMenuItem(menuCaption);
+    KeyboardUtils.simulateClick(menuButton);
+    // Once the submenu is shown, it can only be hidden by modifying its style attribute.
+    // It's not possible to identify and find the specific submenu DOM element that was created and shown as a
+    // result of clicking on the menuButton, so we brute force hide all menus.
+    const menus = Array.from(document.querySelectorAll(".goog-menu"));
+    for (const m of menus)
+      m.style.display = "none";
+  },
+
   // Shows and then hides the tab menu for the currently selected tab.
   // This has the side effect of forcing Sheets to create the menu DOM element if it hasn't yet been created.
   activateTabMenu() {
@@ -575,6 +576,7 @@ SheetActions = {
 
   // NOTE(philc): I couldn't reliably detect the selected font size for the current cell, and so I couldn't
   // implement increaes font / decrease font commands.
+  // TODO(philc): I believe this is now possible. It's held in #docs-font-size.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
   getZoomMenu() { return this.getMenuItem("100%").parentNode; },
 
@@ -639,6 +641,13 @@ SheetActions = {
 
   numberFormatPercent2() {
     UI.typeKey(KeyboardUtils.keyCodes.number5, { shift: true, control: true });s
+    this.activateMenu(this.menuItems.fontSizeMenu);
+    KeyboardUtils.simulateClick(this.getMenuItem(/^10$/));
+  },
+
+  setFontSize8() {
+    this.activateMenu(this.menuItems.fontSizeMenu);
+    KeyboardUtils.simulateClick(this.getMenuItem(/^8$/));
   },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },
@@ -676,23 +685,13 @@ SheetActions = {
   colorCellFontColorBlack() { this.changeFontColor(this.colors.black); },
 
   freezeRow() {
-    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
-    const caption = this.menuItems.freezeRow;
-    this.clickMenu(caption);
-    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
-    const menuItem = this.getMenuItem(caption);
-    const menu = menuItem.closest(".goog-menu");
-    menu.style.display = "none";
+    this.activateMenu("Freeze►");
+    this.clickMenu(this.menuItems.freezeRow); // This forces the creation of the sub-menu items.
   },
 
   freezeColumn() {
-    this.clickMenu(this.menuItems.freeze); // This forces the creation of the sub-menu items.
-    const caption = this.menuItems.freezeColumn;
-    this.clickMenu(caption);
-    // Hide the Freeze menu. Clicking the "Freeze" button again does not hide it.
-    const menuItem = this.getMenuItem(caption);
-    const menu = menuItem.closest(".goog-menu");
-    menu.style.display = "none";
+    this.activateMenu("Freeze►");
+    this.clickMenu(this.menuItems.freezeColumn); // This forces the creation of the sub-menu items.
   },
 
   //
@@ -707,12 +706,12 @@ SheetActions = {
   },
 
   dismissFullScreenNotificationMessage() {
-    const dismissButton = document.querySelector("#docs-butterbar-container .docs-butterbar-link");
-    // Ensure we don't accidentally find and click on another HUD notification which is not for dismissing
-    // the full screen notification.
-    if (dismissButton && dismissButton.innerText === "Dismiss") {
-      KeyboardUtils.simulateClick(dismissButton);
-    }
+    // There should only be one dismiss button, but just in case there's ever multiple, click on all of them.
+    // Another reasonable behavior is to click on none of them, since one of these buttons is likely for a
+    // notification that's not the fullscreen dismiss button.
+    const dismissButtons = document.querySelectorAll(".docs-butterbar-dismiss");
+    for (let button of dismissButtons)
+      KeyboardUtils.simulateClick(button);
   },
 
   // Returns the value of the current cell.

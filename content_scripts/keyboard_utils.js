@@ -114,7 +114,7 @@ window.KeyboardUtils = {
   },
 
   simulateKeypress(el, keyCode, keyIdentifier) {
-    // console.log ">>>> simulating keypress on:", el, keyCode, keyIdentifier
+    // console.log "***** simulating keypress on:", el, keyCode, keyIdentifier
     el.dispatchEvent(this.createSimulatedKeyEvent(el, "keydown", keyCode, keyIdentifier));
     el.dispatchEvent(this.createSimulatedKeyEvent(el, "keypress", keyCode, keyIdentifier));
     el.dispatchEvent(this.createSimulatedKeyEvent(el, "keyup", keyCode, keyIdentifier));
