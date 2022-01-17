@@ -177,6 +177,7 @@ Commands = {
       "c,c": "changeCell",
       "C": "changeCell",
       "y,y": "copyRow",
+      "y": "copy",
 
       ";,j": "copyEndDownAndCopy",
 
