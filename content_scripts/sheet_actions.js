@@ -463,6 +463,10 @@ SheetActions = {
   paste() {
     this.clickMenu(this.menuItems.paste);
     this.unselectRow();
+
+    // Alternative -- does not work
+    // console.log('paste via keyboard shortcut!');
+    // UI.typeKey(KeyboardUtils.keyCodes.v, { meta: true });
   },
 
   pasteFormatOnly() {
