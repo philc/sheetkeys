@@ -92,7 +92,10 @@ SheetActions = {
 
     // If already cached, return it
     let item = this.menuItemElements[caption];
-    if (item) { return item; }
+    if (item) {
+      console.log(`Found menu item from cache: "${caption}"`)
+      return item;
+    }
 
     // Otherwise find it
     item = this.findMenuItem(caption);
@@ -100,6 +103,7 @@ SheetActions = {
       if (!silenceWarning) { console.log(`Error: could not find menu item with caption ${caption}`); }
       return null;
     }
+    console.log(`Found menu item from DOM search: "${caption}"`)
     return this.menuItemElements[caption] = item;
   },
 
@@ -190,7 +194,7 @@ SheetActions = {
   changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
   clickMenu(itemCaption) {
-    console.log(`Clicking menu item: "${itemCaption}"`)
+    console.log(`Called clickMenu(): "${itemCaption}"`)
     KeyboardUtils.simulateClick(this.getMenuItem(itemCaption));
   },
 
@@ -202,7 +206,6 @@ SheetActions = {
     KeyboardUtils.simulateClick(el);
     // Click the submenu buttons
     this.clickMenu(itemCaption);
-
   },
 
   createRishiMenuSubMenu() {
@@ -462,6 +465,7 @@ SheetActions = {
   },
 
   copy() {
+    console.log('Calling SheetActions.copy()');
     this.clickMenu(this.menuItems.copy);
     this.unselectRow();
   },

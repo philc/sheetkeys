@@ -177,7 +177,7 @@ Commands = {
       "c,c": "changeCell",
       "C": "changeCell",
       "Y": "copyRow",
-      "y": "copy",
+      "y,y": "copy",
 
       ";,j": "copyEndDownAndCopy",
 
@@ -323,7 +323,8 @@ Commands.defaultMappings.visual = extend(clone(Commands.defaultMappings.normal),
   "<M-h>": "moveEndLeftAndSelect",
   "<M-l>": "moveEndRightAndSelect",
   "y": "copy",
-  "y,y": null // Unbind "copy row", because it's superceded by "copy"
+  "y,y": null, // Unbind "copy row", because it's superceded by "copy"
+  "Y": null // Unbind "copy row", because it's superceded by "copy"
 });
 
 Commands.defaultMappings.visualLine = clone(Commands.defaultMappings.visual);
