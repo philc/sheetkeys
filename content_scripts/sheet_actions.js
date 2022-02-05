@@ -211,6 +211,12 @@ SheetActions = {
     KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
   },
 
+  createAlbertMenuSubMenu() {
+    // NOTE: Must double click the Rishi menu the first time to create the submenu
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Albert"));
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Albert"));
+  },
+
   deleteColumns() {
     this.clickMenu(this.menuItems.deleteColumn);
     // Clear any row-level selections we might've had.
@@ -494,16 +500,19 @@ SheetActions = {
   // Filtering
   filterToggle() {
     this.createRishiMenuSubMenu()
+    this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.filterToggle);
   },
 
   fitlerOnActiveCell() {
     this.createRishiMenuSubMenu()
+    this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.fitlerOnActiveCell);
   },
 
   removeAllFilters() {
     this.createRishiMenuSubMenu()
+    this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.removeAllFilters);
   },
 

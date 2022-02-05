@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Sheetkeys",
-  "version": "0.1",
+  "version": "1.0.4",
   "description": "TODO",
   "permissions": [
     "storage"
