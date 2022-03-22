@@ -63,6 +63,7 @@ SheetActions = {
     lightGray2: "light gray 2",
     blue: "blue",
     red: "red",
+    darkRed: "red berry",
     blue: "blue",
     black: "black",
     yellow: "yellow",
@@ -747,6 +748,7 @@ SheetActions = {
 
   // Font color
   colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
+  colorCellFontColorDarkRed() { this.changeFontColor(this.colors.darkRed); },
   colorCellFontColorBlue() { this.changeFontColor(this.colors.blue); },
   colorCellFontColorBlack() { this.changeFontColor(this.colors.black); },
 

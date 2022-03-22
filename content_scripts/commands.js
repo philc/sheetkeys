@@ -99,7 +99,8 @@ Commands = {
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions) },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions) },
     colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions) },
-    colorCellFontColorRed: { fn : SheetActions.colorCellFontColorRed.bind(SheetActions) },
+    colorCellFontColorRed: { fn: SheetActions.colorCellFontColorRed.bind(SheetActions) },
+    colorCellFontColorDarkRed: { fn : SheetActions.colorCellFontColorDarkRed.bind(SheetActions) },
     colorCellFontColorBlue: { fn : SheetActions.colorCellFontColorBlue.bind(SheetActions) },
     colorCellFontColorBlack: { fn : SheetActions.colorCellFontColorBlack.bind(SheetActions) },
     fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions) },
@@ -218,8 +219,11 @@ Commands = {
       "g,t": "nextTab",
       "g,T": "prevTab",
 
-      "J": "prevTab",
-      "K": "nextTab",
+      "J": "moveDownAndSelect",
+      "K": "moveUpAndSelect",
+      "H": "moveLeftAndSelect",
+      "L": "moveRightAndSelect",
+
       "[": "prevTab",
       "]": "nextTab",
 
@@ -258,6 +262,7 @@ Commands = {
       ";,u": "colorCellFontColorBlue",
       ";,i": "colorCellFontColorBlack",
       ";,o": "colorCellFontColorRed",
+      ";,O": "colorCellFontColorDarkRed",
       ";,p": "colorCellLightYellow",
 
       ";,f,n": "fontSizeNormal",
