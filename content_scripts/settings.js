@@ -1,9 +1,8 @@
 Settings = {
   // Returns a nested map of mode => key => commandName.
   parseKeyMappings(configText) {
-    // TODO(philc): Rename to keyMappings
     var lines = configText.trim().split("\n");
-    var keyBindings = {};
+    var keyMappings = {};
     for (let line of lines) {
       line = line.trim();
       if (line == "") { continue; } // Ignore blank lines.
@@ -11,10 +10,10 @@ Settings = {
 
       // TODO(philc): Support keybindings in modes other than normal.
       // TODO(philc): return validation errors.
-      if (!keyBindings["normal"]) { keyBindings["normal"] = {} ; }
-      keyBindings["normal"][key] = commandName;
+      if (!keyMappings["normal"]) { keyMappings["normal"] = {} ; }
+      keyMappings["normal"][key] = commandName;
     }
-    return keyBindings;
+    return keyMappings;
   },
 
   async get() {

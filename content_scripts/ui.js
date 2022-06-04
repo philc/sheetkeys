@@ -19,7 +19,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
 
 UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
-  maxBindingLength: 3,
+  maxKeyMappingLength: 3,
   // Mode can be one of:
   // * normal
   // * insert: when editing a cell's contents
@@ -29,8 +29,8 @@ UI = {
   mode: "normal",
   // Keys which were typed recently
   keyQueue: [],
-  // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound keybindings.
-  keyBindingPrefixes: null,
+  // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound key mappings.
+  keyMappingsPrefixes: null,
   richTextEditorId: "waffle-rich-text-editor",
 
   init() {
@@ -46,8 +46,14 @@ UI = {
     // can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
 
-    this.loadUserKeybindings();
+    setTimeout(async () => {
+      const mappings = await this.loadUserKeyMappings();
+      this.keyMappings = mappings;
+      this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
+    }, 0);
   },
+
+
 
   setMode(mode) {
     if (this.mode === mode) { return; }
@@ -149,31 +155,31 @@ UI = {
     return style != null && style != "";
   },
 
-  async loadUserKeybindings() {
-    // TODO(philc): Rename to keyMappings
+  async loadUserKeyMappings() {
     const settings = await Settings.get();
-    let userBindings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
-    let bindings = {};
-    // Perform a deep merge with the default keybindings.
+    let userMappings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
+    console.log(">>>> userMappings:", userMappings);
+    let mappings = {};
+    // Perform a deep merge with the default key mappings.
     for (let mode in Commands.defaultMappings) {
-      bindings[mode] = clone(Commands.defaultMappings[mode]);
-      extend(bindings[mode], userBindings[mode]);
+      mappings[mode] = clone(Commands.defaultMappings[mode]);
+      extend(mappings[mode], userMappings[mode]);
     }
-    this.keyBindings = bindings;
-    this.keyBindingPrefixes = this.buildKeyBindingPrefixes(bindings);
+    console.log(">>>> mappings:", mappings);
+    return mappings;
   },
 
   // Returns a map of (partial keyString) => is_bound?
-  // Note that the keys only include partial keystrings for bindings. So the binding "dap" will add "d" and
+  // Note that the keys only include partial keystrings for mappings. So the mapping "dap" will add "d" and
   // "da" keys to this map, but not "dap".
-  buildKeyBindingPrefixes(keyBindings) {
+  buildKeyMappingsPrefixes(keyMappings) {
     const prefixes = {};
-    for (let mode in keyBindings) {
+    for (let mode in keyMappings) {
       prefixes[mode] = {};
-      const modeKeyBindings = keyBindings[mode];
-      for (let keyString in modeKeyBindings) {
+      const modeKeyMappings = keyMappings[mode];
+      for (let keyString in modeKeyMappings) {
         // If the bound action is null, then treat this key as unbound.
-        const action = modeKeyBindings[keyString];
+        const action = modeKeyMappings[keyString];
         if (!action) { continue; }
         const keys = keyString.split(",");
         for (let i = 0; i < keys.length - 1; i++) {
@@ -211,23 +217,23 @@ UI = {
     }
 
     this.keyQueue.push(keyString);
-    if (this.keyQueue.length > this.maxBindingLength) { this.keyQueue.shift(); }
-    const modeBindings = this.keyBindings[this.mode] || [];
-    const modePrefixes = this.keyBindingPrefixes[this.mode] || [];
+    if (this.keyQueue.length > this.maxKeyMappingLength) { this.keyQueue.shift(); }
+    const modeMappings = this.keyMappings[this.mode] || [];
+    const modePrefixes = this.keyMappingsPrefixes[this.mode] || [];
     // See if a bound command matches the typed key sequence. If so, execute it.
-    // Prioritize longer bindings over shorter bindings.
-    for (let i = Math.min(this.maxBindingLength, this.keyQueue.length); i >= 1; i--) {
+    // Prioritize longer mappings over shorter mappings.
+    for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
       var fn;
       const keySequence = this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(",");
-      // If this key could be part of one of the bound key bindings, don't pass it through to the page.
-      // Also, if some longer binding partically matches this key sequence, then wait for more keys, and
-      // don't immediately apply a shorter binding which also matches this key sequence.
+      // If this key could be part of one of the bound key mapping, don't pass it through to the page.
+      // Also, if some longer mapping partically matches this key sequence, then wait for more keys, and
+      // don't immediately apply a shorter mapping which also matches this key sequence.
       if (modePrefixes[keySequence]) {
         this.cancelEvent(e);
         return;
       }
 
-      if (commandName = modeBindings[keySequence]) {
+      if (commandName = modeMappings[keySequence]) {
         this.keyQueue = [];
         this.cancelEvent(e);
         Commands.commands[commandName].fn();

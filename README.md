@@ -2,7 +2,7 @@ Sheetkeys is a Chrome extension which adds powerful keyboard navigation shortcut
 spirit of the Vim text editor. It's written by one of the authors of
 [Vimium](https://github.com/philc/vimium).
 
-## Keyboard Bindings
+## Keyboard Mappings
 
 Documentation for these shortcuts is Coming Soon. For now, you can see all of the bindings provided by looking
 in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/commands.js#L88).
