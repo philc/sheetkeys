@@ -6,6 +6,7 @@
   "permissions": [
     "storage"
   ],
+  "options_page": "options_page/options.html",
   "content_scripts": [
     {
       "matches": ["https://docs.google.com/spreadsheets/*",
