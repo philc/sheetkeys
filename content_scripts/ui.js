@@ -149,18 +149,18 @@ UI = {
     return style != null && style != "";
   },
 
-  loadUserKeybindings() {
-    chrome.storage.sync.get(null, (settings) => {
-      let userBindings = (settings && settings.keyMappings) ? Settings.parse(settings.keyMappings) : {};
-      let bindings = {};
-      // Perform a deep merge with the default keybindings.
-      for (let mode in Commands.defaultMappings) {
-        bindings[mode] = clone(Commands.defaultMappings[mode]);
-        extend(bindings[mode], userBindings[mode]);
-      }
-      this.keyBindings = bindings;
-      this.keyBindingPrefixes = this.buildKeyBindingPrefixes(bindings);
-    });
+  async loadUserKeybindings() {
+    // TODO(philc): Rename to keyMappings
+    const settings = await Settings.get();
+    let userBindings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
+    let bindings = {};
+    // Perform a deep merge with the default keybindings.
+    for (let mode in Commands.defaultMappings) {
+      bindings[mode] = clone(Commands.defaultMappings[mode]);
+      extend(bindings[mode], userBindings[mode]);
+    }
+    this.keyBindings = bindings;
+    this.keyBindingPrefixes = this.buildKeyBindingPrefixes(bindings);
   },
 
   // Returns a map of (partial keyString) => is_bound?
