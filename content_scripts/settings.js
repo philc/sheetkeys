@@ -23,6 +23,18 @@ Settings = {
 
   async set(settings) {
     chrome.storage.sync.set({"options-v1": settings});
+  },
+
+  async loadUserKeyMappings() {
+    const settings = await Settings.get();
+    let userMappings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
+    let mappings = {};
+    // Perform a deep merge with the default key mappings.
+    for (let mode in Commands.defaultMappings) {
+      mappings[mode] = clone(Commands.defaultMappings[mode]);
+      Object.assign(mappings[mode], userMappings[mode]);
+    }
+    return mappings;
   }
 
 };

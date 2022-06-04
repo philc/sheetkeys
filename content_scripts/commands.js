@@ -1,8 +1,10 @@
 Commands = {
   commands: {
     // Cursor movement
-    moveUp: { fn: SheetActions.moveUp.bind(SheetActions) },
-    moveDown: { fn: SheetActions.moveDown.bind(SheetActions) },
+    moveUp: { fn: SheetActions.moveUp.bind(SheetActions),
+              group: "movement" },
+    moveDown: { fn: SheetActions.moveDown.bind(SheetActions),
+                group: "movement" },
     moveLeft: { fn: SheetActions.moveLeft.bind(SheetActions) },
     moveRight: { fn: SheetActions.moveRight.bind(SheetActions) },
 

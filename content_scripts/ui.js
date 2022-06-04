@@ -41,13 +41,11 @@ UI = {
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
 
     setTimeout(async () => {
-      const mappings = await this.loadUserKeyMappings();
+      const mappings = await Settings.loadUserKeyMappings();
       this.keyMappings = mappings;
       this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
     }, 0);
   },
-
-
 
   setMode(mode) {
     if (this.mode === mode) { return; }
@@ -147,19 +145,6 @@ UI = {
     // the cell editor input box.
     var style = this.editor.parentNode.getAttribute("style");
     return style != null && style != "";
-  },
-
-  async loadUserKeyMappings() {
-    const settings = await Settings.get();
-    let userMappings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
-    console.log(">>>> userMappings:", userMappings);
-    let mappings = {};
-    // Perform a deep merge with the default key mappings.
-    for (let mode in Commands.defaultMappings) {
-      mappings[mode] = clone(Commands.defaultMappings[mode]);
-      Object.assign(mappings[mode], userMappings[mode]);
-    }
-    return mappings;
   },
 
   // Returns a map of (partial keyString) => is_bound?
@@ -266,4 +251,6 @@ UI = {
   reloadPage() { window.location.reload(); },
 };
 
-UI.init();
+// Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
+if (!document.location.pathname.endsWith("options.html"))
+  UI.init();
