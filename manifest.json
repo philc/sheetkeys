@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Sheetkeys",
   "version": "0.1",
   "description": "TODO",
@@ -18,5 +18,9 @@
       "run_at": "document_end",
       "all_frames": false
     }],
-  "web_accessible_resources": ["page_scripts/page_script.js"]
+  "web_accessible_resources": [
+    {
+      "resources": ["page_scripts/page_script.js"],
+      "matches": ["https://docs.google.com/*"]
+    }]
 }

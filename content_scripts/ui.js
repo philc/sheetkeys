@@ -99,7 +99,7 @@ UI = {
   // See here for docs on how to inject page scripts: http://stackoverflow.com/a/9517879/46237
   injectPageScript() {
     const script = document.createElement("script");
-    script.src = chrome.extension.getURL("page_scripts/page_script.js");
+    script.src = chrome.runtime.getURL("page_scripts/page_script.js");
     return document.documentElement.appendChild(script);
   },
 
