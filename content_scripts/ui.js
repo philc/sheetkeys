@@ -1,12 +1,6 @@
 // Utilities
-const clone = o => extend({}, o);
-var extend = function(o, properties) {
-  for (let key in properties) {
-    const val = properties[key];
-    o[key] = val;
-  }
-  return o;
-};
+
+const clone = o => Object.assign({}, o);
 
 // Add an event listener which removes itself once the event is fired once.
 const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
@@ -163,9 +157,8 @@ UI = {
     // Perform a deep merge with the default key mappings.
     for (let mode in Commands.defaultMappings) {
       mappings[mode] = clone(Commands.defaultMappings[mode]);
-      extend(mappings[mode], userMappings[mode]);
+      Object.assign(mappings[mode], userMappings[mode]);
     }
-    console.log(">>>> mappings:", mappings);
     return mappings;
   },
 

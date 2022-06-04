@@ -187,7 +187,7 @@ Commands = {
   }
 };
 
-Commands.defaultMappings.visual = extend(clone(Commands.defaultMappings.normal), {
+Commands.defaultMappings.visual = Object.assign(clone(Commands.defaultMappings.normal), {
   "j": "moveDownAndSelect",
   "k": "moveUpAndSelect",
   "h": "moveLeftAndSelect",
