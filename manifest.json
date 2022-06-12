@@ -15,13 +15,16 @@
              "content_scripts/settings.js",
              "content_scripts/sheet_actions.js",
              "content_scripts/ui.js",
-             "content_scripts/commands.js"],
+             "content_scripts/commands.js",
+             "help_dialog.js"],
       "run_at": "document_end",
       "all_frames": false
     }],
   "web_accessible_resources": [
     {
-      "resources": ["page_scripts/page_script.js"],
+      "resources": ["page_scripts/page_script.js",
+                    "help_dialog.css",
+                    "help_dialog.html"],
       "matches": ["https://docs.google.com/*"]
     }]
 }

@@ -1,0 +1,59 @@
+#help-dialog {
+  color: black;
+  position: absolute;
+  width: 600px;
+  height: 1200px;
+  z-index: 5000;
+  top: 6%;
+  left: 400px;
+  background-color: #eee;
+  border: 5px solid #bbb;
+  border-color: #1A73E8;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px #222;
+  /* Taken from Sheets */
+  font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  overflow: auto;
+}
+
+h1 {
+  margin: 0;
+  background-color: #ddd;
+  padding: 10px;
+  font-weight: normal;
+}
+table {
+  margin: 10px;
+}
+
+thead {
+  border: 1px solid red;
+  font-weight: bold;
+  padding-top: 6px;
+}
+
+thead tr td {
+  padding-bottom: 4px;
+}
+
+tbody tr:last-of-type td {
+  padding-bottom: 18px;
+}
+
+td {
+  padding-right: 10px;
+  /* border: 1px solid red; */
+  padding-bottom: 4px;
+}
+
+td:last-of-type {
+  margin-right: 0;
+}
+
+td:nth-of-type(2) span {
+  background-color: #555B64;
+  border-radius: 5px;
+  color: white;
+  padding: 2px 6px;
+}
