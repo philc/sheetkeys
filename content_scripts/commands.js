@@ -206,6 +206,9 @@ Commands = {
                    group: "formatting" },
 
     // Misc
+    showHelp: { fn: SheetActions.showHelpDialog,
+                name: "Show help",
+                group: "other" },
     toggleFullScreen: { fn: SheetActions.toggleFullScreen.bind(SheetActions),
                    name: "Toggle full screen",
                    group: "other" },
@@ -297,6 +300,7 @@ Commands = {
       ";,f,c": "freezeColumn",
 
       // Misc
+      "?": "showHelp",
       ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
       ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
       ";,o": "openCellAsUrl",

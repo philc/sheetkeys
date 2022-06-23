@@ -530,5 +530,10 @@ SheetActions = {
     const match = url.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
     if (match) { url = match[1]; }
     window.open(url, "_blank");
+  },
+
+  async showHelpDialog() {
+    const h = new HelpDialog();
+    await h.show();
   }
 };
