@@ -1,11 +1,20 @@
 // TODO(philc): Consider making Mapping a struct.
-class HelpDialog {
 
+class ShortcutKey {
+  constructor(key, keyCode, shift, ctrl, alt, meta) {
+    this.key = key;
+    this.keyCode = keyCode;
+    this.shiftKey = shift;
+    this.ctrlKey = ctrl;
+    this.altKey = alt;
+    this.metaKey = meta;
+  }
+}
+
+class HelpDialog {
   // Returns a map of groupName => [Mapping]
   async getMappingsByGroup() {
     const mappings = await Settings.loadUserKeyMappings();
-    console.log(">>>> settings mappings:", mappings);
-    window.o = mappings;
     const groupsToCommand = { "movement": [],
                               "editing": [],
                               "selection": [],
@@ -32,6 +41,8 @@ class HelpDialog {
   }
 
   async createElement() {
+    if (this.el)
+      return;
     const response = await fetch(chrome.runtime.getURL("help_dialog.html"));
     let html = await response.text();
     html = html.replace("help_dialog.css", chrome.runtime.getURL("help_dialog.css"));
@@ -40,7 +51,71 @@ class HelpDialog {
     const shadow = helpDialog.attachShadow({ mode: "open" });
     shadow.innerHTML = html;
     document.body.appendChild(helpDialog);
-    return helpDialog;
+    this.el = helpDialog;
+    this.keydownListener = (e) => this.onKeydown(e);
+    this.el.addEventListener("focus", (e) => this.onFocus(e));
+    this.el.addEventListener("click", (e) => this.onClick(e));
+  }
+
+  onClick(event) {
+    const target = event.path[0];
+    console.log("On click", target);
+    if (target.classList.contains("cancel")) {
+      // TODO(philc): cancel
+    } else if (target.classList.contains("save")) {
+      this.commitChange();
+    } else if (target.classList.contains("reset")) {
+      // TODO(philc): reset
+    }
+  }
+
+  onFocus(event) {
+    this.activeShortcutEl = event.path[0];
+    // TODO(philc): Implement "cancel".
+    this.activeShortcutEl.innerHTML = "";
+    this.el.addEventListener("keydown", this.keydownListener);
+    this.shortcutKeys = [];
+    const tr = this.activeShortcutEl.closest("tr");
+    tr.querySelector(".cancel").style.display = "inline";
+    tr.querySelector(".save").style.display = "inline";
+    tr.querySelector(".reset").style.display = "none";
+  }
+
+  commitChange() {
+    console.log("comimt change");
+    this.el.removeEventListener("keydown", this.keydownListener);
+
+    const tr = this.activeShortcutEl.closest("tr");
+    tr.querySelector(".cancel").style.display = null;
+    tr.querySelector(".save").style.display = null;
+    tr.querySelector(".reset").style.display = null;
+
+    this.activeShortcutEl = null;
+    this.shortcutKeys = null;
+  }
+
+  onKeydown(event) {
+    console.log("help dialog on keydown", event);
+    event.preventDefault();
+    event.stopPropagation();
+
+    const keyString = KeyboardUtils.getKeyString(event);
+
+    // Ignore key presses which are just modifiers.
+    if (!keyString)
+      return;
+
+    const sk = new ShortcutKey(event.key, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey,
+                               event.metaKey);
+    this.shortcutKeys.push(sk);
+    this.activeShortcutEl.appendChild(this.createSpan(sk));
+  }
+
+  createSpan(shortcutKey) {
+    const s = document.createElement("span");
+    const string = KeyboardUtils.getKeyString(shortcutKey);
+    s.innerText = string;
+    return s;
   }
 
   async populateDialog() {
@@ -52,26 +127,19 @@ class HelpDialog {
     }
 
     const shadow = this.el.shadowRoot;
-    console.log(this.el.shadowRoot);
-    console.log(this.el);
 
     const theadTemplate = shadow.querySelector("thead");
-    console.log(">>>> theadTemplate:", theadTemplate);
     const tbodyTemplate = shadow.querySelector("tbody");
-    console.log(">>>> tbodyTemplate:", tbodyTemplate);
     const trTemplate = tbodyTemplate.querySelector("tr");
 
     const table = shadow.querySelector("table");
     table.innerHTML = "";
     for (let group of groups) {
       const thead = theadTemplate.cloneNode(true);
-      console.log(">>>> thead:", thead);
       thead.querySelector("td").innerText = capitalize(group);
 
       const mappingsForGroup = mappings[group];
-      console.log(">>>> mappingsForGroup:", group, mappingsForGroup);
       const tbody = tbodyTemplate.cloneNode();
-      // tbody.innerHTML = "";
       for (let mapping of mappingsForGroup) {
         // TODO(philc): Skipping everything outside of normal mode.
         if (mapping.mode != "normal")
@@ -79,9 +147,9 @@ class HelpDialog {
         const row = trTemplate.cloneNode(true);
         const cells = row.querySelectorAll("td");
         const command = Commands.commands[mapping.command];
-        console.log(">>>> mapping.command:", mapping.command);
+        const shortcutDiv = row.querySelector("div.shortcut");
         cells[0].innerText = command.name || mapping.command;
-        cells[1].innerText = mapping.key;
+        shortcutDiv.innerText = mapping.key;
         tbody.appendChild(row);
       }
       table.appendChild(thead);
@@ -90,9 +158,7 @@ class HelpDialog {
   }
 
   async show() {
-    if (!this.el)
-      // Is it OK this is blocking?
-      this.el = await this.createElement();
+    await this.createElement();
     await this.populateDialog();
     this.el.style.display = "";
   }
