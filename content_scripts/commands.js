@@ -1,4 +1,8 @@
 Commands = {
+  // This character is U+0095, and is used as a separator in the string representation of a sequence of keys.
+  // It cannot itself appear as a key.
+  KEY_SEPARATOR: "•",
+
   commands: {
     // Cursor movement
     moveUp: { fn: SheetActions.moveUp.bind(SheetActions),
@@ -247,19 +251,19 @@ Commands = {
       "O": "openRowAbove",
       "s": "insertRowBelow",
       "S": "insertRowAbove",
-      "d,d": "deleteRowsOrColumns",
+      "d•d": "deleteRowsOrColumns",
       "x": "clear",
-      "c,c": "changeCell",
-      "y,y": "copyRow",
+      "c•c": "changeCell",
+      "y•y": "copyRow",
 
       // Merging cells
-      ";,m,a": "mergeAllCells",
-      ";,m,u": "unmergeCells",
-      ";,m,h": "mergeCellsHorizontally",
-      ";,m,v": "mergeCellsVertically",
+      ";•m•a": "mergeAllCells",
+      ";•m•u": "unmergeCells",
+      ";•m•h": "mergeCellsHorizontally",
+      ";•m•v": "mergeCellsVertically",
 
       // "Yank cell"
-      "y,c": "copy",
+      "y•c": "copy",
       "p": "paste",
 
       // Selection
@@ -270,40 +274,40 @@ Commands = {
       // Scrolling
       "<C-d>": "scrollHalfPageDown",
       "<C-u>": "scrollHalfPageUp",
-      "g,g": "scrollToTop",
+      "g•g": "scrollToTop",
       "G": "scrollToBottom",
 
       // Tabs
-      ">,>": "moveTabRight",
-      "<,<": "moveTabLeft",
-      "g,t": "nextTab",
-      "g,T": "prevTab",
+      ">•>": "moveTabRight",
+      "<•<": "moveTabLeft",
+      "g•t": "nextTab",
+      "g•T": "prevTab",
       "J": "prevTab",
       "K": "nextTab",
 
       // Formatting
-      ";,w,w": "wrap",
-      ";,w,o": "overflow",
-      ";,w,c": "clip",
-      ";,a,l": "alignLeft",
-      ";,a,c": "alignCenter",
-      ";,a,r": "alignRight",
-      ";,c,w": "colorCellWhite",
-      ";,c,y": "colorCellLightYellow3",
-      ";,c,b": "colorCellLightCornflowerBlue3",
-      ";,c,p": "colorCellLightPurple",
-      ";,c,r": "colorCellLightRed3",
-      ";,c,g": "colorCellLightGray2",
-      ";,f,n": "fontSizeNormal",
-      ";,f,s": "fontSizeSmall",
-      ";,f,r": "freezeRow",
-      ";,f,c": "freezeColumn",
+      ";•w•w": "wrap",
+      ";•w•o": "overflow",
+      ";•w•c": "clip",
+      ";•a•l": "alignLeft",
+      ";•a•c": "alignCenter",
+      ";•a•r": "alignRight",
+      ";•c•w": "colorCellWhite",
+      ";•c•y": "colorCellLightYellow3",
+      ";•c•b": "colorCellLightCornflowerBlue3",
+      ";•c•p": "colorCellLightPurple",
+      ";•c•r": "colorCellLightRed3",
+      ";•c•g": "colorCellLightGray2",
+      ";•f•n": "fontSizeNormal",
+      ";•f•s": "fontSizeSmall",
+      ";•f•r": "freezeRow",
+      ";•f•c": "freezeColumn",
 
       // Misc
       "?": "showHelp",
-      ";,w,m": "toggleFullScreen", // Mnemonic for "window maximize"
-      ";,w,f": "toggleFullScreen", // Mnemonic for "window full screen"
-      ";,o": "openCellAsUrl",
+      ";•w•m": "toggleFullScreen", // Mnemonic for "window maximize"
+      ";•w•f": "toggleFullScreen", // Mnemonic for "window full screen"
+      ";•o": "openCellAsUrl",
       // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
       "<M-r>": "reloadPage",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
@@ -329,7 +333,7 @@ Commands.defaultMappings.visual = Object.assign(clone(Commands.defaultMappings.n
   "h": "moveLeftAndSelect",
   "l": "moveRightAndSelect",
   "y": "copy",
-  "y,y": null // Unbind "copy row", because it's superceded by "copy"
+  "y•y": null // Unbind "copy row", because it's superceded by "copy"
 });
 
 Commands.defaultMappings.visualLine = clone(Commands.defaultMappings.visual);

@@ -148,8 +148,8 @@ UI = {
   },
 
   // Returns a map of (partial keyString) => is_bound?
-  // Note that the keys only include partial keystrings for mappings. So the mapping "dap" will add "d" and
-  // "da" keys to this map, but not "dap".
+  // Note that the keys only include partial keystrings for mappings. So the mapping "d•a•p" will add "d" and
+  // "d•a" keys to this map, but not "d•a•p".
   buildKeyMappingsPrefixes(keyMappings) {
     const prefixes = {};
     for (let mode in keyMappings) {
@@ -159,9 +159,9 @@ UI = {
         // If the bound action is null, then treat this key as unbound.
         const action = modeKeyMappings[keyString];
         if (!action) { continue; }
-        const keys = keyString.split(",");
+        const keys = keyString.split(Commands.KEY_SEPARATOR);
         for (let i = 0; i < keys.length - 1; i++) {
-          keyString = keys.slice(0, i+1).join(",");
+          keyString = keys.slice(0, i+1).join(Commands.KEY_SEPARATOR);
           prefixes[mode][keyString] = true;
         }
       }
@@ -202,7 +202,8 @@ UI = {
     // Prioritize longer mappings over shorter mappings.
     for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
       var fn;
-      const keySequence = this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(",");
+      const keySequence =
+            this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(Commands.KEY_SEPARATOR);
       // If this key could be part of one of the bound key mapping, don't pass it through to the page.
       // Also, if some longer mapping partically matches this key sequence, then wait for more keys, and
       // don't immediately apply a shorter mapping which also matches this key sequence.
