@@ -42,7 +42,7 @@ window.KeyboardUtils = {
     "U+00BF": ["U+002F", "U+003F"] // /?
   },
 
-  // Returns the string "<A-f>" if F is pressed.
+  // Returns the string "<A-f>" if "alt F" is pressed.
   getKeyString(event) {
     let keyString;
     if (event.keyCode in this.keyNames) {
@@ -53,7 +53,7 @@ window.KeyboardUtils = {
       // represent a character other than the key in the user's keyboard layout. E.g. on Mac, <A-v> comes
       // through as <A-√>.
       // See https://github.com/philc/vimium/issues/2147#issuecomment-230370011 for discussion.
-      keyString = String.fromCharCode(event.which).toLowerCase();
+      keyString = String.fromCharCode(event.keyCode).toLowerCase();
     } else if (event.key.length === 1) {
       keyString = event.key;
     }
