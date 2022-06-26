@@ -1,6 +1,15 @@
 // Utilities
 
-const clone = o => Object.assign({}, o);
+function clone(o) { return Object.assign({}, o) };
+
+window.invertObjectMap = (o) => {
+  const o2 = {};
+  for (let k of Object.keys(o)) {
+    const v = o[k];
+    o2[v] = k;
+  }
+  return o2;
+}
 
 // Add an event listener which removes itself once the event is fired once.
 const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
@@ -42,7 +51,7 @@ const UI = {
 
     setTimeout(async () => {
       const mappings = await Settings.loadUserKeyMappings();
-      this.keyMappings = mappings;
+      this.modeToKeyToCommand = invertObjectMap(mappings);
       this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
     }, 0);
   },
@@ -155,14 +164,14 @@ const UI = {
     for (let mode in keyMappings) {
       prefixes[mode] = {};
       const modeKeyMappings = keyMappings[mode];
-      for (let keyString in modeKeyMappings) {
+      for (let command of Object.keys(modeKeyMappings)) {
+        const keyString = modeKeyMappings[command];
         // If the bound action is null, then treat this key as unbound.
-        const action = modeKeyMappings[keyString];
-        if (!action) { continue; }
+        if (!keyString) { continue; }
         const keys = keyString.split(Commands.KEY_SEPARATOR);
         for (let i = 0; i < keys.length - 1; i++) {
-          keyString = keys.slice(0, i+1).join(Commands.KEY_SEPARATOR);
-          prefixes[mode][keyString] = true;
+          let prefix = keys.slice(0, i+1).join(Commands.KEY_SEPARATOR);
+          prefixes[mode][prefix] = true;
         }
       }
     }
@@ -205,7 +214,7 @@ const UI = {
       const keySequence =
             this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(Commands.KEY_SEPARATOR);
       // If this key could be part of one of the bound key mapping, don't pass it through to the page.
-      // Also, if some longer mapping partically matches this key sequence, then wait for more keys, and
+      // Also, if some longer mapping partially matches this key sequence, then wait for more keys, and
       // don't immediately apply a shorter mapping which also matches this key sequence.
       if (modePrefixes[keySequence]) {
         this.cancelEvent(e);
@@ -220,7 +229,7 @@ const UI = {
     }
   },
 
-  // modifiers: optiona; an object with these boolean properties: meta, shift, control.
+  // modifiers: Optional; an object with these boolean properties: meta, shift, control.
   typeKey(keyCode, modifiers) {
     if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;

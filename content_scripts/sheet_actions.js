@@ -1,4 +1,4 @@
-SheetActions = {
+const SheetActions = {
   // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
   // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
   menuItems: {
@@ -537,3 +537,5 @@ SheetActions = {
     await h.show();
   }
 };
+
+window.SheetActions = SheetActions;

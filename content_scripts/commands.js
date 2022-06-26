@@ -1,4 +1,4 @@
-Commands = {
+const Commands = {
   // This character is U+0095, and is used as a separator in the string representation of a sequence of keys.
   // It cannot itself appear as a key.
   KEY_SEPARATOR: "•",
@@ -227,114 +227,116 @@ Commands = {
   defaultMappings: {
     "normal": {
       // Cursor movement
-      "k": "moveUp",
-      "j": "moveDown",
-      "h": "moveLeft",
-      "l": "moveRight",
+      "moveUp": "k",
+      "moveDown": "j",
+      "moveLeft": "h",
+      "moveRight": "l",
 
       // Row & column movement
-      "<C-J>": "moveRowsDown",
-      "<C-K>": "moveRowsUp",
-      "<C-H>": "moveColumnsLeft",
-      "<C-L>": "moveColumnsRight",
+      "moveRowsDown": "<C-J>",
+      "moveRowsUp": "<C-K>",
+      "moveColumnsLeft": "<C-H>",
+      "moveColumnsRight": "<C-L>",
 
       // TODO(philc): remove this because it's custom to my configuration
-      "BACKSPACE": "moveColumnsLeft",
+      "moveColumnsLeft": "BACKSPACE",
 
       // Editing
-      "i": "editCell",
-      "a": "editCellAppend",
-      "u": "undo",
+      "editCell": "i",
+      "editCellAppend": "a",
+      "undo": "u",
       "<C-r>": "redo",
-      "r": "replaceChar",
-      "o": "openRowBelow",
-      "O": "openRowAbove",
-      "s": "insertRowBelow",
-      "S": "insertRowAbove",
-      "d•d": "deleteRowsOrColumns",
-      "x": "clear",
-      "c•c": "changeCell",
-      "y•y": "copyRow",
+      "replaceChar": "r",
+      "openRowBelow": "o",
+      "openRowAbove": "O",
+      "insertRowBelow": "s",
+      "insertRowAbove": "S",
+      "deleteRowsOrColumns": "d•d",
+      "clear": "x",
+      "changeCell": "c•c",
+      "copyRow": "y•y",
 
       // Merging cells
-      ";•m•a": "mergeAllCells",
-      ";•m•u": "unmergeCells",
-      ";•m•h": "mergeCellsHorizontally",
-      ";•m•v": "mergeCellsVertically",
+      "mergeAllCells": ";•m•a",
+      "unmergeCells": ";•m•u",
+      "mergeCellsHorizontally": ";•m•h",
+      "mergeCellsVertically": ";•m•v",
 
       // "Yank cell"
-      "y•c": "copy",
-      "p": "paste",
+      "copy": "y•c",
+      "paste": "p",
 
       // Selection
-      "v": "enterVisualMode",
-      "V": "enterVisualLineMode",
-      "<A-v>": "enterVisualColumnMode",
+      "enterVisualMode": "v",
+      "enterVisualLineMode": "V",
+      "enterVisualColumnMode": "<A-v>",
 
       // Scrolling
-      "<C-d>": "scrollHalfPageDown",
-      "<C-u>": "scrollHalfPageUp",
-      "g•g": "scrollToTop",
-      "G": "scrollToBottom",
+      "scrollHalfPageDown": "<C-d>",
+      "scrollHalfPageUp": "<C-u>",
+      "scrollToTop": "g•g",
+      "scrollToBottom": "G",
 
       // Tabs
-      ">•>": "moveTabRight",
-      "<•<": "moveTabLeft",
-      "g•t": "nextTab",
-      "g•T": "prevTab",
-      "J": "prevTab",
-      "K": "nextTab",
+      "moveTabRight": ">•>",
+      "moveTabLeft": "<•<",
+      "nextTab": "g•t",
+      "prevTab": "g•T",
+      "prevTab": "J",
+      "nextTab": "K",
 
       // Formatting
-      ";•w•w": "wrap",
-      ";•w•o": "overflow",
-      ";•w•c": "clip",
-      ";•a•l": "alignLeft",
-      ";•a•c": "alignCenter",
-      ";•a•r": "alignRight",
-      ";•c•w": "colorCellWhite",
-      ";•c•y": "colorCellLightYellow3",
-      ";•c•b": "colorCellLightCornflowerBlue3",
-      ";•c•p": "colorCellLightPurple",
-      ";•c•r": "colorCellLightRed3",
-      ";•c•g": "colorCellLightGray2",
-      ";•f•n": "fontSizeNormal",
-      ";•f•s": "fontSizeSmall",
-      ";•f•r": "freezeRow",
-      ";•f•c": "freezeColumn",
+      "wrap": ";•w•w",
+      "overflow": ";•w•o",
+      "clip": ";•w•c",
+      "alignLeft": ";•a•l",
+      "alignCenter": ";•a•c",
+      "alignRight": ";•a•r",
+      "colorCellWhite": ";•c•w",
+      "colorCellLightYellow3": ";•c•y",
+      "colorCellLightCornflowerBlue3": ";•c•b",
+      "colorCellLightPurple": ";•c•p",
+      "colorCellLightRed3": ";•c•r",
+      "colorCellLightGray2": ";•c•g",
+      "fontSizeNormal": ";•f•n",
+      "fontSizeSmall": ";•f•s",
+      "freezeRow": ";•f•r",
+      "freezeColumn": ";•f•c",
 
       // Misc
-      "?": "showHelp",
-      ";•w•m": "toggleFullScreen", // Mnemonic for "window maximize"
-      ";•w•f": "toggleFullScreen", // Mnemonic for "window full screen"
-      ";•o": "openCellAsUrl",
+      "showHelp": "?",
+      "toggleFullScreen": ";•w•m", // Mnemonic for "window maximize"
+      "toggleFullScreen": ";•w•f", // Mnemonic for "window full screen"
+      "openCellAsUrl": ";•o",
       // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
-      "<M-r>": "reloadPage",
+      "reloadPage": "<M-r>",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
       // happen. If you mistakenly type it in Sheets, you will exit full screen mode.
-      "esc": "exitMode"
+      "exitMode": "esc"
     },
 
     "insert": {
       // In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
       // people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
-      "esc": "commitCellChanges",
+      "commitCellChanges": "esc",
       // In form fields on Mac, C-e takes you to the end of the field. For some reason C-e doesn't work in
       // Sheets. Here, we fix that.
-      "<C-e>": "moveCursorToCellLineEnd",
-      "<M-r>": "reloadPage"
+      "moveCursorToCellLineEnd": "<C-e>",
+      "reloadPage": "<M-r>"
     }
   }
 };
 
 Commands.defaultMappings.visual = Object.assign(clone(Commands.defaultMappings.normal), {
-  "j": "moveDownAndSelect",
-  "k": "moveUpAndSelect",
-  "h": "moveLeftAndSelect",
-  "l": "moveRightAndSelect",
-  "y": "copy",
-  "y•y": null // Unbind "copy row", because it's superceded by "copy"
+  "moveDownAndSelect": "j",
+  "moveUpAndSelect": "k",
+  "moveLeftAndSelect": "h",
+  "moveRightAndSelect": "l",
+  "copy": "y",
+  "copyRow": null // Unbind "copy row", because it's superceded by "copy"
 });
 
 Commands.defaultMappings.visualLine = clone(Commands.defaultMappings.visual);
 Commands.defaultMappings.visualColumn = clone(Commands.defaultMappings.visual);
+
+window.Commands = Commands;

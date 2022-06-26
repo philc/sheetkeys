@@ -1,12 +1,9 @@
 Settings = {
   settingsKey: "settings-v1",
 
-  // Returns a nested map of mode => key => commandName.
+  // Returns a nested map of mode => commandName => key
   parseKeyMappings(keyMappings) {
-    const keyToCommand = {};
-    for (let [k, v] of Object.entries(keyMappings))
-      keyToCommand[k] = v;
-    return { "normal": keyToCommand };
+    return { "normal": keyMappings };
     // var lines = configText.trim().split("\n");
     // var keyMappings = {};
     // for (let line of lines) {

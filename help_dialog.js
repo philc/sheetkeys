@@ -28,7 +28,7 @@ class HelpDialog {
       commandToGroup[key] = command.group || "other";
 
     for (let mode of Object.keys(mappings)) {
-      for (let [key, commandName] of Object.entries(mappings[mode])) {
+      for (let [commandName, key] of Object.entries(mappings[mode])) {
         const group = commandToGroup[commandName];
         if (!group) {
           // There must be an invalid key mapping in the command.
