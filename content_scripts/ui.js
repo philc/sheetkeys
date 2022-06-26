@@ -11,7 +11,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
   return dispatcher.addEventListener(eventType, handlerFn, true);
 };
 
-UI = {
+const UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxKeyMappingLength: 3,
   // Mode can be one of:
@@ -253,5 +253,7 @@ UI = {
 };
 
 // Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
-if (!document.location.pathname.endsWith("options.html"))
+if (window.document && !document.location.pathname.endsWith("options.html"))
   UI.init();
+
+window.UI = UI;
