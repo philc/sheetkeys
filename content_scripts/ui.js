@@ -42,7 +42,13 @@ const UI = {
 
     setTimeout(async () => {
       const mappings = await Settings.loadUserKeyMappings();
-      this.modeToKeyToCommand = invertObjectMap(mappings);
+      // TODO(philc): This can be simplified once we collapse all modes together.
+      this.modeToKeyToCommand = {};
+      for (let mode of Object.keys(mappings)) {
+        const m = mappings[mode];
+        this.modeToKeyToCommand[mode] = invertObjectMap(m);
+      }
+
       this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
     }, 0);
   },
@@ -151,8 +157,8 @@ const UI = {
 
     this.keyQueue.push(keyString);
     if (this.keyQueue.length > this.maxKeyMappingLength) { this.keyQueue.shift(); }
-    const modeMappings = this.keyMappings[this.mode] || [];
-    const modePrefixes = this.keyMappingsPrefixes[this.mode] || [];
+    const modeMappings = this.modeToKeyToCommand[SheetActions.mode] || [];
+    const modePrefixes = this.keyMappingsPrefixes[SheetActions.mode] || [];
     // See if a bound command matches the typed key sequence. If so, execute it.
     // Prioritize longer mappings over shorter mappings.
     for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
