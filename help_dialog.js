@@ -54,16 +54,16 @@ class HelpDialog {
     this.el = helpDialog;
     this.keydownListener = (e) => this.onKeydown(e);
     this.el.addEventListener("focus", (e) => this.onFocus(e));
-    this.el.addEventListener("click", (e) => this.onClick(e));
+    this.el.addEventListener("click", async (e) => await this.onClick(e));
   }
 
-  onClick(event) {
+  async onClick(event) {
     const target = event.path[0];
     console.log("On click", target);
     if (target.classList.contains("cancel")) {
       // TODO(philc): cancel
     } else if (target.classList.contains("save")) {
-      this.commitChange();
+      await this.commitChange();
     } else if (target.classList.contains("reset")) {
       // TODO(philc): reset
     }
@@ -74,15 +74,15 @@ class HelpDialog {
     // TODO(philc): Implement "cancel".
     this.activeShortcutEl.innerHTML = "";
     this.el.addEventListener("keydown", this.keydownListener);
-    this.shortcutKeys = [];
+    this.keyStrings = [];
     const tr = this.activeShortcutEl.closest("tr");
     tr.querySelector(".cancel").style.display = "inline";
     tr.querySelector(".save").style.display = "inline";
     tr.querySelector(".reset").style.display = "none";
   }
 
-  commitChange() {
-    console.log("comimt change");
+  async commitChange() {
+    console.log("commit change");
     this.el.removeEventListener("keydown", this.keydownListener);
 
     const tr = this.activeShortcutEl.closest("tr");
@@ -90,8 +90,14 @@ class HelpDialog {
     tr.querySelector(".save").style.display = null;
     tr.querySelector(".reset").style.display = null;
 
+    const newKeyMapping = this.keyStrings.join(Commands.KEY_SEPARATOR);
+    const commandName = tr.dataset.command;
+    console.log(">>>> commandName:", commandName);
+    console.log(">>>> newKeyMapping:", newKeyMapping);
+    await Settings.changeKeyMapping(commandName, newKeyMapping);
+
     this.activeShortcutEl = null;
-    this.shortcutKeys = null;
+    this.keyStrings = null;
   }
 
   onKeydown(event) {
@@ -105,16 +111,15 @@ class HelpDialog {
     if (!keyString)
       return;
 
-    const sk = new ShortcutKey(event.key, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey,
-                               event.metaKey);
-    this.shortcutKeys.push(sk);
-    this.activeShortcutEl.appendChild(this.createSpan(sk));
+    // const sk = new ShortcutKey(event.key, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey,
+    //                            event.metaKey);
+    this.keyStrings.push(keyString);
+    this.activeShortcutEl.appendChild(this.createSpan(keyString));
   }
 
-  createSpan(shortcutKey) {
+  createSpan(keyString) {
     const s = document.createElement("span");
-    const string = KeyboardUtils.getKeyString(shortcutKey);
-    s.innerText = string;
+    s.innerText = keyString;
     return s;
   }
 
@@ -145,6 +150,7 @@ class HelpDialog {
         if (mapping.mode != "normal")
           continue;
         const row = trTemplate.cloneNode(true);
+        row.dataset.command = mapping.command;
         const cells = row.querySelectorAll("td");
         const command = Commands.commands[mapping.command];
         const shortcutDiv = row.querySelector("div.shortcut");

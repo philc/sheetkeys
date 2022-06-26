@@ -1,39 +1,61 @@
 Settings = {
-  // Returns a nested map of mode => key => commandName.
-  parseKeyMappings(configText) {
-    var lines = configText.trim().split("\n");
-    var keyMappings = {};
-    for (let line of lines) {
-      line = line.trim();
-      if (line == "") { continue; } // Ignore blank lines.
-      const [mapCommand, key, commandName] = line.split(/\s+/);
+  settingsKey: "settings-v1",
 
-      // TODO(philc): Support keybindings in modes other than normal.
-      // TODO(philc): return validation errors.
-      if (!keyMappings["normal"]) { keyMappings["normal"] = {} ; }
-      keyMappings["normal"][key] = commandName;
-    }
-    return keyMappings;
+  // Returns a nested map of mode => key => commandName.
+  parseKeyMappings(keyMappings) {
+    const keyToCommand = {};
+    for (let [k, v] of Object.entries(keyMappings))
+      keyToCommand[k] = v;
+    return { "normal": keyToCommand };
+    // var lines = configText.trim().split("\n");
+    // var keyMappings = {};
+    // for (let line of lines) {
+    //   line = line.trim();
+    //   if (line == "") { continue; } // Ignore blank lines.
+    //   const [mapCommand, key, commandName] = line.split(/\s+/);
+
+    //   // TODO(philc): Support keybindings in modes other than normal.
+    //   // TODO(philc): return validation errors.
+    //   if (!keyMappings["normal"]) { keyMappings["normal"] = {} ; }
+    //   keyMappings["normal"][key] = commandName;
+    // }
+    // return keyMappings;
   },
 
   async get() {
-    const settings = await chrome.storage.sync.get("options-v1");
-    return settings["options-v1"] || {};
+    const settings = await chrome.storage.sync.get(this.settingsKey);
+    const defaultOptions = {
+      keyMappings: {} // A map of commandName => list of keys
+    };
+    return Object.assign(defaultOptions, settings[this.settingsKey]);
   },
 
   async set(settings) {
-    chrome.storage.sync.set({"options-v1": settings});
+    const o = {};
+    o[this.settingsKey] = settings;
+    chrome.storage.sync.set(o);
+  },
+
+  async changeKeyMapping(commandName, keyMapping) {
+    if (commandName == null || keyMapping == null || keyMapping == "") {
+      throw new Error(`Invalid command name or key mapping '${commandName}', '${keyMapping}'`);
+    }
+    const settings = await Settings.get();
+    settings.keyMappings[commandName] = keyMapping;
+    await Settings.set(settings);
   },
 
   async loadUserKeyMappings() {
     const settings = await Settings.get();
-    let userMappings = settings.keyMappings ? Settings.parseKeyMappings(settings.keyMappings) : {};
+    console.log(">>>> settings:", settings);
+    let userMappings = this.parseKeyMappings(settings.keyMappings);
     let mappings = {};
     // Perform a deep merge with the default key mappings.
     for (let mode in Commands.defaultMappings) {
       mappings[mode] = clone(Commands.defaultMappings[mode]);
       Object.assign(mappings[mode], userMappings[mode]);
     }
+    console.log(">>>> mappings:", mappings);
     return mappings;
   }
 
