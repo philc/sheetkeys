@@ -49,6 +49,63 @@ const SheetActions = {
   // A mapping of button-caption to DOM element.
   menuItemElements: {},
 
+  // Mode can be one of:
+  // * normal
+  // * insert: when editing a cell's contents
+  // * disabled: when the cursor is on some other form field in Sheets, like the Find dialog.
+  // * replace: when "r" has been typed, and we're waiting for the user to type a character to replace the
+  //   cell's contents with.
+  mode: "normal",
+
+  // This is a function that will get assigned to by ui.js. We're not referencing ui.js directly, so that we
+  // can avoid a circular dependency.
+  typeKeyFn: null,
+
+  setMode(mode) {
+    if (this.mode === mode) { return; }
+    console.log(`Entering ${mode} mode.`);
+    this.mode = mode;
+    this.keyQueue = [];
+  },
+
+  enterVisualMode() { this.setMode("visual"); },
+
+  // In this mode, entire lines are selected.
+  enterVisualLineMode() {
+    this.preserveSelectedColumn();
+    this.selectRow();
+    this.setMode("visualLine");
+  },
+
+  enterVisualColumnMode() {
+    SheetActions.selectColumn();
+    this.setMode("visualColumn");
+  },
+
+  // Exits the current mode and transitions to normal mode.
+  exitMode() {
+    switch (this.mode) {
+    case "visual":
+      this.unselectRow();
+      this.setMode("normal");
+      break;
+    case "visualLine":
+      this.unselectRow();
+      this.restoreSelectedColumn();
+      this.setMode("normal");
+      break;
+    case "visualColumn":
+      this.unselectRow();
+      this.setMode("normal");
+      break;
+    case "normal": // Do nothing.
+      break;
+    default:
+      throw `Attempted to exit an unknown mode: ${this.mode}`;
+      break;
+    }
+  },
+
   clickToolbarButton(captionList) {
     // Sometimes a toolbar button won't exist in the DOM until its parent has been clicked, so we click all of
     // its parents in sequence.
@@ -132,9 +189,14 @@ const SheetActions = {
 
     // Clear any row-level selections we might've had.
     this.unselectRow();
+
+    // In case we're in visual mode, exit that mode and return to normal mode.
+    this.setMode("normal");
   },
 
   preserveSelectedColumn() { this.previousColumnLeft = this.selectedCellCoords().left; },
+
+  replaceChar() { this.setMode("replace"); },
 
   restoreSelectedColumn() {
     const left = this.previousColumnLeft;
@@ -184,7 +246,7 @@ const SheetActions = {
     UI.typeKey(KeyboardUtils.keyCodes.downArrow);
     // If the cursor moved after we typed our arrow key, undo this selection change.
     if (oldY !== this.cellCursorY()) {
-      UI.typeKey(KeyboardUtils.keyCodes.upArrow);
+      this.typeKeyFn(KeyboardUtils.keyCodes.upArrow);
     }
   },
 
@@ -200,15 +262,15 @@ const SheetActions = {
   //
   // Movement
   //
-  moveUp() { UI.typeKey(KeyboardUtils.keyCodes.upArrow); },
-  moveDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow); },
-  moveLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow); },
-  moveRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow); },
+  moveUp() { this.typeKeyFn(KeyboardUtils.keyCodes.upArrow); },
+  moveDown() { this.typeKeyFn(KeyboardUtils.keyCodes.downArrow); },
+  moveLeft() { this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow); },
+  moveRight() { this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow); },
 
-  moveDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
-  moveUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
-  moveLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
-  moveRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
+  moveDownAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
+  moveUpAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
+  moveLeftAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
+  moveRightAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
 
   //
   // Row movement
@@ -262,12 +324,12 @@ const SheetActions = {
   // Creates a row below and begins editing it.
   openRowBelow() {
     this.insertRowBelow();
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
   },
 
   openRowAbove() {
     this.insertRowAbove();
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
   },
 
   // Like openRowBelow, but does not enter insert mode.
@@ -283,19 +345,19 @@ const SheetActions = {
 
   changeCell() {
     this.clear();
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
   },
 
   // Put the cursor at the beginning of the cell.
   editCell() {
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
     // Note that just typing the "home" key here doesn't work, for unknown reasons.
     this.moveCursorToCellStart();
   },
 
   editCellAppend() {
     // Note that appending to the cell's contents is the default behavior of the Enter key in Sheets.
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
   },
 
   moveCursorToCellStart() {
@@ -320,9 +382,9 @@ const SheetActions = {
   },
 
   commitCellChanges() {
-    UI.typeKey(KeyboardUtils.keyCodes.enter);
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
     // "Enter" in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
-    UI.typeKey(KeyboardUtils.keyCodes.upArrow);
+    this.typeKeyFn(KeyboardUtils.keyCodes.upArrow);
   },
 
   copyRow() {
@@ -363,27 +425,27 @@ const SheetActions = {
   scrollHalfPageDown() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
-      UI.typeKey(KeyboardUtils.keyCodes.downArrow)
+      this.typeKeyFn(KeyboardUtils.keyCodes.downArrow)
     }
   },
 
   scrollHalfPageUp() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
-      UI.typeKey(KeyboardUtils.keyCodes.upArrow)
+      this.typeKeyFn(KeyboardUtils.keyCodes.upArrow)
     }
   },
 
   scrollToTop() {
     // TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
     // those platforms?
-    UI.typeKey(KeyboardUtils.keyCodes.home, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.home, {meta: true});
   },
 
   scrollToBottom() {
     // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
-    UI.typeKey(KeyboardUtils.keyCodes.end, {meta: true});
-    UI.typeKey(KeyboardUtils.keyCodes.leftArrow, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.end, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, {meta: true});
   },
 
   //
@@ -535,7 +597,9 @@ const SheetActions = {
   async showHelpDialog() {
     const h = new HelpDialog();
     await h.show();
-  }
+  },
+
+  reloadPage() { window.location.reload(); }
 };
 
 window.SheetActions = SheetActions;

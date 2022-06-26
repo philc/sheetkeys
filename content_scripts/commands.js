@@ -45,7 +45,7 @@ const Commands = {
     redo: { fn: SheetActions.redo.bind(SheetActions),
             name: "Redo",
             group: "editing" },
-    replaceChar: { fn: UI.replaceChar.bind(UI),
+    replaceChar: { fn: SheetActions.replaceChar.bind(SheetActions),
                    name: "Replace",
                    group: "editing" },
     openRowBelow: { fn: SheetActions.openRowBelow.bind(SheetActions),
@@ -60,7 +60,7 @@ const Commands = {
     insertRowAbove: { fn: SheetActions.insertRowAbove.bind(SheetActions),
                       name: "Insert row above",
                       group: "editing" },
-    deleteRowsOrColumns: { fn: UI.deleteRowsOrColumns.bind(UI),
+    deleteRowsOrColumns: { fn: SheetActions.deleteRowsOrColumns.bind(SheetActions),
                            name: "Delete selected rows/columns",
                            group: "editing" },
     clear: { fn: SheetActions.clear.bind(SheetActions),
@@ -78,7 +78,7 @@ const Commands = {
     moveCursorToCellLineEnd: { fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions),
                                name: "Move cursor to line end",
                                group: "editing" },
-    exitMode: { fn: UI.exitMode.bind(UI),
+    exitMode: { fn: SheetActions.exitMode.bind(SheetActions),
                 name: "Exit the current mode",
                 group: "editing" },
 
@@ -105,14 +105,14 @@ const Commands = {
                    group: "editing" },
 
     // Selection
-    enterVisualMode: { fn: UI.enterVisualMode.bind(UI),
+    enterVisualMode: { fn: SheetActions.enterVisualMode.bind(SheetActions),
                    name: "Enter selection mode",
                    group: "selection" },
     // TODO(philc): Rename to visual row mode
-    enterVisualLineMode: { fn: UI.enterVisualLineMode.bind(UI),
+    enterVisualLineMode: { fn: SheetActions.enterVisualLineMode.bind(SheetActions),
                    name: "Begin selecting entire rows",
                    group: "selection" },
-    enterVisualColumnMode: { fn: UI.enterVisualColumnMode.bind(UI),
+    enterVisualColumnMode: { fn: SheetActions.enterVisualColumnMode.bind(SheetActions),
                    name: "Begin selecting entire columns",
                    group: "selection" },
     // TODO(philc): These can be removed; they're awkward to expose to the user. Just have moveUp etc. check
@@ -219,7 +219,7 @@ const Commands = {
     openCellAsUrl: { fn: SheetActions.openCellAsUrl.bind(SheetActions),
                    name: "Open URL in cell in a new tab",
                    group: "other" },
-    reloadPage: { fn: UI.reloadPage.bind(UI),
+    reloadPage: { fn: SheetActions.reloadPage.bind(SheetActions),
                    name: "Reload page",
                    group: "other" },
   },

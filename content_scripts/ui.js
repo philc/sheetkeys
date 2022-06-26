@@ -23,13 +23,6 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
 const UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
   maxKeyMappingLength: 3,
-  // Mode can be one of:
-  // * normal
-  // * insert: when editing a cell's contents
-  // * disabled: when the cursor is on some other form field in Sheets, like the Find dialog.
-  // * replace: when "r" has been typed, and we're waiting for the user to type a character to replace the
-  //   cell's contents with.
-  mode: "normal",
   // Keys which were typed recently
   keyQueue: [],
   // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound key mappings.
@@ -38,6 +31,7 @@ const UI = {
 
   init() {
     this.injectPageScript();
+    SheetActions.typeKeyFn = this.typeKey;
     window.addEventListener("focus", (e => this.onFocus(e)), true);
     // When we first focus the spreadsheet, if we're in fullscreen mode, dismiss Sheet's "info" message.
     addOneTimeListener(window, "focus", () => {
@@ -54,51 +48,6 @@ const UI = {
       this.modeToKeyToCommand = invertObjectMap(mappings);
       this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
     }, 0);
-  },
-
-  setMode(mode) {
-    if (this.mode === mode) { return; }
-    console.log(`Entering ${mode} mode.`);
-    this.mode = mode;
-    this.keyQueue = [];
-  },
-
-  enterVisualMode() { this.setMode("visual"); },
-
-  // In this mode, entire lines are selected.
-  enterVisualLineMode() {
-    SheetActions.preserveSelectedColumn();
-    SheetActions.selectRow();
-    this.setMode("visualLine");
-  },
-
-  enterVisualColumnMode() {
-    SheetActions.selectColumn();
-    this.setMode("visualColumn");
-  },
-
-  // Exits the current mode and transitions to normal mode.
-  exitMode() {
-    switch (this.mode) {
-    case "visual":
-      SheetActions.unselectRow();
-      this.setMode("normal");
-      break;
-    case "visualLine":
-      SheetActions.unselectRow();
-      SheetActions.restoreSelectedColumn();
-      this.setMode("normal");
-      break;
-    case "visualColumn":
-      SheetActions.unselectRow();
-      this.setMode("normal");
-      break;
-    case "normal": // Do nothing.
-      break;
-    default:
-      throw `Attempted to exit an unknown mode: ${this.mode}`;
-      break;
-    }
   },
 
   // We inject the page_script into the page so that we can simulate keypress events, which must be done by a
@@ -120,11 +69,11 @@ const UI = {
     if (!this.editor) { this.setupEditor(); }
     const el = event.target;
     if (el.id === this.richTextEditorId) {
-      if (this.mode === "disabled") {
-        this.setMode("normal");
+      if (SheetActions.mode === "disabled") {
+        SheetActions.setMode("normal");
       }
     } else if (this.isEditable(el)) {
-      this.setMode("disabled");
+      SheetActions.setMode("disabled");
     }
   },
 
@@ -135,7 +84,7 @@ const UI = {
         // Listen for when the editor's style attribute changes. This indicates that a cell is now being
         // edited, perhaps due to double clicking into a cell.
         const observer = new MutationObserver(mutations => {
-          this.isEditorEditing() ? this.setMode("insert") : this.setMode("normal");
+          this.isEditorEditing() ? SheetActions.setMode("insert") : SheetActions.setMode("normal");
         });
         observer.observe(this.editor.parentNode, {
           attributes: true,
@@ -192,10 +141,10 @@ const UI = {
 
     // In replace mode, we're waiting for one character to be typed, and we will replace the cell's contents
     // with that character and then return to normal mode.
-    if (this.mode === "replace") {
+    if (SheetActions.mode === "replace") {
       if (keyString === "esc") {
         this.cancelEvent(e);
-        this.setMode("normal");
+        SheetActions.setMode("normal");
       } else {
         SheetActions.changeCell();
         setTimeout((() => SheetActions.commitCellChanges()), 0);
@@ -240,15 +189,6 @@ const UI = {
     this.ignoreKeys = false;
   },
 
-  deleteRowsOrColumns() {
-    SheetActions.deleteRowsOrColumns();
-    // In case we're in visual mode, exit that mode and return to normal mode.
-    this.setMode("normal");
-  },
-
-  replaceChar() { this.setMode("replace"); },
-
-  // TODO(philc): Consider moving this to SheetActions.
   reflowGrid() {
     // When you hide a DOM element, Google's Waffle grid doesn't know to reflow and take up the full viewport.
     // You can trigger a reflow by resizing the browser or by clicking on the Explore button in the lower-left
@@ -256,9 +196,7 @@ const UI = {
     const exploreButton = document.querySelector(".waffle-assistant-entry [role=button]");
     KeyboardUtils.simulateClick(exploreButton);
     KeyboardUtils.simulateClick(exploreButton); // Click twice to show and then hide.
-  },
-
-  reloadPage() { window.location.reload(); },
+  }
 };
 
 // Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
