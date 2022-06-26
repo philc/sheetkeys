@@ -49,7 +49,7 @@ Settings = {
     let mappings = {};
     // Perform a deep merge with the default key mappings.
     for (let mode in Commands.defaultMappings) {
-      mappings[mode] = clone(Commands.defaultMappings[mode]);
+      mappings[mode] = Object.assign({}, Commands.defaultMappings[mode]);
       Object.assign(mappings[mode], userMappings[mode]);
     }
     console.log(">>>> mappings:", mappings);

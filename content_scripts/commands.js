@@ -327,7 +327,7 @@ const Commands = {
   }
 };
 
-Commands.defaultMappings.visual = Object.assign(clone(Commands.defaultMappings.normal), {
+Commands.defaultMappings.visual = Object.assign({}, (Commands.defaultMappings.normal), {
   "moveDownAndSelect": "j",
   "moveUpAndSelect": "k",
   "moveLeftAndSelect": "h",
@@ -336,7 +336,7 @@ Commands.defaultMappings.visual = Object.assign(clone(Commands.defaultMappings.n
   "copyRow": null // Unbind "copy row", because it's superceded by "copy"
 });
 
-Commands.defaultMappings.visualLine = clone(Commands.defaultMappings.visual);
-Commands.defaultMappings.visualColumn = clone(Commands.defaultMappings.visual);
+Commands.defaultMappings.visualLine = Object.assign({}, Commands.defaultMappings.visual);
+Commands.defaultMappings.visualColumn = Object.assign({}, Commands.defaultMappings.visual);
 
 window.Commands = Commands;

@@ -1,7 +1,4 @@
 // Utilities
-
-function clone(o) { return Object.assign({}, o) };
-
 window.invertObjectMap = (o) => {
   const o2 = {};
   for (let k of Object.keys(o)) {
