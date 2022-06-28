@@ -582,16 +582,37 @@ const SheetActions = {
       KeyboardUtils.simulateClick(button);
   },
 
-  // Returns the value of the current cell.
-  getCellValue() { return document.querySelector("#t-formula-bar-input-container").textContent; },
-
-  // Opens a new tab using the current cell's value as the URL.
+  // Opens a new tab for each link in the current cell.
   openCellAsUrl() {
-    let url = this.getCellValue().trim();
-    // Some cells can contain a HYPERLINK("url", "caption") value. If so, assume that's the URL to open.
-    const match = url.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
-    if (match) { url = match[1]; }
-    window.open(url, "_blank");
+    // Focus the current cell, which causes the <a> elements to appear in the formula bar DOM:
+    this.typeKeyFn(KeyboardUtils.keyCodes.enter);
+
+    const formulaBar = document.querySelector("#t-formula-bar-input-container .cell-input");
+    const embeddedLinks = formulaBar.querySelectorAll("a");
+    // Case 1: Embedded links
+    if (embeddedLinks.length > 0) {
+      embeddedLinks.forEach((el) => {
+        console.log(el);
+        console.log(el.dataset.sheetsFormulaBarTextLink);
+        window.open(el.dataset.sheetsFormulaBarTextLink, "_blank");
+      });
+    } else {
+      const text = formulaBar.textContent.trim();
+      const functionMatch = text.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
+      // Case 2: Usage of the 'HYPERLINK("url", "caption")' function
+      if (functionMatch) {
+        window.open(functionMatch[1], "_blank");
+      } else {
+        const urlMatches = text.match(/(https?:\/\/[^\s]+)/g);
+        // Case 3: Raw link(s) in the cell's plain text
+        if (urlMatches) {
+          urlMatches.forEach((url) => { window.open(url, "_blank"); });
+        }
+      }
+    }
+
+    // Finally, unfocus the current cell:
+    this.commitCellChanges();
   },
 
   async showHelpDialog() {
