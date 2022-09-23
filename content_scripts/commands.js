@@ -67,7 +67,7 @@ Commands = {
     copyEndDownAndCopy: { fn: SheetActions.copyEndDownAndCopy.bind(SheetActions) },
 
     // Filtering
-    //NOTE: Only works if Rishi menu is installed
+    //NOTE: Only works if Rishi OR Albert menu is installed
     filterToggle:{ fn: SheetActions.filterToggle.bind(SheetActions) },
     fitlerOnActiveCell:{ fn: SheetActions.fitlerOnActiveCell.bind(SheetActions) },
     removeAllFilters:{ fn: SheetActions.removeAllFilters.bind(SheetActions) },
@@ -252,8 +252,8 @@ Commands = {
       // ";,c,g": "colorCellLightGray2",
       "c,w": "colorCellWhite",
       "c,y": "colorCellLightYellow",
-      // "c,b": "colorCellLightCornflowerBlue3",
-      "c,b": "colorCellLightBlue3",
+      "c,b": "colorCellLightCornflowerBlue3",
+      // "c,b": "colorCellLightBlue3",
       "c,p": "colorCellLightPurple",
       "c,r": "colorCellLightRed3",
       "c,g": "colorCellLightGray2",

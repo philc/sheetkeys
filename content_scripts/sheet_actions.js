@@ -49,6 +49,7 @@ SheetActions = {
     borderClear: ["Borders", "Clear borders"],
     decimalDecrease: ["Decrease decimal places"],
     decimalIncrease: ["Increase decimal places"],
+    deleteColumns: ["Delete", "Column"],
     // pasteFormulaOnly: ["Paste special s", "Formula only"],
   },
 
@@ -212,12 +213,10 @@ SheetActions = {
   createRishiMenuSubMenu() {
     // NOTE: Must double click the Rishi menu the first time to create the submenu
     KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
-    KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
   },
 
   createAlbertMenuSubMenu() {
     // NOTE: Must double click the Rishi menu the first time to create the submenu
-    KeyboardUtils.simulateClick(this.findMenuRootButton("Albert"));
     KeyboardUtils.simulateClick(this.findMenuRootButton("Albert"));
   },
 
@@ -504,19 +503,19 @@ SheetActions = {
 
   // Filtering
   filterToggle() {
-    this.createRishiMenuSubMenu()
+    // this.createRishiMenuSubMenu()
     this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.filterToggle);
   },
 
   fitlerOnActiveCell() {
-    this.createRishiMenuSubMenu()
+    // this.createRishiMenuSubMenu()
     this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.fitlerOnActiveCell);
   },
 
   removeAllFilters() {
-    this.createRishiMenuSubMenu()
+    // this.createRishiMenuSubMenu()
     this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.removeAllFilters);
   },
