@@ -237,6 +237,10 @@ UI = {
 
   // modifiers: optiona; an object with these boolean properties: meta, alt, shift, control.
   typeKey(keyCode, modifiers) {
+    // Print log
+    var modifiers_str = JSON.stringify(modifiers) || "no modifiers";
+    console.log(`Typing: ${keyCode} + ${modifiers_str}`);
+
     if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;
     if (!modifiers) { modifiers = {}; }

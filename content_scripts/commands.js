@@ -145,6 +145,11 @@ Commands = {
       "h": "moveLeft",
       "l": "moveRight",
 
+      // "w": "jumpForward",
+      "e": "moveEndRight",
+      "b": "moveEndLeft",
+      "g,e": "moveEndLeft",
+
       "<M-j>": "moveEndDown",
       "<M-k>": "moveEndUp",
       "<M-l>": "moveEndRight",
@@ -155,6 +160,11 @@ Commands = {
       "<C-K>": "moveRowsUp",
       "<C-H>": "moveColumnsLeft",
       "<C-L>": "moveColumnsRight",
+
+      "J": "moveDownAndSelect",
+      "K": "moveUpAndSelect",
+      "H": "moveLeftAndSelect",
+      "L": "moveRightAndSelect",
 
       // TODO(philc): remove this because it's custom to my configuration
       "BACKSPACE": "moveColumnsLeft",
@@ -193,7 +203,7 @@ Commands = {
       "p": "paste",
       "t": "pasteFormatOnly",
       "f": "pasteFormulaOnly",
-      "e": "pasteValuesOnly",
+      "w": "pasteValuesOnly",
       "<C-t>": "pasteFormatOnly",
       // DOES NOT WORK - blocked by a global shortcut, maybe emacs on karabiner
       // "<C-f>": "pasteFormulaOnly",
@@ -218,12 +228,6 @@ Commands = {
       "<,<": "moveTabLeft",
       "g,t": "nextTab",
       "g,T": "prevTab",
-
-      "J": "moveDownAndSelect",
-      "K": "moveUpAndSelect",
-      "H": "moveLeftAndSelect",
-      "L": "moveRightAndSelect",
-
       "[": "prevTab",
       "]": "nextTab",
 
@@ -277,11 +281,11 @@ Commands = {
       ";,9": "zoom90",
       ";,8": "zoom80",
 
-      "b,t": "borderTop",
-      "b,b": "borderBottom",
-      "b,r": "borderRight",
-      "b,l": "borderLeft",
-      "b,c": "borderClear",
+      ";,b,t": "borderTop",
+      ";,b,b": "borderBottom",
+      ";,b,r": "borderRight",
+      ";,b,l": "borderLeft",
+      ";,b,c": "borderClear",
 
       "n": "decimalIncrease",
       "m": "decimalDecrease",
@@ -319,14 +323,28 @@ Commands = {
 };
 
 Commands.defaultMappings.visual = extend(clone(Commands.defaultMappings.normal), {
+  // One cell at a time
   "j": "moveDownAndSelect",
   "k": "moveUpAndSelect",
   "h": "moveLeftAndSelect",
   "l": "moveRightAndSelect",
+
+  // Jump to end in selection mode
   "<M-j>": "moveEndDownAndSelect",
   "<M-k>": "moveEndUpAndSelect",
   "<M-h>": "moveEndLeftAndSelect",
   "<M-l>": "moveEndRightAndSelect",
+
+  // Jump to end in selection mode
+  "J": "moveEndDownAndSelect",
+  "K": "moveEndUpAndSelect",
+  "H": "moveEndLeftAndSelect",
+  "L": "moveEndRightAndSelect",
+
+  // Jump to end in selection mode
+  "e": "moveEndRightAndSelect",
+  "b": "moveEndLeftAndSelect",
+
   "y": "copy",
   "y,y": null, // Unbind "copy row", because it's superceded by "copy"
   "Y": null // Unbind "copy row", because it's superceded by "copy"
