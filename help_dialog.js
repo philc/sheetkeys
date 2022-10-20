@@ -72,6 +72,8 @@ class HelpDialog {
       this.commitChange();
     } else if (target.classList.contains("cancel")) {
       this.cancelEditing();
+    } else if (target.classList.contains("default")) {
+      this.resetToDefault();
     }
   }
 
@@ -97,17 +99,39 @@ class HelpDialog {
     this.edits.rowEl = visibility ? tr : null;
   }
 
+  // Creates HTML within shortcutEl to display the given key mapping.
+  displayKeyString(shortcutEl, keyMapping) {
+    shortcutEl.innerHTML = "";
+    if (keyMapping) {
+      for (const keyString of keyMapping.split(Commands.KEY_SEPARATOR)) {
+        const s = document.createElement("span");
+        s.innerText = keyString;
+        shortcutEl.appendChild(s);
+      }
+    }
+  }
+
   cancelEditing() {
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
     shortcutEl.innerHTML = "";
     const originalMapping = this.edits.rowEl.dataset.mapping;
-    for (const keyString of originalMapping.split(Commands.KEY_SEPARATOR))
-      shortcutEl.appendChild(this.createSpan(keyString));
+    this.displayKeyString(shortcutEl, originalMapping);
     this.showEditingUI(this.edits.rowEl, false);
   }
 
+  // Restores the command currently being mapped to its SheetKeys default mapping.
+  resetToDefault() {
+    const command = this.edits.rowEl.dataset.command;
+    const defaultMapping = Commands.defaultMappings.normal[command];
+    this.edits.keyStrings = defaultMapping ? defaultMapping.split(Commands.KEY_SEPARATOR) : [];
+    this.displayKeyString(this.edits.rowEl.querySelector(".shortcut"), defaultMapping);
+    this.commitChange();
+  }
+
   async commitChange() {
-    const newKeyMapping = this.edits.keyStrings.join(Commands.KEY_SEPARATOR);
+    const newKeyMapping = this.edits.keyStrings.length > 0 ?
+          this.edits.keyStrings.join(Commands.KEY_SEPARATOR) :
+          null;
     const commandName = this.edits.rowEl.dataset.command;
     await Settings.changeKeyMapping(commandName, newKeyMapping);
     this.edits.rowEl.dataset.mapping = newKeyMapping;
@@ -126,17 +150,9 @@ class HelpDialog {
     if (!keyString)
       return;
 
-    // const sk = new ShortcutKey(event.key, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey,
-    //                            event.metaKey);
     this.edits.keyStrings.push(keyString);
-    const shortcutEl = this.edits.rowEl.querySelector(".shortcut")
-    shortcutEl.appendChild(this.createSpan(keyString));
-  }
-
-  createSpan(keyString) {
-    const s = document.createElement("span");
-    s.innerText = keyString;
-    return s;
+    this.displayKeyString(this.edits.rowEl.querySelector(".shortcut"),
+                          this.edits.keyStrings.join(Commands.KEY_SEPARATOR));
   }
 
   async populateDialog() {
@@ -170,10 +186,9 @@ class HelpDialog {
         row.dataset.mapping = mapping.key;
         const cells = row.querySelectorAll("td");
         const command = Commands.commands[mapping.command];
-        const shortcutDiv = row.querySelector("div.shortcut");
+        const shortcutEl = row.querySelector(".shortcut");
         cells[0].innerText = command.name || mapping.command;
-        for (const keyString of mapping.key.split(Commands.KEY_SEPARATOR))
-          shortcutDiv.appendChild(this.createSpan(keyString));
+        this.displayKeyString(shortcutEl, mapping.key);
         tbody.appendChild(row);
       }
       table.appendChild(thead);
