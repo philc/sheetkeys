@@ -72,10 +72,10 @@ a {
   color: #1967D2;
 }
 
-.cancel, .save, .reset {
+.edit {
   text-decoration: none;
 }
 
-.cancel, .save {
-  display: none;
+.cancel, .save, .default {
+  margin-right: 5px;
 }

@@ -12,6 +12,14 @@ class ShortcutKey {
 }
 
 class HelpDialog {
+  constructor() {
+    // State for when a key mapping is being edited.
+    this.edits = {
+      keyStrings: [],
+      rowEl: null,
+    };
+  }
+
   // Returns a map of groupName => [Mapping]
   async getMappingsByGroup() {
     const mappings = await Settings.loadUserKeyMappings();
@@ -40,7 +48,7 @@ class HelpDialog {
     return groupsToCommand;
   }
 
-  async createElement() {
+  async createDialogElement() {
     if (this.el)
       return;
     const response = await fetch(chrome.runtime.getURL("help_dialog.html"));
@@ -53,51 +61,58 @@ class HelpDialog {
     document.body.appendChild(helpDialog);
     this.el = helpDialog;
     this.keydownListener = (e) => this.onKeydown(e);
-    this.el.addEventListener("focus", (e) => this.onFocus(e));
     this.el.addEventListener("click", async (e) => await this.onClick(e));
   }
 
   async onClick(event) {
     const target = event.path[0];
-    console.log("On click", target);
-    if (target.classList.contains("cancel")) {
-      // TODO(philc): cancel
+    if (target.classList.contains("edit")) {
+      this.beginEditing(target);
     } else if (target.classList.contains("save")) {
-      await this.commitChange();
-    } else if (target.classList.contains("reset")) {
-      // TODO(philc): reset
+      this.commitChange();
+    } else if (target.classList.contains("cancel")) {
+      this.cancelEditing();
     }
   }
 
-  onFocus(event) {
-    this.activeShortcutEl = event.path[0];
-    // TODO(philc): Implement "cancel".
-    this.activeShortcutEl.innerHTML = "";
+  beginEditing(clickTarget) {
+    if (this.edits.rowEl) {
+      // Another mapping was being edited. Cancel that, so that we have only one edit in progress at a time.
+      this.cancelEditing();
+    }
+    const tr = clickTarget.closest("tr");
+    this.showEditingUI(tr, true);
+    // Remove the UI elements which shows the existing key binding.
+    const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
+    shortcutEl.focus();
+    shortcutEl.innerHTML = "";
     this.el.addEventListener("keydown", this.keydownListener);
-    this.keyStrings = [];
-    const tr = this.activeShortcutEl.closest("tr");
-    tr.querySelector(".cancel").style.display = "inline";
-    tr.querySelector(".save").style.display = "inline";
-    tr.querySelector(".reset").style.display = "none";
+  }
+
+  // Shows/hides the editing UI, and sets the local state of `edits` accordingly.
+  showEditingUI(tr, visibility) {
+    tr.querySelector(".editing-controls").style.display = visibility ? "inline" : "none";
+    tr.querySelector(".edit").style.display = visibility ? "none" : "inline";
+    this.edits.keyStrings = [];
+    this.edits.rowEl = visibility ? tr : null;
+  }
+
+  cancelEditing() {
+    const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
+    shortcutEl.innerHTML = "";
+    const originalMapping = this.edits.rowEl.dataset.mapping;
+    for (const keyString of originalMapping.split(Commands.KEY_SEPARATOR))
+      shortcutEl.appendChild(this.createSpan(keyString));
+    this.showEditingUI(this.edits.rowEl, false);
   }
 
   async commitChange() {
-    console.log("commit change");
-    this.el.removeEventListener("keydown", this.keydownListener);
-
-    const tr = this.activeShortcutEl.closest("tr");
-    tr.querySelector(".cancel").style.display = null;
-    tr.querySelector(".save").style.display = null;
-    tr.querySelector(".reset").style.display = null;
-
-    const newKeyMapping = this.keyStrings.join(Commands.KEY_SEPARATOR);
-    const commandName = tr.dataset.command;
-    console.log(">>>> commandName:", commandName);
-    console.log(">>>> newKeyMapping:", newKeyMapping);
+    const newKeyMapping = this.edits.keyStrings.join(Commands.KEY_SEPARATOR);
+    const commandName = this.edits.rowEl.dataset.command;
     await Settings.changeKeyMapping(commandName, newKeyMapping);
-
-    this.activeShortcutEl = null;
-    this.keyStrings = null;
+    this.edits.rowEl.dataset.mapping = newKeyMapping;
+    this.el.removeEventListener("keydown", this.keydownListener);
+    this.showEditingUI(this.edits.rowEl, false);
   }
 
   onKeydown(event) {
@@ -113,8 +128,9 @@ class HelpDialog {
 
     // const sk = new ShortcutKey(event.key, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey,
     //                            event.metaKey);
-    this.keyStrings.push(keyString);
-    this.activeShortcutEl.appendChild(this.createSpan(keyString));
+    this.edits.keyStrings.push(keyString);
+    const shortcutEl = this.edits.rowEl.querySelector(".shortcut")
+    shortcutEl.appendChild(this.createSpan(keyString));
   }
 
   createSpan(keyString) {
@@ -146,11 +162,12 @@ class HelpDialog {
       const mappingsForGroup = mappings[group];
       const tbody = tbodyTemplate.cloneNode();
       for (let mapping of mappingsForGroup) {
-        // TODO(philc): Skipping everything outside of normal mode.
+        // Only show bindings, and only allow customization, for normal mode.
         if (mapping.mode != "normal")
           continue;
         const row = trTemplate.cloneNode(true);
         row.dataset.command = mapping.command;
+        row.dataset.mapping = mapping.key;
         const cells = row.querySelectorAll("td");
         const command = Commands.commands[mapping.command];
         const shortcutDiv = row.querySelector("div.shortcut");
@@ -165,7 +182,7 @@ class HelpDialog {
   }
 
   async show() {
-    await this.createElement();
+    await this.createDialogElement();
     await this.populateDialog();
     this.el.style.display = "";
   }
