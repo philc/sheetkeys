@@ -1,24 +1,6 @@
 Settings = {
   settingsKey: "settings-v1",
 
-  // Returns a nested map of mode => commandName => key
-  parseKeyMappings(keyMappings) {
-    return { "normal": keyMappings };
-    // var lines = configText.trim().split("\n");
-    // var keyMappings = {};
-    // for (let line of lines) {
-    //   line = line.trim();
-    //   if (line == "") { continue; } // Ignore blank lines.
-    //   const [mapCommand, key, commandName] = line.split(/\s+/);
-
-    //   // TODO(philc): Support keybindings in modes other than normal.
-    //   // TODO(philc): return validation errors.
-    //   if (!keyMappings["normal"]) { keyMappings["normal"] = {} ; }
-    //   keyMappings["normal"][key] = commandName;
-    // }
-    // return keyMappings;
-  },
-
   async get() {
     // TODO(philc): This settings key doesn't need to be version-specific at the chrome.storage.sync level.
     // I think we want to have one key for chrome.storage.sync (e.g. "sheetkeys"), and within that map,
@@ -57,15 +39,9 @@ Settings = {
 
   async loadUserKeyMappings() {
     const settings = await Settings.get();
-    console.log(">>>> settings:", settings);
-    let userMappings = this.parseKeyMappings(settings.keyMappings);
-    let mappings = {};
-    // Perform a deep merge with the default key mappings.
-    for (let mode in Commands.defaultMappings) {
-      mappings[mode] = Object.assign({}, Commands.defaultMappings[mode]);
-      Object.assign(mappings[mode], userMappings[mode]);
-    }
-    console.log(">>>> mappings:", mappings);
+    // We only allow the user to bind keys in normal mode, for simplicity.
+    const mappings = Object.assign({}, Commands.defaultMappings);
+    mappings.normal = Object.assign(mappings.normal, settings.keyMappings);
     return mappings;
   }
 
