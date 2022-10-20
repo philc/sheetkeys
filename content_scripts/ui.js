@@ -156,9 +156,12 @@ const UI = {
     }
 
     this.keyQueue.push(keyString);
+    // There are keymaps for two different modes: insert and normal. When we're in one of the visual modes,
+    // use the normal keymap. The commands themselves may implement mode-specific behavior.
+    const modeToUse = SheetActions.mode == "insert" ? "insert" : "normal";
     if (this.keyQueue.length > this.maxKeyMappingLength) { this.keyQueue.shift(); }
-    const modeMappings = this.modeToKeyToCommand[SheetActions.mode] || [];
-    const modePrefixes = this.keyMappingsPrefixes[SheetActions.mode] || [];
+    const modeMappings = this.modeToKeyToCommand[modeToUse] || [];
+    const modePrefixes = this.keyMappingsPrefixes[modeToUse] || [];
     // See if a bound command matches the typed key sequence. If so, execute it.
     // Prioritize longer mappings over shorter mappings.
     for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {

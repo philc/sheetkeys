@@ -313,8 +313,4 @@ const Commands = {
   }
 };
 
-Commands.defaultMappings.visual = Object.assign({}, Commands.defaultMappings.visual);
-Commands.defaultMappings.visualLine = Object.assign({}, Commands.defaultMappings.visual);
-Commands.defaultMappings.visualColumn = Object.assign({}, Commands.defaultMappings.visual);
-
 window.Commands = Commands;
