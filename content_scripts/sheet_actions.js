@@ -394,14 +394,20 @@ const SheetActions = {
     this.typeKeyFn(KeyboardUtils.keyCodes.upArrow);
   },
 
-  copyRow() {
-    this.selectRow();
-    this.clickMenu(this.menuItems.copy);
-    this.unselectRow();
+  copyRowOrSelection() {
+    if (this.mode == "normal") {
+      this.selectRow();
+      this.clickMenu(this.menuItems.copy);
+      this.unselectRow();
+    } else {
+      this.clickMenu(this.menuItems.copy);
+    }
+
   },
 
   copy() {
     this.clickMenu(this.menuItems.copy);
+    // This is needed because clicking the copy button starts a cell selection process for some reason.
     this.unselectRow();
   },
 

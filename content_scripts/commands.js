@@ -69,9 +69,9 @@ const Commands = {
     changeCell: { fn: SheetActions.changeCell.bind(SheetActions),
                   name: "Change cell",
                   group: "editing" },
-    copyRow: { fn: SheetActions.copyRow.bind(SheetActions),
-               name: "Copy row",
-               group: "editing" },
+    copyRowOrSelection: { fn: SheetActions.copyRowOrSelection.bind(SheetActions),
+                          name: "Copy row, or selected cells",
+                          group: "editing" },
     commitCellChanges: { fn: SheetActions.commitCellChanges.bind(SheetActions),
                          name: "Finish editing cell",
                          group: "editing" },
@@ -240,7 +240,7 @@ const Commands = {
       "deleteRowsOrColumns": "d•d",
       "clear": "x",
       "changeCell": "c•c",
-      "copyRow": "y•y",
+      "copyRowOrSelection": "y•y",
 
       // Merging cells
       "mergeAllCells": ";•m•a",
@@ -313,11 +313,7 @@ const Commands = {
   }
 };
 
-Commands.defaultMappings.visual = Object.assign({}, {
-  "copy": "y",
-  "copyRow": null // Unbind "copy row", because it's superceded by "copy"
-});
-
+Commands.defaultMappings.visual = Object.assign({}, Commands.defaultMappings.visual);
 Commands.defaultMappings.visualLine = Object.assign({}, Commands.defaultMappings.visual);
 Commands.defaultMappings.visualColumn = Object.assign({}, Commands.defaultMappings.visual);
 
