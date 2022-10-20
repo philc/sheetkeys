@@ -39,8 +39,11 @@ Settings = {
 
   async loadUserKeyMappings() {
     const settings = await Settings.get();
-    // We only allow the user to bind keys in normal mode, for simplicity.
-    const mappings = Object.assign({}, Commands.defaultMappings);
+    const mappings = {};
+    // Do a deep clone of the default mappings.
+    for (let mode of Object.keys(Commands.defaultMappings))
+      mappings[mode] = Object.assign({}, Commands.defaultMappings[mode]);
+    // We only allow the user to bind keys in normal mode, for conceptual and UI simplicity.
     mappings.normal = Object.assign(mappings.normal, settings.keyMappings);
     return mappings;
   }
