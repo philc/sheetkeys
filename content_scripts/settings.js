@@ -28,7 +28,16 @@ Settings = {
     const defaultOptions = {
       keyMappings: {} // A map of commandName => list of keys
     };
-    return Object.assign(defaultOptions, settings[this.settingsKey]);
+
+    const values = settings[this.settingsKey];
+
+    // If the user has a keybinding which refers to a command that no longer exists, prune it.
+    for (let commandName of Object.keys(values.keyMappings || {})) {
+      if (!Commands.commands[commandName])
+        delete values.keyMappings[mode][commandName];
+    }
+
+    return Object.assign(defaultOptions, values);
   },
 
   async set(settings) {
