@@ -155,7 +155,8 @@ class HelpDialog {
         const command = Commands.commands[mapping.command];
         const shortcutDiv = row.querySelector("div.shortcut");
         cells[0].innerText = command.name || mapping.command;
-        shortcutDiv.innerText = mapping.key;
+        for (const keyString of mapping.key.split(Commands.KEY_SEPARATOR))
+          shortcutDiv.appendChild(this.createSpan(keyString));
         tbody.appendChild(row);
       }
       table.appendChild(thead);
