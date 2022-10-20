@@ -262,15 +262,22 @@ const SheetActions = {
   //
   // Movement
   //
-  moveUp() { this.typeKeyFn(KeyboardUtils.keyCodes.upArrow); },
-  moveDown() { this.typeKeyFn(KeyboardUtils.keyCodes.downArrow); },
-  moveLeft() { this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow); },
-  moveRight() { this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow); },
-
-  moveDownAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.downArrow, {shift: true}); },
-  moveUpAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.upArrow, {shift: true}); },
-  moveLeftAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, {shift: true}); },
-  moveRightAndSelect() { this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow, {shift: true}); },
+  moveUp() {
+    const keyOptions = (this.mode == "normal") ? {} : { shift: true };
+    this.typeKeyFn(KeyboardUtils.keyCodes.upArrow, keyOptions);
+  },
+  moveDown() {
+    const keyOptions = (this.mode == "normal") ? {} : { shift: true };
+    this.typeKeyFn(KeyboardUtils.keyCodes.downArrow, keyOptions);
+  },
+  moveLeft() {
+    const keyOptions = (this.mode == "normal") ? {} : { shift: true };
+    this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, keyOptions);
+  },
+  moveRight() {
+    const keyOptions = (this.mode == "normal") ? {} : { shift: true };
+    this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow, keyOptions);
+  },
 
   //
   // Row movement

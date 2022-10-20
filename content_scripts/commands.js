@@ -115,20 +115,6 @@ const Commands = {
     enterVisualColumnMode: { fn: SheetActions.enterVisualColumnMode.bind(SheetActions),
                    name: "Begin selecting entire columns",
                    group: "selection" },
-    // TODO(philc): These can be removed; they're awkward to expose to the user. Just have moveUp etc. check
-    // if we're in a mode, and then preserve the selection.
-    moveDownAndSelect: { fn: SheetActions.moveDownAndSelect.bind(SheetActions),
-                   name: "Expand selection downwards",
-                   group: "selection" },
-    moveUpAndSelect: { fn: SheetActions.moveUpAndSelect.bind(SheetActions),
-                   name: "Expand selection upwards",
-                   group: "selection" },
-    moveLeftAndSelect: { fn: SheetActions.moveLeftAndSelect.bind(SheetActions),
-                   name: "Expand selection leftwards",
-                   group: "selection" },
-    moveRightAndSelect: { fn: SheetActions.moveRightAndSelect.bind(SheetActions),
-                   name: "Expand selection rightwards",
-                   group: "selection" },
 
     // Scrolling
     scrollHalfPageDown:{ fn: SheetActions.scrollHalfPageDown.bind(SheetActions),
@@ -327,11 +313,7 @@ const Commands = {
   }
 };
 
-Commands.defaultMappings.visual = Object.assign({}, (Commands.defaultMappings.normal), {
-  "moveDownAndSelect": "j",
-  "moveUpAndSelect": "k",
-  "moveLeftAndSelect": "h",
-  "moveRightAndSelect": "l",
+Commands.defaultMappings.visual = Object.assign({}, {
   "copy": "y",
   "copyRow": null // Unbind "copy row", because it's superceded by "copy"
 });
