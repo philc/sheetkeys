@@ -182,7 +182,7 @@ const SheetActions = {
 
   deleteRowsOrColumns() {
     this.activateMenu("Delete►");
-    if (UI.mode == "visualColumn")
+    if (this.mode == "visualColumn")
       this.clickMenu(this.menuItems.deleteColumn);
     else
       this.clickMenu(this.menuItems.deleteRow);
@@ -277,22 +277,22 @@ const SheetActions = {
   //
   moveRowsUp() {
     // In normal mode, where we have just a single cell selected, restore the column after moving the row.
-    if (UI.mode === "normal") { this.preserveSelectedColumn(); }
+    if (this.mode == "normal") { this.preserveSelectedColumn(); }
     this.selectRow(); // A row has to be selected before the "Move>" menu becomes enabled.
     this.activateMenu("Move►");
     this.clickMenu(this.menuItems.moveRowUp);
-    if (UI.mode === "normal") {
+    if (this.mode == "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
     }
   },
 
   moveRowsDown() {
-    if (UI.mode === "normal") { this.preserveSelectedColumn(); }
+    if (this.mode == "normal") { this.preserveSelectedColumn(); }
     this.selectRow();
     this.activateMenu("Move►");
     this.clickMenu(this.menuItems.moveRowDown);
-    if (UI.mode === "normal") {
+    if (this.mode == "normal") {
       SheetActions.unselectRow();
       this.restoreSelectedColumn();
     }
