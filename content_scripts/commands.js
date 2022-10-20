@@ -223,9 +223,7 @@ const Commands = {
       "moveRowsUp": "<C-K>",
       "moveColumnsLeft": "<C-H>",
       "moveColumnsRight": "<C-L>",
-
-      // TODO(philc): remove this because it's custom to my configuration
-      "moveColumnsLeft": "BACKSPACE",
+      "moveColumnsLeft": "<C-H>",
 
       // Editing
       "editCell": "i",
