@@ -12,7 +12,7 @@
   border-radius: 5px;
   box-shadow: 0px 2px 10px #222;
   /* Taken from Sheets */
-  font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  font-family: Roboto,RobotoDraft,Helvetica Neue,Arial,sans-serif;
   font-size: 14px;
   overflow: auto;
 }
@@ -21,14 +21,13 @@ h1 {
   margin: 0;
   background-color: #ddd;
   padding: 10px;
-  font-weight: normal;
+  font-size: 18px;
 }
 table {
   margin: 10px;
 }
 
 thead {
-  border: 1px solid red;
   font-weight: bold;
   padding-top: 6px;
 }
@@ -43,8 +42,7 @@ tbody tr:last-of-type td {
 
 td {
   padding-right: 10px;
-  /* border: 1px solid red; */
-  padding-bottom: 4px;
+  padding-bottom: 5px;
 }
 
 td:last-of-type {
@@ -55,18 +53,20 @@ td:nth-of-type(2) span {
   background-color: #555B64;
   border-radius: 5px;
   color: white;
-  padding: 2px 6px;
+  padding: 3px 6px;
+  margin-right: 3px;
 }
 
 .shortcut {
-  border: 1px solid red;
+  border: 1px solid transparent;
   /* This is required because when editing a shortcut, the contents are cleared and the height collapsed. */
-  height: 18px;
+  height: 20px;
 }
 
 .shortcut:focus {
-  border: 1px solid blue;
+  border: 1px solid #666;
 }
+
 a {
   color: #8AB4F8; /* dark mode */
   color: #1967D2;
