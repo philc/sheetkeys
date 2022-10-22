@@ -29,7 +29,7 @@ Settings = {
   },
 
   async changeKeyMapping(commandName, keyMapping) {
-    if (commandName == null || keyMapping == null || keyMapping == "") {
+    if (commandName == null || keyMapping == "") {
       throw new Error(`Invalid command name or key mapping '${commandName}', '${keyMapping}'`);
     }
     const settings = await Settings.get();
