@@ -1,5 +1,3 @@
-// TODO(philc): Consider making Mapping a struct.
-
 class ShortcutKey {
   constructor(key, keyCode, shift, ctrl, alt, meta) {
     this.key = key;
@@ -20,31 +18,19 @@ class HelpDialog {
     };
   }
 
-  // Returns a map of groupName => [Mapping]
-  async getMappingsByGroup() {
-    const mappings = await Settings.loadUserKeyMappings();
-    const groupsToCommand = { "movement": [],
-                              "editing": [],
-                              "selection": [],
-                              "tabs": [],
-                              "formatting": [],
-                              "other": [] };
+  // Returns a map of groupName => [commandKey]
+  getCommandsByGroup() {
+    const groupsToCommand = {
+      "movement": [],
+      "editing": [],
+      "selection": [],
+      "tabs": [],
+      "formatting": [],
+      "other": []
+    };
 
-    // TODO(philc): This logic needs to account for commands which are not bound to keys...
-    const commandToGroup = {};
     for (let [key, command] of Object.entries(Commands.commands))
-      commandToGroup[key] = command.group || "other";
-
-    for (let mode of Object.keys(mappings)) {
-      for (let [commandName, key] of Object.entries(mappings[mode])) {
-        const group = commandToGroup[commandName];
-        if (!group) {
-          // There must be an invalid key mapping in the command.
-          continue;
-        }
-        groupsToCommand[group].push({mode: mode, key: key, command: commandName});
-      }
-    }
+      groupsToCommand[command.group].push(key);
     return groupsToCommand;
   }
 
@@ -114,7 +100,9 @@ class HelpDialog {
   cancelEditing() {
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
     shortcutEl.innerHTML = "";
-    const originalMapping = this.edits.rowEl.dataset.mapping;
+    let originalMapping = this.edits.rowEl.dataset.mapping;
+    if (originalMapping == "")
+      originalMapping = null;
     this.displayKeyString(shortcutEl, originalMapping);
     this.showEditingUI(this.edits.rowEl, false);
   }
@@ -134,7 +122,7 @@ class HelpDialog {
           null;
     const commandName = this.edits.rowEl.dataset.command;
     await Settings.changeKeyMapping(commandName, newKeyMapping);
-    this.edits.rowEl.dataset.mapping = newKeyMapping;
+    this.edits.rowEl.dataset.mapping = newKeyMapping || "";
     this.el.removeEventListener("keydown", this.keydownListener);
     this.showEditingUI(this.edits.rowEl, false);
   }
@@ -156,39 +144,44 @@ class HelpDialog {
   }
 
   async populateDialog() {
-    const mappings = await this.getMappingsByGroup();
+    const commandsByGroup = this.getCommandsByGroup();
+
+    // These are the order in which they'll be shown in the dialog.
     const groups = ["movement", "selection", "editing", "formatting", "other"];
+
     const capitalize = function(str) {
       const lower = str.toLowerCase();
       return str.charAt(0).toUpperCase() + lower.slice(1);
     }
 
     const shadow = this.el.shadowRoot;
-
     const theadTemplate = shadow.querySelector("thead");
     const tbodyTemplate = shadow.querySelector("tbody");
     const trTemplate = tbodyTemplate.querySelector("tr");
 
     const table = shadow.querySelector("table");
     table.innerHTML = "";
+
+    // Only show bindings, and only allow customization, for normal mode.
+    const normalModeMappings = (await Settings.loadUserKeyMappings()).normal;
+
     for (let group of groups) {
       const thead = theadTemplate.cloneNode(true);
       thead.querySelector("td").innerText = capitalize(group);
 
-      const mappingsForGroup = mappings[group];
+      const commandKeys = commandsByGroup[group];
+
       const tbody = tbodyTemplate.cloneNode();
-      for (let mapping of mappingsForGroup) {
-        // Only show bindings, and only allow customization, for normal mode.
-        if (mapping.mode != "normal")
-          continue;
+
+      for (let commandKey of commandKeys) {
         const row = trTemplate.cloneNode(true);
-        row.dataset.command = mapping.command;
-        row.dataset.mapping = mapping.key;
-        const cells = row.querySelectorAll("td");
-        const command = Commands.commands[mapping.command];
+        const mapping = normalModeMappings[commandKey]; // This can be null.
+        row.dataset.command = commandKey;
+        row.dataset.mapping = mapping || "";
+        const command = Commands.commands[commandKey];
+        row.querySelector(".display-name").innerText = command.name || commandKey;
         const shortcutEl = row.querySelector(".shortcut");
-        cells[0].innerText = command.name || mapping.command;
-        this.displayKeyString(shortcutEl, mapping.key);
+        this.displayKeyString(shortcutEl, mapping);
         tbody.appendChild(row);
       }
       table.appendChild(thead);
