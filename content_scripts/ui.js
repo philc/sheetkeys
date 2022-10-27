@@ -19,7 +19,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
 
 UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
-  maxBindingLength: 3,
+  maxBindingLength: 6,
   // Mode can be one of:
   // * normal
   // * insert: when editing a cell's contents
@@ -54,6 +54,8 @@ UI = {
     console.log(`Entering ${mode} mode.`);
     this.mode = mode;
     this.keyQueue = [];
+    this.repeatCount = null;
+    this.previousRepeatCount = null;
   },
 
   enterVisualMode() { this.setMode("visual"); },
@@ -192,7 +194,7 @@ UI = {
 
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
-    // console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
+    // console.log("keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e);
     if (this.ignoreKeys) { return; }
 
     if (!keyString) { return; } // Ignore key presses which are just modifiers.
@@ -207,6 +209,18 @@ UI = {
         SheetActions.changeCell();
         setTimeout((() => SheetActions.commitCellChanges()), 0);
       }
+      return;
+    }
+
+    // if keystring is a number, add it to the repeatCount
+    if (this.mode === "normal" && keyString.match(/^\d+$/)) {
+      if (!this.repeatCount) {
+        this.repeatCount = parseInt(keyString);
+      } else {
+        this.repeatCount = this.repeatCount * 10 + parseInt(keyString);
+      }
+      // console.log("repeatCount:", this.repeatCount);
+      this.cancelEvent(e);
       return;
     }
 
@@ -230,7 +244,20 @@ UI = {
       if (commandName = modeBindings[keySequence]) {
         this.keyQueue = [];
         this.cancelEvent(e);
-        Commands.commands[commandName].fn();
+
+        if (commandName == "undo" || commandName == "redo") {
+          this.repeatCount = this.previousRepeatCount || 1;
+        }
+
+        if (this.repeatCount === null) {
+          this.repeatCount = 1;
+        }
+
+        for (let i = 0; i < this.repeatCount; i++) {
+          Commands.commands[commandName].fn();
+        }
+        this.previousRepeatCount = this.repeatCount;
+        this.repeatCount = null;
       }
     }
   },
