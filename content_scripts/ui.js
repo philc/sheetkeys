@@ -162,7 +162,7 @@ const UI = {
 
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
-    // console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
+    // console.log("keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e);
     if (this.ignoreKeys || SheetActions.mode == "disabled") return;
 
     // Ignore key presses which are just modifiers.
@@ -178,6 +178,18 @@ const UI = {
         SheetActions.changeCell();
         setTimeout(() => SheetActions.commitCellChanges(), 0);
       }
+      return;
+    }
+
+    // if keystring is a number, add it to the repeatCount
+    if (SheetActions.mode === "normal" && keyString.match(/^\d+$/)) {
+      if (!this.repeatCount) {
+        this.repeatCount = parseInt(keyString);
+      } else {
+        this.repeatCount = this.repeatCount * 10 + parseInt(keyString);
+      }
+      // console.log("repeatCount:", this.repeatCount);
+      this.cancelEvent(e);
       return;
     }
 
@@ -206,7 +218,20 @@ const UI = {
       if (commandName) {
         this.keyQueue = [];
         this.cancelEvent(e);
-        Commands.commands[commandName].fn();
+
+        if (commandName == "undo" || commandName == "redo") {
+          this.repeatCount = this.previousRepeatCount || 1;
+        }
+
+        if (this.repeatCount === null) {
+          this.repeatCount = 1;
+        }
+
+        for (let i = 0; i < this.repeatCount; i++) {
+          Commands.commands[commandName].fn();
+        }
+        this.previousRepeatCount = this.repeatCount;
+        this.repeatCount = null;
       }
     }
   },
