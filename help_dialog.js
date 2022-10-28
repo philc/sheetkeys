@@ -37,9 +37,20 @@ class HelpDialog {
   async createDialogElement() {
     if (this.el)
       return;
+
+    // Here, we're adding a CSS file to the document root (outside of the dialog's shadow DOM) which contains
+    // a font-face declaration for an icon font. This is required if we want to use the font within the shadow
+    // DOM. It's a long-standing bug in Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=336876
+    // Workaround described: https://github.com/google/material-design-icons/issues/1165#issuecomment-851128010
+    const linkEl = document.createElement("link");
+    linkEl.setAttribute("type", "text/css");
+    linkEl.setAttribute("rel", "stylesheet");
+    linkEl.setAttribute("href", chrome.runtime.getURL("fontello_svg_icon_font.css"));
+    document.head.appendChild(linkEl);
+
     const response = await fetch(chrome.runtime.getURL("help_dialog.html"));
     let html = await response.text();
-    html = html.replace("help_dialog.css", chrome.runtime.getURL("help_dialog.css"));
+    html = html.replace('href="help_dialog.css"', `href="${chrome.runtime.getURL("help_dialog.css")}"`);
     const helpDialog = document.createElement("div");
     // let shadow = helpDialog;
     const shadow = helpDialog.attachShadow({ mode: "open" });
@@ -51,14 +62,16 @@ class HelpDialog {
   }
 
   async onClick(event) {
-    const target = event.path[0];
-    if (target.classList.contains("edit")) {
-      this.beginEditing(target);
-    } else if (target.classList.contains("save")) {
+    const anchor = event.path[0].closest("a");
+    if (!anchor)
+      return;
+    if (anchor.classList.contains("edit")) {
+      this.beginEditing(anchor);
+    } else if (anchor.classList.contains("save")) {
       this.commitChange();
-    } else if (target.classList.contains("cancel")) {
+    } else if (anchor.classList.contains("cancel")) {
       this.cancelEditing();
-    } else if (target.classList.contains("default")) {
+    } else if (anchor.classList.contains("default")) {
       this.resetToDefault();
     }
   }

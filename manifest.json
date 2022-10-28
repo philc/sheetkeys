@@ -23,6 +23,7 @@
   "web_accessible_resources": [
     {
       "resources": ["page_scripts/page_script.js",
+                    "fontello_svg_icon_font.css",
                     "help_dialog.css",
                     "help_dialog.html"],
       "matches": ["https://docs.google.com/*"]

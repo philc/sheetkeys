@@ -79,3 +79,33 @@ a {
 .cancel, .save, .default {
   margin-right: 5px;
 }
+
+/*
+ * Styles for Fontello icons. See fontello_svg_icon_font.css for details on how this works.
+ */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: never;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cancel-circled:before { content: '\e800'; }
+.icon-pencil:before { content: '\e801'; }
