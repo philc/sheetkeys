@@ -1,10 +1,22 @@
+#help-dialog-modal-background {
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 #help-dialog {
   color: black;
-  position: absolute;
+  /* This can become wider if the user creates a long key mapping. */
   min-width: 600px;
-  height: 1200px;
-  z-index: 5000;
-  top: 6%;
+  height: 90%;
   background-color: #eee;
   border: 5px solid #bbb;
   border-color: #1A73E8;
