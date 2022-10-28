@@ -1,11 +1,10 @@
 #help-dialog {
   color: black;
   position: absolute;
-  width: 600px;
+  min-width: 600px;
   height: 1200px;
   z-index: 5000;
   top: 6%;
-  left: 400px;
   background-color: #eee;
   border: 5px solid #bbb;
   border-color: #1A73E8;
@@ -59,6 +58,7 @@ tbody tr:last-of-type td {
 td {
   padding-right: 10px;
   padding-bottom: 5px;
+  white-space: nowrap;
 }
 
 td:last-of-type {
