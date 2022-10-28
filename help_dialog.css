@@ -14,7 +14,8 @@
   /* Taken from Sheets */
   font-family: Roboto,RobotoDraft,Helvetica Neue,Arial,sans-serif;
   font-size: 14px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -22,7 +23,7 @@ h1 {
   background-color: #ddd;
   padding: 10px;
   font-size: 18px;
-  /* This is so the close button will be right-aligned. */
+  /* Flex is used so the close button will be right-aligned. */
   display: flex;
   justify-content: space-between;
 }
@@ -31,8 +32,15 @@ h1 .close {
   color: black;
 }
 
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
 table {
   margin: 10px;
+  overflow: auto;
 }
 
 thead {
