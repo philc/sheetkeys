@@ -22,7 +22,15 @@ h1 {
   background-color: #ddd;
   padding: 10px;
   font-size: 18px;
+  /* This is so the close button will be right-aligned. */
+  display: flex;
+  justify-content: space-between;
 }
+
+h1 .close {
+  color: black;
+}
+
 table {
   margin: 10px;
 }

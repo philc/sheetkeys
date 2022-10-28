@@ -65,7 +65,10 @@ class HelpDialog {
     const anchor = event.path[0].closest("a");
     if (!anchor)
       return;
-    if (anchor.classList.contains("edit")) {
+    event.preventDefault();
+    if (anchor.classList.contains("close")) {
+      this.hide();
+    } else if (anchor.classList.contains("edit")) {
       this.beginEditing(anchor);
     } else if (anchor.classList.contains("save")) {
       this.commitChange();
@@ -206,5 +209,9 @@ class HelpDialog {
     await this.createDialogElement();
     await this.populateDialog();
     this.el.style.display = "";
+  }
+
+  hide() {
+    this.el.style.display = "none";
   }
 }
