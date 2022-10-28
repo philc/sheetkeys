@@ -95,8 +95,8 @@ class HelpDialog {
 
   // Shows/hides the editing UI, and sets the local state of `edits` accordingly.
   showEditingUI(tr, visibility) {
-    tr.querySelector(".editing-controls").style.display = visibility ? "inline" : "none";
-    tr.querySelector(".edit").style.display = visibility ? "none" : "inline";
+    tr.querySelector(".editing-controls").style.visibility = visibility ? "visible" : "hidden";
+    tr.querySelector(".edit").style.visibility = visibility ? "hidden" : "visible";
     this.edits.keyStrings = [];
     this.edits.rowEl = visibility ? tr : null;
   }
