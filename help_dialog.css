@@ -1,3 +1,8 @@
+/*
+ * We're trying to mimic many of the styles (border radius, font size, colors) from the Google Sheets UI. A
+ * representative example of a dialog is File > Settings.
+ */
+
 #help-dialog-modal-background {
   background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
@@ -17,13 +22,12 @@
   /* This can become wider if the user creates a long key mapping. */
   min-width: 600px;
   height: 90%;
-  background-color: #eee;
-  border: 5px solid #bbb;
-  border-color: #1A73E8;
-  border-radius: 5px;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 8px;
   box-shadow: 0px 2px 10px #222;
-  /* Taken from Sheets */
-  font-family: Roboto,RobotoDraft,Helvetica Neue,Arial,sans-serif;
+  /* Taken from Sheets. Google Sans is provided by the Sheets page; it's not a typical system font. */
+  font-family: Google Sans, Roboto, RobotoDraft, Helvetica Neue, Arial, sans-serif;
   font-size: 14px;
   display: flex;
   flex-direction: column;
@@ -31,12 +35,12 @@
 
 h1 {
   margin: 0;
-  background-color: #ddd;
-  padding: 10px;
-  font-size: 18px;
+  padding: 25px;
+  font-size: 22px;
   /* Flex is used so the close button will be right-aligned. */
   display: flex;
   justify-content: space-between;
+  font-weight: normal;
 }
 
 h1 .close {
@@ -44,14 +48,16 @@ h1 .close {
 }
 
 .dialog-body {
+  padding: 25px;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
 }
 
 table {
-  margin: 10px;
   overflow: auto;
+  border-collapse: collapse
 }
 
 thead {
@@ -60,7 +66,7 @@ thead {
 }
 
 thead tr td {
-  padding-bottom: 4px;
+  padding-bottom: 10px;
 }
 
 tbody tr:last-of-type td {
@@ -78,11 +84,12 @@ td:last-of-type {
 }
 
 td:nth-of-type(2) span {
-  background-color: #555B64;
   border-radius: 5px;
-  color: white;
   padding: 3px 6px;
   margin-right: 3px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+  color: black;
 }
 
 .shortcut {
@@ -102,6 +109,7 @@ a {
 
 .edit {
   text-decoration: none;
+  color: #666;
 }
 
 .cancel, .save, .default {
