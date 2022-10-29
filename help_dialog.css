@@ -75,7 +75,6 @@ tbody tr:last-of-type td {
 
 td {
   padding-right: 10px;
-  padding-bottom: 5px;
   white-space: nowrap;
 }
 
@@ -90,16 +89,21 @@ td:nth-of-type(2) span {
   background-color: #eee;
   border: 1px solid #ddd;
   color: black;
+  display: inline-block;
 }
 
 .shortcut {
   border: 1px solid transparent;
+  border-radius: 5px;
+  /* The shortcut gets focused, which draws a heavy border around it. Avoid that. */
+  outline: none;
   /* This is required because when editing a shortcut, the contents are cleared and the height collapsed. */
-  height: 20px;
+  height: 25px;
 }
 
-.shortcut:focus {
-  border: 1px solid #666;
+.shortcut.editing {
+  border: 1px solid #CEE6D3;
+  background-color: #F9FCF9;
 }
 
 a {

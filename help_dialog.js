@@ -88,6 +88,7 @@ class HelpDialog {
     this.showEditingUI(tr, true);
     // Remove the UI elements which shows the existing key binding.
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
+    shortcutEl.classList.add("editing");
     shortcutEl.focus();
     shortcutEl.innerHTML = "";
     this.el.addEventListener("keydown", this.keydownListener);
@@ -115,6 +116,7 @@ class HelpDialog {
 
   cancelEditing() {
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
+    shortcutEl.classList.remove("editing");
     shortcutEl.innerHTML = "";
     let originalMapping = this.edits.rowEl.dataset.mapping;
     if (originalMapping == "")
