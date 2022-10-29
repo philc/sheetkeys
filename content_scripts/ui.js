@@ -206,7 +206,7 @@ const UI = {
 };
 
 // Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
-if (window.document && !document.location.pathname.endsWith("options.html"))
+if (window.document && !document.location.pathname.endsWith("harness.html"))
   UI.init();
 
 window.UI = UI;

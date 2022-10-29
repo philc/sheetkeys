@@ -1,5 +1,5 @@
 async function init() {
-  let h = new HelpDialog();
+  const h = new HelpDialog();
   await h.show();
 }
 
