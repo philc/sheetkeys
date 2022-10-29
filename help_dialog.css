@@ -120,6 +120,10 @@ a {
   margin-right: 5px;
 }
 
+.validation-error {
+  color: #CD4F3B;
+}
+
 /*
  * Styles for Fontello icons. See fontello_svg_icon_font.css for details on how this works.
  */

@@ -29,7 +29,7 @@ class HelpDialog {
       "other": []
     };
 
-    for (let [key, command] of Object.entries(Commands.commands))
+    for (const [key, command] of Object.entries(Commands.commands))
       groupsToCommand[command.group].push(key);
     return groupsToCommand;
   }
@@ -125,6 +125,24 @@ class HelpDialog {
     this.showEditingUI(this.edits.rowEl, false);
   }
 
+  async showValidationErrors() {
+    // Remove any previous validation errors
+    for (const el of this.el.shadowRoot.querySelectorAll(".validation-error"))
+      el.innerText = "";
+
+    const normalModeMappings = Object.entries((await Settings.loadUserKeyMappings()).normal);
+
+    for (const row of this.el.shadowRoot.querySelectorAll("tr[data-command]")) {
+      const rowMapping = row.dataset.mapping;
+      for (const [command, mapping] of normalModeMappings) {
+        if (rowMapping == mapping && row.dataset.command != command) {
+          const commandDisplayName = Commands.commands[command].name;
+          row.querySelector(".validation-error").innerText = `Conflicts with "${commandDisplayName}"`;
+        }
+      }
+    }
+  }
+
   // Restores the command currently being mapped to its SheetKeys default mapping.
   resetToDefault() {
     const command = this.edits.rowEl.dataset.command;
@@ -143,6 +161,7 @@ class HelpDialog {
     this.edits.rowEl.dataset.mapping = newKeyMapping || "";
     this.el.removeEventListener("keydown", this.keydownListener);
     this.showEditingUI(this.edits.rowEl, false);
+    this.showValidationErrors();
   }
 
   onKeydown(event) {
@@ -183,7 +202,7 @@ class HelpDialog {
     // Only show bindings, and only allow customization, for normal mode.
     const normalModeMappings = (await Settings.loadUserKeyMappings()).normal;
 
-    for (let group of groups) {
+    for (const group of groups) {
       const thead = theadTemplate.cloneNode(true);
       thead.querySelector("td").innerText = capitalize(group);
 
@@ -191,7 +210,7 @@ class HelpDialog {
 
       const tbody = tbodyTemplate.cloneNode();
 
-      for (let commandKey of commandKeys) {
+      for (const commandKey of commandKeys) {
         const row = trTemplate.cloneNode(true);
         const mapping = normalModeMappings[commandKey]; // This can be null.
         row.dataset.command = commandKey;
@@ -205,6 +224,8 @@ class HelpDialog {
       table.appendChild(thead);
       table.appendChild(tbody);
     }
+
+    await this.showValidationErrors();
   }
 
   async show() {

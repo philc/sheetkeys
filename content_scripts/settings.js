@@ -37,6 +37,7 @@ Settings = {
     await Settings.set(settings);
   },
 
+  // Returns a map of { mode => { commandName => keyString } }
   async loadUserKeyMappings() {
     const settings = await Settings.get();
     const mappings = {};
