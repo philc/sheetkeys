@@ -629,7 +629,11 @@ const SheetActions = {
   },
 
   async showHelpDialog() {
+    UI.ignoreKeys = true;
     const h = new HelpDialog();
+    h.addEventListener("hide", () => {
+      UI.ignoreKeys = false;
+    });
     await h.show();
   },
 

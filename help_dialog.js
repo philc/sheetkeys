@@ -9,6 +9,28 @@ class ShortcutKey {
   }
 }
 
+/* Mixin-functions for enabling a class to dispatch methods. */
+const EventDispatcher = {
+  addEventListener: (eventName, listener) => {
+    this.events = this.events || [];
+    this.events[eventName] = this.events[eventName] || [];
+    this.events[eventName].push(listener);
+  },
+
+  dispatchEvent: (eventName, listener) => {
+    this.events = this.events || [];
+    for (const listener of this.events[eventName] || [])
+      listener();
+  },
+
+  removeEventListener: (eventName, listener) => {
+    const events = this.events || {};
+    const listeners = events[eventName] || [];
+    if (listeners.length > 0)
+      events[eventName] = listeners.filter((l) => l != listener);
+  }
+};
+
 class HelpDialog {
   constructor() {
     // State for when a key mapping is being edited.
@@ -53,7 +75,7 @@ class HelpDialog {
     html = html.replace('href="help_dialog.css"', `href="${chrome.runtime.getURL("help_dialog.css")}"`);
     const helpDialog = document.createElement("div");
     // let shadow = helpDialog;
-    const shadow = helpDialog.attachShadow({ mode: "open" });
+    const shadow = helpDialog.attachShadow({ mode: "open", delegatesFocus: true });
     shadow.innerHTML = html;
     document.body.appendChild(helpDialog);
     this.el = helpDialog;
@@ -235,9 +257,19 @@ class HelpDialog {
     await this.createDialogElement();
     await this.populateDialog();
     this.el.style.display = "";
+    // Focus the dialog body. This prevents keys from going to the underlying spreadsheet, and it allows the
+    // help dialog to be scrolled using the arrow keys.
+    this.el.shadowRoot.querySelector(".dialog-body").focus();
+  }
+
+  isVisible() {
+    return this.el && this.el.style.display != "none";
   }
 
   hide() {
     this.el.style.display = "none";
+    this.dispatchEvent("hide");
   }
 }
+
+Object.assign(HelpDialog.prototype, EventDispatcher);

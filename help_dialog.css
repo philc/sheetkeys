@@ -53,6 +53,8 @@ h1 .close {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  /* The dialog-body div is focused when the dialog is first shown. Disable the outline. */
+  outline: none;
 }
 
 table {

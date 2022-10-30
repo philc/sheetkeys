@@ -295,7 +295,7 @@ const Commands = {
       // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
       "reloadPage": "<M-r>",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
-      // happen. If you mistakenly type it in Sheets, you will exit full screen mode.
+      // happen. If we pass this through to Sheets, Sheets will exit full screen mode if if's activated.
       "exitMode": "esc"
     },
 
