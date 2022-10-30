@@ -79,7 +79,7 @@ class HelpDialog {
     shadow.innerHTML = html;
     document.body.appendChild(helpDialog);
     this.el = helpDialog;
-    this.keydownListener = (e) => this.onKeydown(e);
+    this.editingKeydownListener = (e) => this.onEditingKeydown(e);
     this.el.addEventListener("click", async (e) => await this.onClick(e));
   }
 
@@ -112,7 +112,7 @@ class HelpDialog {
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
     shortcutEl.focus();
     shortcutEl.innerHTML = "";
-    this.el.addEventListener("keydown", this.keydownListener);
+    this.el.addEventListener("keydown", this.editingKeydownListener);
   }
 
   // Shows/hides the editing UI, and sets the local state of `edits` accordingly.
@@ -184,13 +184,12 @@ class HelpDialog {
     const commandName = this.edits.rowEl.dataset.command;
     await Settings.changeKeyMapping(commandName, newKeyMapping);
     this.edits.rowEl.dataset.mapping = newKeyMapping || "";
-    this.el.removeEventListener("keydown", this.keydownListener);
+    this.el.removeEventListener("keydown", this.editingKeydownListener);
     this.showEditingUI(this.edits.rowEl, false);
     this.showValidationErrors();
   }
 
-  onKeydown(event) {
-    console.log("help dialog on keydown", event);
+  onEditingKeydown(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -253,21 +252,33 @@ class HelpDialog {
     await this.showValidationErrors();
   }
 
-  async show() {
-    await this.createDialogElement();
-    await this.populateDialog();
-    this.el.style.display = "";
-    // Focus the dialog body. This prevents keys from going to the underlying spreadsheet, and it allows the
-    // help dialog to be scrolled using the arrow keys.
-    this.el.shadowRoot.querySelector(".dialog-body").focus();
+  onWindowKeydown(event) {
+    const keyString = KeyboardUtils.getKeyString(event);
+    if (keyString == "esc") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.hide();
+    }
   }
 
   isVisible() {
     return this.el && this.el.style.display != "none";
   }
 
+  async show() {
+    await this.createDialogElement();
+    await this.populateDialog();
+    this.el.style.display = "";
+    this.windowKeydownListener = (event) => this.onWindowKeydown(event);
+    window.addEventListener("keydown", this.windowKeydownListener);
+    // Focus the dialog body. This prevents keys from going to the underlying spreadsheet, and it allows the
+    // help dialog to be scrolled using the arrow keys.
+    this.el.shadowRoot.querySelector(".dialog-body").focus();
+  }
+
   hide() {
     this.el.style.display = "none";
+    window.removeEventListener("keydown", this.windowKeydownListener);
     this.dispatchEvent("hide");
   }
 }
