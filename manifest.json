@@ -6,6 +6,9 @@
   "permissions": [
     "storage"
   ],
+  "background": {
+    "service_worker": "background_script.js"
+  },
   // Uncommenting this will make this page accessible by navigating to chrome://extensions and clicking on the
   // Options page for SheetKeys. It is faster to test UI without having to load and reload a heavy-weight
   // Google Sheets page.

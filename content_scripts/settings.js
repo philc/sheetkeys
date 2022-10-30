@@ -28,6 +28,8 @@ Settings = {
     chrome.storage.sync.set(o);
   },
 
+  // Saves the new mapping in Settings, and broadcasts a message to the SheetKeys content scripts in all tabs
+  // that a key mapping has changed.
   async changeKeyMapping(commandName, keyMapping) {
     if (commandName == null || keyMapping == "") {
       throw new Error(`Invalid command name or key mapping '${commandName}', '${keyMapping}'`);
@@ -35,6 +37,7 @@ Settings = {
     const settings = await Settings.get();
     settings.keyMappings[commandName] = keyMapping;
     await Settings.set(settings);
+    chrome.runtime.sendMessage(null, "keyMappingChange");
   },
 
   // Returns a map of { mode => { commandName => keyString } }

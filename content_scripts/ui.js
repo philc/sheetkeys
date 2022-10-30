@@ -40,17 +40,25 @@ const UI = {
     // can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
 
-    setTimeout(async () => {
-      const mappings = await Settings.loadUserKeyMappings();
-      // TODO(philc): This can be simplified once we collapse all modes together.
-      this.modeToKeyToCommand = {};
-      for (let mode of Object.keys(mappings)) {
-        const m = mappings[mode];
-        this.modeToKeyToCommand[mode] = invertObjectMap(m);
-      }
+    // TODO(philc): Why did I put this in a setTieout?
+    setTimeout(() => this.loadKeyMappings(), 0);
 
-      this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
-    }, 0);
+    // If a key mapping setting is changed from another tab, update this tab's key mappings.
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message == "keyMappingChange")
+        this.loadKeyMappings();
+    });
+  },
+
+  async loadKeyMappings() {
+    const mappings = await Settings.loadUserKeyMappings();
+    this.modeToKeyToCommand = {};
+    for (const mode of Object.keys(mappings)) {
+      const m = mappings[mode];
+      this.modeToKeyToCommand[mode] = invertObjectMap(m);
+    }
+
+    this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
   },
 
   // We inject the page_script into the page so that we can simulate keypress events, which must be done by a
