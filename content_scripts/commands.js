@@ -214,7 +214,7 @@ Commands = {
       "<A-v>": "enterVisualColumnMode",
 
       // Filtering
-      "q": "filterToggle",
+      "q": "fitlerOnActiveCell",
       "Q": "removeAllFilters",
 
       // Scrolling

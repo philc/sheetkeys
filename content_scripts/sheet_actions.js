@@ -510,13 +510,13 @@ SheetActions = {
 
   fitlerOnActiveCell() {
     // this.createRishiMenuSubMenu()
-    this.createAlbertMenuSubMenu()
+    // this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.fitlerOnActiveCell);
   },
 
   removeAllFilters() {
     // this.createRishiMenuSubMenu()
-    this.createAlbertMenuSubMenu()
+    // this.createAlbertMenuSubMenu()
     this.clickMenu(this.menuItems.removeAllFilters);
   },
 
