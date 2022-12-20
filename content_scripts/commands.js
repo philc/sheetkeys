@@ -74,10 +74,18 @@ const Commands = {
                           group: "editing" },
     commitCellChanges: { fn: SheetActions.commitCellChanges.bind(SheetActions),
                          name: "Finish editing cell",
-                         group: "editing" },
+                         group: "editing",
+                         // This is hidden because this is an insert-mode binding, and that concept isn't yet
+                         // exposed to the user or handled by the UI.
+                         hiddenFromHelp: true,
+                       },
     moveCursorToCellLineEnd: { fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions),
                                name: "Move cursor to line end",
-                               group: "editing" },
+                               group: "editing",
+                               // This is hidden because this is an insert-mode binding, and that concept
+                               // isn't yet exposed to the user or handled by the UI.
+                               hiddenFromHelp: true,
+                             },
     exitMode: { fn: SheetActions.exitMode.bind(SheetActions),
                 name: "Exit the current mode",
                 group: "editing" },
