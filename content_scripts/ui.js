@@ -19,7 +19,7 @@ const addOneTimeListener = function(dispatcher, eventType, listenerFn) {
 
 const UI = {
   // An arbitrary limit that should instead be equal to the longest key sequence that's actually bound.
-  maxKeyMappingLength: 3,
+  maxKeyMappingLength: 6,
   // Keys which were typed recently
   keyQueue: [],
   // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound key mappings.
