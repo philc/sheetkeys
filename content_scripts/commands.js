@@ -49,10 +49,10 @@ const Commands = {
                    name: "Replace",
                    group: "editing" },
     openRowBelow: { fn: SheetActions.openRowBelow.bind(SheetActions),
-                    name: "Add and edit rows below",
+                    name: "Add and edit row below",
                     group: "editing" },
     openRowAbove: { fn: SheetActions.openRowAbove.bind(SheetActions),
-                    name: "Add and edit rows above",
+                    name: "Add and edit row above",
                     group: "editing" },
     insertRowBelow: { fn: SheetActions.insertRowBelow.bind(SheetActions),
                       name: "Insert row below",
@@ -98,7 +98,7 @@ const Commands = {
 
     // "Yank cell"
     copy: { fn: SheetActions.copy.bind(SheetActions),
-            name: "Copy",
+            name: "Copy cells",
             group: "editing" },
     paste: { fn: SheetActions.paste.bind(SheetActions),
              name: "Paste",
@@ -106,14 +106,14 @@ const Commands = {
 
     // Selection
     enterVisualMode: { fn: SheetActions.enterVisualMode.bind(SheetActions),
-                       name: "Enter selection mode",
+                       name: "Begin selecting cells",
                        group: "selection" },
     // TODO(philc): Rename to visual row mode
     enterVisualLineMode: { fn: SheetActions.enterVisualLineMode.bind(SheetActions),
-                           name: "Begin selecting entire rows",
+                           name: "Begin selecting rows",
                            group: "selection" },
     enterVisualColumnMode: { fn: SheetActions.enterVisualColumnMode.bind(SheetActions),
-                             name: "Begin selecting entire columns",
+                             name: "Begin selecting columns",
                              group: "selection" },
 
     // Scrolling
@@ -292,7 +292,7 @@ const Commands = {
       "toggleFullScreen": ";•w•m", // Mnemonic for "window maximize"
       "toggleFullScreen": ";•w•f", // Mnemonic for "window full screen"
       "openCellAsUrl": ";•o",
-      // For some reason Cmd-r, which normally reloads the page, is disabled by sheets.
+      // For some reason Cmd-r, which normally reloads the page, is disabled by Sheets.
       "reloadPage": "<M-r>",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
       // happen. If we pass this through to Sheets, Sheets will exit full screen mode if if's activated.
