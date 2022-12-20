@@ -249,7 +249,7 @@ const Commands = {
       "editCell": "i",
       "editCellAppend": "a",
       "undo": "u",
-      "<C-r>": "redo",
+      "redo": "<C-r>",
       "replaceChar": "r",
       "openRowBelow": "o",
       "openRowAbove": "O",
