@@ -235,11 +235,13 @@ class HelpDialog {
       const tbody = tbodyTemplate.cloneNode();
 
       for (const commandKey of commandKeys) {
-        const row = trTemplate.cloneNode(true);
+        const command = Commands.commands[commandKey];
+        if (command.hiddenFromHelp)
+          continue;
         const mapping = normalModeMappings[commandKey]; // This can be null.
+        const row = trTemplate.cloneNode(true);
         row.dataset.command = commandKey;
         row.dataset.mapping = mapping || "";
-        const command = Commands.commands[commandKey];
         row.querySelector(".display-name").innerText = command.name || commandKey;
         const shortcutEl = row.querySelector(".shortcut");
         this.displayKeyString(shortcutEl, mapping);
