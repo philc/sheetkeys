@@ -173,22 +173,34 @@ const Commands = {
                   group: "formatting" },
     colorCellWhite: { fn : SheetActions.colorCellWhite.bind(SheetActions),
                       name: "Color background white",
-                      group: "formatting" },
+                      group: "formatting",
+                      hiddenFromHelp: true
+                    },
     colorCellLightYellow3: { fn : SheetActions.colorCellLightYellow3.bind(SheetActions),
                              name: "Color background light yellow 3",
-                             group: "formatting" },
+                             group: "formatting",
+                             hiddenFromHelp: true
+                           },
     colorCellLightCornflowerBlue3: { fn : SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions),
                                      name: "Color cell light corn flower blue 3",
-                                     group: "formatting" },
+                                     group: "formatting",
+                                     hiddenFromHelp: true
+                                   },
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions),
                             name: "Color cell light purple",
-                            group: "formatting" },
+                            group: "formatting",
+                            hiddenFromHelp: true
+                          },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions),
                           name: "Color cell light red 3",
-                          group: "formatting" },
+                          group: "formatting",
+                          hiddenFromHelp: true
+                        },
     colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions),
                            name: "Color cell light gray 2",
-                           group: "formatting" },
+                           group: "formatting",
+                           hiddenFromHelp: true
+                         },
     // TODO(philc): Add a fontSizeLarge command
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions),
                       name: "Set font size to normal",
