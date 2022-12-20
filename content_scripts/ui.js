@@ -95,6 +95,8 @@ const UI = {
         // Listen for when the editor's style attribute changes. This indicates that a cell is now being
         // edited, perhaps due to double clicking into a cell.
         const observer = new MutationObserver(mutations => {
+          if (SheetActions.mode === "disabled")
+            return;
           this.isEditorEditing() ? SheetActions.setMode("insert") : SheetActions.setMode("normal");
         });
         observer.observe(this.editor.parentNode, {
@@ -146,7 +148,7 @@ const UI = {
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
     // console.log "keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e
-    if (this.ignoreKeys) { return; }
+    if (this.ignoreKeys || SheetActions.mode == "disabled") { return; }
 
     if (!keyString) { return; } // Ignore key presses which are just modifiers.
 
