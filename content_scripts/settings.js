@@ -11,7 +11,7 @@ Settings = {
       keyMappings: {} // A map of commandName => list of keys
     };
 
-    const values = settings[this.settingsKey];
+    const values = settings[this.settingsKey] || {};
 
     // If the user has a keybinding which refers to a command that no longer exists, prune it.
     for (let commandName of Object.keys(values.keyMappings || {})) {
