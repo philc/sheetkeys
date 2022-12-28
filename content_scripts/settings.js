@@ -2,10 +2,8 @@ const Settings = {
   settingsKey: "settings-v1",
 
   async get() {
-    // TODO(philc): This settings key doesn't need to be version-specific at the chrome.storage.sync level.
-    // I think we want to have one key for chrome.storage.sync (e.g. "sheetkeys"), and within that map,
-    // keys for settings versions, so we can migrate settings from old versions of sheetkeys to new versions,
-    // whenever the settings change in a way that is not backwards compatible.
+    // NOTE(philc): If we change the schema of the settings object in a backwards-incompatible way, then we
+    // can fetch the whole storage object here and migrate any old settings the user has to the new schema.
     const settings = await chrome.storage.sync.get(this.settingsKey);
     const defaultOptions = {
       keyMappings: {} // A map of commandName => list of keys
