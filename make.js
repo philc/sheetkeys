@@ -21,4 +21,10 @@ const runUnitTests = async () => {
   await shoulda.run();
 };
 
+// Builds a release build zip file suitable for uploading to the Chrome store.
+async function buildStorePackage() {
+  // TODO(philc): Assert that manifest.json doesn't include an "options_page" key. That is used for debugging
+  // purposes and shouldn't make it into a release build.
+}
+
 await runUnitTests();
