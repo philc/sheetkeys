@@ -40,8 +40,7 @@ const UI = {
     // can't set handlers to grab keys before this extension does.
     window.addEventListener("keydown", (e => this.onKeydown(e)), true);
 
-    // TODO(philc): Why did I put this in a setTieout?
-    setTimeout(() => this.loadKeyMappings(), 0);
+    this.loadKeyMappings();
 
     // If a key mapping setting is changed from another tab, update this tab's key mappings.
     chrome.runtime.onMessage.addListener((message) => {
