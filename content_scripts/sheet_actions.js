@@ -543,14 +543,19 @@ const SheetActions = {
   // TODO(philc): I believe this is now possible. It's held in #docs-font-size.
   getFontSizeMenu() { return this.getMenuItem("6").parentNode; },
 
+  setFontSize8() {
+    this.activateMenu(this.menuItems.fontSizeMenu);
+    KeyboardUtils.simulateClick(this.getMenuItem(/^8$/));
+  },
+
   setFontSize10() {
     this.activateMenu(this.menuItems.fontSizeMenu);
     KeyboardUtils.simulateClick(this.getMenuItem(/^10$/));
   },
 
-  setFontSize8() {
+  setFontSize12() {
     this.activateMenu(this.menuItems.fontSizeMenu);
-    KeyboardUtils.simulateClick(this.getMenuItem(/^8$/));
+    KeyboardUtils.simulateClick(this.getMenuItem(/^12$/));
   },
 
   wrap() { this.clickToolbarButton(this.buttons.wrap); },

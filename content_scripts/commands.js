@@ -200,10 +200,12 @@ const Commands = {
                            group: "formatting",
                            hiddenFromHelp: true
                          },
-    // TODO(philc): Add a fontSizeLarge command
     fontSizeNormal: { fn : SheetActions.setFontSize10.bind(SheetActions),
                       name: "Set font size to normal",
                       group: "formatting" },
+    fontSizeLarge: { fn : SheetActions.setFontSize12.bind(SheetActions),
+                     name: "Set font size to large",
+                     group: "formatting" },
     fontSizeSmall: { fn : SheetActions.setFontSize8.bind(SheetActions),
                      name: "Set font size to small",
                      group: "formatting" },
@@ -302,6 +304,7 @@ const Commands = {
       "colorCellLightRed3": ";•c•r",
       "colorCellLightGray2": ";•c•g",
       "fontSizeNormal": ";•f•n",
+      "fontSizeLarge": ";•f•l",
       "fontSizeSmall": ";•f•s",
       "freezeRow": ";•f•r",
       "freezeColumn": ";•f•c",
