@@ -1,40 +1,102 @@
+## SheetKeys - The Hacker's Spreadsheet
+
 Sheetkeys is a Chrome extension which adds powerful keyboard navigation shortcuts to Google Sheets, in the
 spirit of the Vim text editor. It's written by one of the authors of
 [Vimium](https://github.com/philc/vimium).
 
+(If you are using SheetKeys with [Vimium](https://github.com/philc/vimium), disable Vimium on Google Sheets so
+its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in Chrome's toolbar, enter
+`https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern, and click Save.)
+
+## How to install
+
+Install on the Chrome web store (coming soon).
+
+To install from source, see [here](https://github.com/philc/sheetkeys/wiki/How-to-install-from-source).
+
 ## Keyboard Mappings
 
-Documentation for these shortcuts is Coming Soon. For now, you can see all of the bindings provided by looking
-in the [source](https://github.com/philc/sheetkeys/blob/master/content_scripts/commands.js#L88).
+SheetKeys adds many key mappings to Google Sheets. After installing, you can see and customize all of them by
+typing `?` while on a Google Sheets page.
 
-**Other UI improvements**
+Here is a partial list:
+
+**Movement**
+
+    j      Move cursor down
+    k      Move cursor up
+    h      Move cursor left
+    l      Move cursor right
+
+    C-J    Move rows down
+    C-K    Move rows up
+    C-H    Move columns left
+    C-L    Move columns right
+
+    C-d    Scroll half page down
+    C-u    Scroll half page up
+    g,g    Scroll to the top of the sheet
+    G      Scroll to the bottom of the sheet
+
+**Selection**
+
+    v      Begin selecting cells
+    V      Begin selecting rows
+    A-v    Begin selecting columns
+
+**Editing**
+
+    i      Edit cell
+    a      Append to cell (edit but, starting at the end)
+    u      Undo
+    C-r    Redo
+
+    o      Insert a row below the cursor and edit it
+    O      Insert a row above the cursor and edit it
+    s      Insert a row below the cursor
+    S      Insert a row above the cursor
+
+    d,d    Delete the current row (or selected rows/columns)
+    x      Delete cell contents
+    y,y    Copy the current row (or selected rows/columns)
+    y,c    Copy cells
+    p      Paste
+
+    ;,m,a  Merge selected cells
+    ;,m,h  Merge selected cells horizontally
+    ;,m,v  Merge selected cells vertically
+
+**Formatting**
+
+    ;,a,l  Align left
+    ;,a,c  Align center
+    ;,a,r  Align right
+
+    ;,w,w  Wrap cell
+    ;,w,w  Overflow the cell
+    ;,w,c  Clip the cell
+
+
+    ;,f,s  Set font size to small
+    ;,f,n  Set font size to normal
+    ;,f,l  Set font size to large
+
+    ;,f,r  Freeze row
+    ;,f,c  Freeze column
+
+**Other**
+
+    ?      Show the help dialog
+    ;,w,f  Toggle full screen
+    ;o     Open URL in cell in a new tab
+
+## Other improvements to Google Sheets
 
 * In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your changes
   can't be brought back with "Undo". Sheetkeys fixes this. Now ESC will save your changes to the cell, and you
   can revert them by using Undo.
 * `Ctrl-e` on Mac OS X is a handy system-wide shortcut which moves the cursor to the end of the form field
-  you're currently editing. This essential shortcut doesn't work in stock Google Sheets. With Sheetkeys, it
-  now does.
-
-## Install
-
-**Installing from the Chrome Web Store:**
-
-Coming soon!
-
-**Installing from source:**
-
-1. Check out this repository
-2. Navigate to `chrome://extensions` in Chrome
-3. Toggle into Developer Mode
-4. Click on "Load Unpacked Extension..."
-5. Select the Sheetkeys folder
-
-## Usage tips
-
-* If you're using [Vimium](https://github.com/philc/vimium), consider disabling it for
-  `https?://docs.google.com/spreadsheets/*` so that the Google sheets page receives the keyboard focus when it
-  first loads. Otherwise you'll need to click on the sheet before the SheetKeys hotkeys take effect.
+  you're currently editing. This essential shortcut doesn't work in Google Sheets. With Sheetkeys, it does.
 
 ## Developer workflow
 
