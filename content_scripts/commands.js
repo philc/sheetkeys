@@ -3,6 +3,8 @@ const Commands = {
   // It cannot itself appear as a key.
   KEY_SEPARATOR: "•",
 
+  // Commands will appear in the help dialog, grouped by "group", in the order that they're defined in this
+  // map.
   commands: {
     // Cursor movement
     moveUp: { fn: SheetActions.moveUp.bind(SheetActions),
@@ -69,9 +71,6 @@ const Commands = {
     changeCell: { fn: SheetActions.changeCell.bind(SheetActions),
                   name: "Change cell",
                   group: "editing" },
-    copyRowOrSelection: { fn: SheetActions.copyRowOrSelection.bind(SheetActions),
-                          name: "Copy row, or selected cells",
-                          group: "editing" },
     commitCellChanges: { fn: SheetActions.commitCellChanges.bind(SheetActions),
                          name: "Finish editing cell",
                          group: "editing",
@@ -86,6 +85,16 @@ const Commands = {
                                // isn't yet exposed to the user or handled by the UI.
                                hiddenFromHelp: true,
                              },
+    copyRowOrSelection: { fn: SheetActions.copyRowOrSelection.bind(SheetActions),
+                          name: "Copy row, or selected cells",
+                          group: "editing" },
+    // "Yank cell"
+    copy: { fn: SheetActions.copy.bind(SheetActions),
+            name: "Copy cells",
+            group: "editing" },
+    paste: { fn: SheetActions.paste.bind(SheetActions),
+             name: "Paste",
+             group: "editing" },
     exitMode: { fn: SheetActions.exitMode.bind(SheetActions),
                 name: "Exit the current mode",
                 group: "editing" },
@@ -103,14 +112,6 @@ const Commands = {
     unmergeCells: { fn: SheetActions.unmergeCells.bind(SheetActions),
                     name: "Unmerge cells",
                     group: "editing" },
-
-    // "Yank cell"
-    copy: { fn: SheetActions.copy.bind(SheetActions),
-            name: "Copy cells",
-            group: "editing" },
-    paste: { fn: SheetActions.paste.bind(SheetActions),
-             name: "Paste",
-             group: "editing" },
 
     // Selection
     enterVisualMode: { fn: SheetActions.enterVisualMode.bind(SheetActions),
@@ -152,15 +153,6 @@ const Commands = {
                group: "tabs" },
 
     // Formatting
-    wrap: { fn: SheetActions.wrap.bind(SheetActions),
-            name: "Wrap cell",
-            group: "formatting" },
-    overflow: { fn: SheetActions.overflow.bind(SheetActions),
-                name: "Overflow cell",
-                group: "formatting" },
-    clip: { fn: SheetActions.clip.bind(SheetActions),
-            name: "Clip cell",
-            group: "formatting" },
     alignLeft: { fn: SheetActions.alignLeft.bind(SheetActions),
                  name: "Align left",
                  group: "formatting" },
@@ -170,6 +162,15 @@ const Commands = {
     alignRight: { fn: SheetActions.alignRight.bind(SheetActions),
                   name: "Align right",
                   group: "formatting" },
+    wrap: { fn: SheetActions.wrap.bind(SheetActions),
+            name: "Wrap cell",
+            group: "formatting" },
+    overflow: { fn: SheetActions.overflow.bind(SheetActions),
+                name: "Overflow cell",
+                group: "formatting" },
+    clip: { fn: SheetActions.clip.bind(SheetActions),
+            name: "Clip cell",
+            group: "formatting" },
     colorCellWhite: { fn : SheetActions.colorCellWhite.bind(SheetActions),
                       name: "Color background white",
                       group: "formatting",
