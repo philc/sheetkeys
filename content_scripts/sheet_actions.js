@@ -71,10 +71,10 @@ const SheetActions = {
   enterVisualMode() { this.setMode("visual"); },
 
   // In this mode, entire lines are selected.
-  enterVisualLineMode() {
+  enterVisualRowMode() {
     this.preserveSelectedColumn();
     this.selectRow();
-    this.setMode("visualLine");
+    this.setMode("visualRow");
   },
 
   enterVisualColumnMode() {
@@ -89,7 +89,7 @@ const SheetActions = {
       this.unselectRow();
       this.setMode("normal");
       break;
-    case "visualLine":
+    case "visualRow":
       this.unselectRow();
       this.restoreSelectedColumn();
       this.setMode("normal");

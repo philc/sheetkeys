@@ -116,10 +116,9 @@ const Commands = {
     enterVisualMode: { fn: SheetActions.enterVisualMode.bind(SheetActions),
                        name: "Begin selecting cells",
                        group: "selection" },
-    // TODO(philc): Rename to visual row mode
-    enterVisualLineMode: { fn: SheetActions.enterVisualLineMode.bind(SheetActions),
-                           name: "Begin selecting rows",
-                           group: "selection" },
+    enterVisualRowMode: { fn: SheetActions.enterVisualRowMode.bind(SheetActions),
+                          name: "Begin selecting rows",
+                          group: "selection" },
     enterVisualColumnMode: { fn: SheetActions.enterVisualColumnMode.bind(SheetActions),
                              name: "Begin selecting columns",
                              group: "selection" },
@@ -272,7 +271,7 @@ const Commands = {
 
       // Selection
       "enterVisualMode": "v",
-      "enterVisualLineMode": "V",
+      "enterVisualRowMode": "V",
       "enterVisualColumnMode": "<A-v>",
 
       // Scrolling
