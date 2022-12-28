@@ -244,10 +244,10 @@ const SheetActions = {
   unselectRow() {
     const oldY = this.cellCursorY();
     // Typing any arrow key will unselect the current selection.
-    UI.typeKey(KeyboardUtils.keyCodes.downArrow);
+    UI.typeKey(KeyboardUtils.keyCodes.down);
     // If the cursor moved after we typed our arrow key, undo this selection change.
     if (oldY !== this.cellCursorY()) {
-      this.typeKeyFn(KeyboardUtils.keyCodes.upArrow);
+      this.typeKeyFn(KeyboardUtils.keyCodes.up);
     }
   },
 
@@ -265,19 +265,19 @@ const SheetActions = {
   //
   moveUp() {
     const keyOptions = (this.mode == "normal") ? {} : { shift: true };
-    this.typeKeyFn(KeyboardUtils.keyCodes.upArrow, keyOptions);
+    this.typeKeyFn(KeyboardUtils.keyCodes.up, keyOptions);
   },
   moveDown() {
     const keyOptions = (this.mode == "normal") ? {} : { shift: true };
-    this.typeKeyFn(KeyboardUtils.keyCodes.downArrow, keyOptions);
+    this.typeKeyFn(KeyboardUtils.keyCodes.down, keyOptions);
   },
   moveLeft() {
     const keyOptions = (this.mode == "normal") ? {} : { shift: true };
-    this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, keyOptions);
+    this.typeKeyFn(KeyboardUtils.keyCodes.left, keyOptions);
   },
   moveRight() {
     const keyOptions = (this.mode == "normal") ? {} : { shift: true };
-    this.typeKeyFn(KeyboardUtils.keyCodes.rightArrow, keyOptions);
+    this.typeKeyFn(KeyboardUtils.keyCodes.right, keyOptions);
   },
 
   //
@@ -392,7 +392,7 @@ const SheetActions = {
   commitCellChanges() {
     this.typeKeyFn(KeyboardUtils.keyCodes.enter);
     // "Enter" in Sheets moves your cursor to the cell below the one you're currently editing. Avoid that.
-    this.typeKeyFn(KeyboardUtils.keyCodes.upArrow);
+    this.typeKeyFn(KeyboardUtils.keyCodes.up);
   },
 
   copyRowOrSelection() {
@@ -439,14 +439,14 @@ const SheetActions = {
   scrollHalfPageDown() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
-      this.typeKeyFn(KeyboardUtils.keyCodes.downArrow)
+      this.typeKeyFn(KeyboardUtils.keyCodes.down)
     }
   },
 
   scrollHalfPageUp() {
     var rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
-      this.typeKeyFn(KeyboardUtils.keyCodes.upArrow)
+      this.typeKeyFn(KeyboardUtils.keyCodes.up)
     }
   },
 
@@ -459,7 +459,7 @@ const SheetActions = {
   scrollToBottom() {
     // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
     this.typeKeyFn(KeyboardUtils.keyCodes.end, {meta: true});
-    this.typeKeyFn(KeyboardUtils.keyCodes.leftArrow, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.left, {meta: true});
   },
 
   //
