@@ -28,8 +28,8 @@ document.body.appendChild(jsonEl);
 window.addEventListener("sheetkeys-simulate-key-event", function(e) {
   const editorEl = document.getElementById("waffle-rich-text-editor");
   const args = JSON.parse(jsonEl.innerText);
-  // TODO(philc): We simulate all three events because it's needed for some keystrokes to be recognized by
-  // Google sheets (in particular, the Enter key).
+  // We simulate all three events because it's needed for some keystrokes to be recognized by Google sheets
+  // (in particular, the Enter key).
   simulateKeyEvent("keydown", editorEl, args);
   simulateKeyEvent("keypress", editorEl, args);
   simulateKeyEvent("keyup", editorEl, args);
