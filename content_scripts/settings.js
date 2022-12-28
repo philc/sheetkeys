@@ -1,4 +1,4 @@
-Settings = {
+const Settings = {
   settingsKey: "settings-v1",
 
   async get() {
