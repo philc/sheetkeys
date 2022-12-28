@@ -244,7 +244,6 @@ const Commands = {
       "moveRowsUp": "<C-K>",
       "moveColumnsLeft": "<C-H>",
       "moveColumnsRight": "<C-L>",
-      "moveColumnsLeft": "<C-H>",
 
       // Editing
       "editCell": "i",
