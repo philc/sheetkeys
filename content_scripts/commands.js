@@ -309,7 +309,6 @@ const Commands = {
 
       // Misc
       "showHelp": "?",
-      "toggleFullScreen": ";•w•m", // Mnemonic for "window maximize"
       "toggleFullScreen": ";•w•f", // Mnemonic for "window full screen"
       "openCellAsUrl": ";•o",
       // For some reason Cmd-r, which normally reloads the page, is disabled by Sheets.
