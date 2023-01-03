@@ -4,8 +4,6 @@ const keyCodes = {
   tab: 9,
   ctrlEnter: 10,
   enter: 13,
-  shift: 16,
-  ctrl: 17,
   esc: 27,
   space: 32,
   pageUp: 33,
