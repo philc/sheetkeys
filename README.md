@@ -105,3 +105,7 @@ Here is a partial list:
   which provides a quick shortcut for reloading all of your locally-developed extensions. See
   [here](http://stackoverflow.com/a/12767200/46237) for further info.
 * Refresh your Google Sheets page after reloading the Sheetkeys extension in Chrome.
+
+## License
+
+Copyright (c) Phil Crosby. See [MIT-LICENSE.txt](MIT-LICENSE.txt) for details.
