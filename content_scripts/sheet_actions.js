@@ -85,6 +85,10 @@ const SheetActions = {
   // Exits the current mode and transitions to normal mode.
   exitMode() {
     switch (this.mode) {
+    case "insert":
+      this.commitCellChanges();
+      this.setMode("normal");
+      break;
     case "visual":
       this.unselectRow();
       this.setMode("normal");

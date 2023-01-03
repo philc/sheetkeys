@@ -25,6 +25,7 @@ const UI = {
   // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound key mappings.
   keyMappingsPrefixes: null,
   richTextEditorId: "waffle-rich-text-editor",
+  modeToKeyToCommand: null,
 
   init() {
     this.injectPageScript();
@@ -55,6 +56,16 @@ const UI = {
     for (const mode of Object.keys(mappings)) {
       const m = mappings[mode];
       this.modeToKeyToCommand[mode] = invertObjectMap(m);
+    }
+
+    // Since we don't expose in the UI the concept of mappings for insert mode commands, for command sthat
+    // exist in both modes, use the mappings defined for normal mode.
+    for (const [commandName, insertKey] of Object.entries(mappings["insert"])) {
+      const normalKey = mappings.normal[commandName];
+      if (normalKey) {
+        delete this.modeToKeyToCommand["insert"][insertKey];
+        this.modeToKeyToCommand["insert"][normalKey] = commandName;
+      }
     }
 
     this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);

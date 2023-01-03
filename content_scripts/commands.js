@@ -71,13 +71,6 @@ const Commands = {
     changeCell: { fn: SheetActions.changeCell.bind(SheetActions),
                   name: "Change cell",
                   group: "editing" },
-    commitCellChanges: { fn: SheetActions.commitCellChanges.bind(SheetActions),
-                         name: "Finish editing cell",
-                         group: "editing",
-                         // This is hidden because this is an insert-mode binding, and that concept isn't yet
-                         // exposed to the user or handled by the UI.
-                         hiddenFromHelp: true,
-                       },
     moveCursorToCellLineEnd: { fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions),
                                name: "Move cursor to line end",
                                group: "editing",
@@ -316,14 +309,17 @@ const Commands = {
       // For some reason Cmd-r, which normally reloads the page, is disabled by Sheets.
       "reloadPage": "<M-r>",
       // Don't pass through ESC to the page in normal mode. If you hit ESC in normal mode, nothing should
-      // happen. If we pass this through to Sheets, Sheets will exit full screen mode if if's activated.
+      // happen. If we pass this through to Sheets, Sheets will exit full screen mode if it's activated.
       "exitMode": "esc"
     },
 
+    // NOTE(philc): Currently we only let the user bind mappings for normal mode commands. So, if the user
+    // binds a mapping for a normal mode command which is also available in insert mode (like "exitMode"),
+    // then the mapping from normal mode will be used, even in insert mode.
     "insert": {
       // In normal Sheets, esc takes you out of the cell and loses your edits. That's a poor experience for
       // people used to Vim. Now ESC will save your cell edits and put you back in normal mode.
-      "commitCellChanges": "esc",
+      "exitMode": "esc",
       // In form fields on Mac, C-e takes you to the end of the field. For some reason C-e doesn't work in
       // Sheets. Here, we fix that.
       "moveCursorToCellLineEnd": "<C-e>",
