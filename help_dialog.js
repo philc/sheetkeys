@@ -74,17 +74,16 @@ class HelpDialog {
     let html = await response.text();
     html = html.replace('href="help_dialog.css"', `href="${chrome.runtime.getURL("help_dialog.css")}"`);
     const helpDialog = document.createElement("div");
-    // let shadow = helpDialog;
     const shadow = helpDialog.attachShadow({ mode: "open", delegatesFocus: true });
     shadow.innerHTML = html;
     document.body.appendChild(helpDialog);
     this.el = helpDialog;
     this.editingKeydownListener = (e) => this.onEditingKeydown(e);
-    this.el.addEventListener("click", async (e) => await this.onClick(e));
+    this.el.shadowRoot.addEventListener("click", async (e) => await this.onClick(e));
   }
 
   async onClick(event) {
-    const anchor = event.path[0].closest("a");
+    const anchor = event.target.closest("a");
     if (!anchor)
       return;
     event.preventDefault();
