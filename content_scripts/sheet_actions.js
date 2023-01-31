@@ -62,6 +62,7 @@ SheetActions = {
     lightPurple3: "light purple 3",
     lightRed3: "light red 3",
     lightGray2: "light gray 2",
+    darkGray1: "dark gray 1",
     blue: "blue",
     red: "red",
     darkRed: "red berry",
@@ -732,6 +733,9 @@ SheetActions = {
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+  colorCellDarkGray1() {
+    this.changeCellColor(this.colors.darkGray1);
+  },
 
   borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
   borderBottom() {

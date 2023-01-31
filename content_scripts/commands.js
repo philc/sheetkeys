@@ -99,6 +99,9 @@ Commands = {
     colorCellLightPurple: { fn : SheetActions.colorCellLightPurple.bind(SheetActions) },
     colorCellLightRed3: { fn : SheetActions.colorCellLightRed3.bind(SheetActions) },
     colorCellLightGray2: { fn : SheetActions.colorCellLightGray2.bind(SheetActions) },
+    colorCellDarkGray1: {
+      fn: SheetActions.colorCellDarkGray1.bind(SheetActions)
+    },
     colorCellFontColorRed: { fn: SheetActions.colorCellFontColorRed.bind(SheetActions) },
     colorCellFontColorDarkRed: { fn : SheetActions.colorCellFontColorDarkRed.bind(SheetActions) },
     colorCellFontColorBlue: { fn : SheetActions.colorCellFontColorBlue.bind(SheetActions) },
@@ -261,6 +264,7 @@ Commands = {
       "c,p": "colorCellLightPurple",
       "c,r": "colorCellLightRed3",
       "c,g": "colorCellLightGray2",
+      "c,G": "colorCellDarkGray1",
 
       // Customized colors
       ";,u": "colorCellFontColorBlue",
