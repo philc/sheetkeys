@@ -1,0 +1,157 @@
+/*
+ * We're trying to mimic many of the styles (border radius, font size, colors) from the Google Sheets UI. A
+ * representative example of a dialog is File > Settings.
+ */
+
+#help-dialog-modal-background {
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+#help-dialog {
+  color: black;
+  /* This can become wider if the user creates a long key mapping. */
+  min-width: 600px;
+  height: 90%;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px #222;
+  /* Taken from Sheets. Google Sans is provided by the Sheets page; it's not a typical system font. */
+  font-family: Google Sans, Roboto, RobotoDraft, Helvetica Neue, Arial, sans-serif;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 0;
+  padding: 25px;
+  font-size: 22px;
+  /* Flex is used so the close button will be right-aligned. */
+  display: flex;
+  justify-content: space-between;
+  font-weight: normal;
+}
+
+h1 .close {
+  color: black;
+}
+
+.dialog-body {
+  padding: 25px;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  /* The dialog-body div is focused when the dialog is first shown. Disable the outline. */
+  outline: none;
+}
+
+table {
+  overflow: auto;
+  border-collapse: collapse
+}
+
+thead {
+  font-weight: bold;
+  padding-top: 6px;
+}
+
+thead tr td {
+  padding-bottom: 10px;
+}
+
+tbody tr:last-of-type td {
+  padding-bottom: 18px;
+}
+
+td {
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+td:last-of-type {
+  margin-right: 0;
+}
+
+td:nth-of-type(2) span {
+  border-radius: 5px;
+  padding: 3px 6px;
+  margin-right: 3px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+  color: black;
+  display: inline-block;
+}
+
+.shortcut {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  /* The shortcut gets focused, which draws a heavy border around it. Avoid that. */
+  outline: none;
+  /* This is required because when editing a shortcut, the contents are cleared and the height collapsed. */
+  height: 25px;
+}
+
+.shortcut.editing {
+  border: 1px solid #CEE6D3;
+  background-color: #F9FCF9;
+}
+
+a {
+  color: #8AB4F8; /* dark mode */
+  color: #1967D2;
+}
+
+.edit {
+  text-decoration: none;
+  color: #666;
+}
+
+.cancel, .save, .default {
+  margin-right: 5px;
+}
+
+.validation-error {
+  color: #CD4F3B;
+}
+
+/*
+ * Styles for Fontello icons. See fontello_svg_icon_font.css for details on how this works.
+ */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: never;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cancel-circled:before { content: '\e800'; }
+.icon-pencil:before { content: '\e801'; }
