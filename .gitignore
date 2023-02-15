@@ -1,3 +1,6 @@
 *.crx
 node_modules/*
 .cake_task_cache
+tags
+page_scripts/.DS_Store
+.DS_Store
