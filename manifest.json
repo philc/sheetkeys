@@ -15,7 +15,8 @@
              "content_scripts/sheet_actions.js",
              "content_scripts/ui.js",
              "content_scripts/commands.js",
-             "content_scripts/version.js"
+             "content_scripts/version.js",
+             "content_scripts/hud.js"
             ],
       "run_at": "document_end",
       "all_frames": false
