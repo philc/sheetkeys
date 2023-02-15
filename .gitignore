@@ -2,3 +2,5 @@
 node_modules/*
 .cake_task_cache
 tags
+
+.DS_Store
