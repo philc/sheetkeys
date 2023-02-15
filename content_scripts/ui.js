@@ -82,7 +82,7 @@ const UI = {
 
   isEditable(el) {
     // Note that the window object doesn't have a tagname.
-    const tagName = (el.tagName? el.tagName.toLowerCase() : null);
+    const tagName = (el.tagName ? el.tagName.toLowerCase() : null);
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
   },
 
@@ -142,7 +142,7 @@ const UI = {
         if (!keyString) { continue; }
         const keys = keyString.split(Commands.KEY_SEPARATOR);
         for (let i = 0; i < keys.length - 1; i++) {
-          let prefix = keys.slice(0, i+1).join(Commands.KEY_SEPARATOR);
+          let prefix = keys.slice(0, i + 1).join(Commands.KEY_SEPARATOR);
           prefixes[mode][prefix] = true;
         }
       }
@@ -187,7 +187,7 @@ const UI = {
     for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
       var fn;
       const keySequence =
-            this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(Commands.KEY_SEPARATOR);
+        this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(Commands.KEY_SEPARATOR);
       // If this key could be part of one of the bound key mapping, don't pass it through to the page.
       // Also, if some longer mapping partially matches this key sequence, then wait for more keys, and
       // don't immediately apply a shorter mapping which also matches this key sequence.
@@ -204,13 +204,13 @@ const UI = {
     }
   },
 
-  // modifiers: Optional; an object with these boolean properties: meta, shift, control.
+  // modifiers: Optional; an object with these boolean properties: meta, alt, shift, control.
   typeKey(keyCode, modifiers) {
     if (keyCode == null) { throw "The keyCode provided to typeKey() is null."; }
     this.ignoreKeys = true;
     if (!modifiers) { modifiers = {}; }
     document.getElementById("sheetkeys-json-message").innerText =
-      JSON.stringify({keyCode, mods: modifiers});
+      JSON.stringify({ keyCode, mods: modifiers });
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}));
     this.ignoreKeys = false;
   },

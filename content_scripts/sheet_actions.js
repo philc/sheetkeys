@@ -24,7 +24,14 @@ const SheetActions = {
     mergeAll: "Merge all",
     mergeHorizontally: "Merge horizontally",
     mergeVertically: "Merge vertically",
-    unmerge: "Unmerge"
+    unmerge: "Unmerge",
+    // /////////////////////////////////////////
+    // Rishi: Custom 'Rishi' menu items
+    numberDollar2: "$ $0.00",
+    filterToggle: "Filter toggle",
+    fitlerOnActiveCell: "Filter on active cell",
+    removeAllFilters: "Remove all filters",
+    // /////////////////////////////////////////
   },
 
   buttons: {
@@ -33,17 +40,41 @@ const SheetActions = {
     left: ["Horizontal align", "Left"],
     right: ["Horizontal align", "Right"],
     overflow: ["Text wrapping", "Overflow"],
-    wrap: ["Text wrapping", "Wrap"]
+    wrap: ["Text wrapping", "Wrap"],
+    // /////////////////////////////////////////
+    // Rishi: Additional menu items
+    borderTop: ["Borders", "Top border"],
+    // borderBottom: ["Borders", "Bottom border"],
+    borderLeft: ["Borders", "Left border"],
+    borderRight: ["Borders", "Right border"],
+    borderClear: ["Borders", "Clear borders"],
+    decimalDecrease: ["Decrease decimal places"],
+    decimalIncrease: ["Increase decimal places"],
+    deleteColumns: ["Delete", "Column"],
+    // pasteFormulaOnly: ["Paste special s", "Formula only"],
+    // /////////////////////////////////////////
   },
 
   // You can find the names of these color swatches by hovering over the swatches and seeing the tooltip.
   colors: {
     white: "white",
+    lightYellow: "light yellow",
     lightYellow3: "light yellow 3",
     lightCornflowBlue3: "light cornflower blue 3",
     lightPurple3: "light purple 3",
     lightRed3: "light red 3",
-    lightGray2: "light gray 2"
+    lightGray2: "light gray 2",
+    // /////////////////////////////////////////
+    // Rishi: Add more colors here.
+    black: "black",
+    blue: "blue",
+    darkGray1: "dark gray 1",
+    darkRed: "red berry",
+    lightBlue3: "light blue 3",
+    lightGray2: "light gray 2",
+    red: "red",
+    yellow: "yellow",
+    // /////////////////////////////////////////
   },
 
   // A mapping of button-caption to DOM element.
@@ -85,28 +116,28 @@ const SheetActions = {
   // Exits the current mode and transitions to normal mode.
   exitMode() {
     switch (this.mode) {
-    case "insert":
-      this.commitCellChanges();
-      this.setMode("normal");
-      break;
-    case "visual":
-      this.unselectRow();
-      this.setMode("normal");
-      break;
-    case "visualRow":
-      this.unselectRow();
-      this.restoreSelectedColumn();
-      this.setMode("normal");
-      break;
-    case "visualColumn":
-      this.unselectRow();
-      this.setMode("normal");
-      break;
-    case "normal": // Do nothing.
-      break;
-    default:
-      throw `Attempted to exit an unknown mode: ${this.mode}`;
-      break;
+      case "insert":
+        this.commitCellChanges();
+        this.setMode("normal");
+        break;
+      case "visual":
+        this.unselectRow();
+        this.setMode("normal");
+        break;
+      case "visualRow":
+        this.unselectRow();
+        this.restoreSelectedColumn();
+        this.setMode("normal");
+        break;
+      case "visualColumn":
+        this.unselectRow();
+        this.setMode("normal");
+        break;
+      case "normal": // Do nothing.
+        break;
+      default:
+        throw `Attempted to exit an unknown mode: ${this.mode}`;
+        break;
     }
   },
 
@@ -162,7 +193,7 @@ const SheetActions = {
     // First we must open the palette; only then can we reliably get the color button that pertains to that
     // color palette.
     const paletteButton = document.querySelector(
-      (type == "cell") ? "*[aria-label='Fill color']": "*[aria-label='Text color']");
+      (type == "cell") ? "*[aria-label='Fill color']" : "*[aria-label='Text color']");
     KeyboardUtils.simulateClick(paletteButton);
 
     const rect = paletteButton.getBoundingClientRect();
@@ -183,6 +214,35 @@ const SheetActions = {
   changeCellColor(color) { KeyboardUtils.simulateClick(this.getColorButton(color, "cell")); },
 
   clickMenu(itemCaption) { KeyboardUtils.simulateClick(this.getMenuItem(itemCaption)); },
+
+  // /////////////////////////////////////////
+  // Rishi: added menu cliicking items for special menus
+  clickRootMenuItem(rootMenuCaption, itemCaption) {
+    console.log(`Clicking root menu item: ${rootMenuCaption} → ${itemCaption}`)
+    // Manually get the top level menu to open to prevent the hanging modal
+    const el = Array.from(document.querySelectorAll(".menu-button"))
+      .find(el => el.textContent === rootMenuCaption);
+    KeyboardUtils.simulateClick(el);
+    // Click the submenu buttons
+    this.clickMenu(itemCaption);
+  },
+
+  createRishiMenuSubMenu() {
+    // NOTE: Must double click the Rishi menu the first time to create the submenu
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Rishi"));
+  },
+
+  createAlbertMenuSubMenu() {
+    // NOTE: Must double click the Rishi menu the first time to create the submenu
+    KeyboardUtils.simulateClick(this.findMenuRootButton("Albert"));
+  },
+  // /////////////////////////////////////////
+
+  deleteColumns() {
+    this.clickMenu(this.menuItems.deleteColumn);
+    // Clear any row-level selections we might've had.
+    this.unselectRow();
+  },
 
   deleteRowsOrColumns() {
     this.activateMenu("Delete►");
@@ -214,7 +274,7 @@ const SheetActions = {
     // Offset this box by > 0 so we don't select the borders around the selected cell.
     // NOTE(philc): I've chosen 5 here instead of 1 because > 1 is required when the document is zoomed.
     const margin = 5;
-    return {top: box.top + margin, left: box.left + margin};
+    return { top: box.top + margin, left: box.left + margin };
   },
 
   selectRow() {
@@ -322,6 +382,53 @@ const SheetActions = {
     this.clickMenu(this.menuItems.moveColumnRight);
   },
 
+  // /////////////////////////////////////////
+  // Rishi additions - move and select
+  // Move to end in direction (cmd + arrow)
+  moveEndDown() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { meta: true }) },
+  moveEndUp() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, { meta: true }) },
+  moveEndRight() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { meta: true }) },
+  moveEndLeft() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, { meta: true }) },
+
+  // Move to end and select (cmd + shift + arrow)
+  moveEndDownAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true }); },
+  moveEndUpAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.upArrow, { shift: true, meta: true }); },
+  moveEndLeftAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.leftArrow, { shift: true, meta: true }); },
+  moveEndRightAndSelect() { UI.typeKey(KeyboardUtils.keyCodes.rightArrow, { shift: true, meta: true }); },
+
+  // Copy down a column (cmd + shift + down -> cmd + d)
+  copyCellDownColumn() {
+    UI.typeKey(KeyboardUtils.keyCodes.downArrow, { shift: true, meta: true });
+    UI.typeKey(KeyboardUtils.keyCodes.d, { shift: false, meta: true });
+  },
+  // /////////////////////////////////////////
+
+  // /////////////////////////////////////////
+  // Rishi additions for opening UI elements
+  //
+  // UI control
+  //
+  openCommandPalette() {
+    var el = document.querySelector(`*[placeholder='Search the menus (Option+/)']`);
+    KeyboardUtils.simulateClick(el);
+  },
+
+  openSearch() {
+    // NOT WORKING -- Attempted to prepopulate search with active call
+    // this.clickMenu(this.menuItems.copy);
+    // UI.typeKey(KeyboardUtils.keyCodes.c, { meta: true });
+    UI.typeKey(KeyboardUtils.keyCodes.f, { meta: true });
+    // document.getElementsByClassName('docs-findinput-input')[0].click()
+    // UI.typeKey(KeyboardUtils.keyCodes.v, { meta: true });
+  },
+
+  openTabsList() {
+    console.log('Opening tabs list')
+    var el = document.querySelectorAll(".docs-sheet-all").item(0)
+    KeyboardUtils.simulateClick(el);
+  },
+  // /////////////////////////////////////////
+
   //
   // Editing
   //
@@ -421,6 +528,22 @@ const SheetActions = {
     this.unselectRow();
   },
 
+  // Rishi: Add paste special functions
+  pasteFormatOnly() {
+    console.log('paste format only!');
+    UI.typeKey(KeyboardUtils.keyCodes.v, { alt: true, meta: true });
+  },
+
+  pasteValuesOnly() {
+    console.log('Paste values only!');
+    UI.typeKey(KeyboardUtils.keyCodes.v, { shift: true, meta: true });
+  },
+
+  pasteFormulaOnly() {
+    this.activateMenu("Paste special►");
+    this.clickMenu(this.menuItems.pasteFormulaOnly);
+  },
+
   // Merging cells
   mergeAllCells() { this.clickMenu(this.menuItems.mergeAll); },
   mergeCellsHorizontally() { this.clickMenu(this.menuItems.mergeHorizontally); },
@@ -436,8 +559,8 @@ const SheetActions = {
 
   // The approximate number of visible rows. It's probably possible to compute this precisely.
   visibleRowCount() {
-     return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
-   },
+    return Math.ceil(document.querySelector(".grid-scrollable-wrapper").offsetHeight / this.rowHeight());
+  },
 
   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and imprecise.
   scrollHalfPageDown() {
@@ -457,13 +580,13 @@ const SheetActions = {
   scrollToTop() {
     // TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
     // those platforms?
-    this.typeKeyFn(KeyboardUtils.keyCodes.home, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.home, { meta: true });
   },
 
   scrollToBottom() {
     // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
-    this.typeKeyFn(KeyboardUtils.keyCodes.end, {meta: true});
-    this.typeKeyFn(KeyboardUtils.keyCodes.left, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.end, { meta: true });
+    this.typeKeyFn(KeyboardUtils.keyCodes.left, { meta: true });
   },
 
   //
@@ -574,6 +697,31 @@ const SheetActions = {
   colorCellLightPurple() { this.changeCellColor(this.colors.lightPurple3); },
   colorCellLightRed3() { this.changeCellColor(this.colors.lightRed3); },
   colorCellLightGray2() { this.changeCellColor(this.colors.lightGray2); },
+
+  // /////////////////////////////////////////
+  // Rishi 
+
+  // Borders
+  borderTop() { this.clickToolbarButton(this.buttons.borderTop); },
+  borderBottom() {
+    this.clickBorderButton("Bottom border");
+    // this.commitCellChanges();
+  },
+  borderRight() { this.clickToolbarButton(this.buttons.borderRight); },
+  borderLeft() { this.clickToolbarButton(this.buttons.borderLeft); },
+  borderClear() { this.clickToolbarButton(this.buttons.borderClear); },
+
+  // Decimal inc, dec
+  decimalDecrease() { this.clickToolbarButton(this.buttons.decimalDecrease); },
+  decimalIncrease() { this.clickToolbarButton(this.buttons.decimalIncrease); },
+
+  // Font color
+  colorCellFontColorRed() { this.changeFontColor(this.colors.red); },
+  colorCellFontColorDarkRed() { this.changeFontColor(this.colors.darkRed); },
+  colorCellFontColorBlue() { this.changeFontColor(this.colors.blue); },
+  colorCellFontColorBlack() { this.changeFontColor(this.colors.black); },
+
+  // /////////////////////////////////////////
 
   freezeRow() {
     this.activateMenu("Freeze►");
