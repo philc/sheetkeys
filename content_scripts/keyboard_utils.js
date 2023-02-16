@@ -47,7 +47,7 @@ window.KeyboardUtils = {
     let keyString;
     if (this.keyNames.has(event.keyCode)) {
       keyString = this.keyNames.get(event.keyCode);
-    } else if (event.altKey && event.key) {
+    } else if (event.altKey && event.key && event.key != "Alt") {
       // The pressed key is a non-ASCII printing character in the current layout, and is ASCII in en_US, so we
       // use the corresponding ASCII character. We do this because event.key when modified with Alt may
       // represent a character other than the key in the user's keyboard layout. E.g. on Mac, <A-v> comes
@@ -56,8 +56,7 @@ window.KeyboardUtils = {
       keyString = String.fromCharCode(event.keyCode).toLowerCase();
     } else if (event.key.length === 1) {
       keyString = event.key;
-    }
-    else if (event.key.length === 2 && "F1" <= event.key && event.key <= "F9") {
+    } else if (event.key.length === 2 && "F1" <= event.key && event.key <= "F9") {
       keyString = event.key.toLowerCase(); // F1 to F9.
     } else if (event.key.length === 3 && "F10" <= event.key && event.key <= "F12") {
       keyString = event.key.toLowerCase(); // F10 to F12.
