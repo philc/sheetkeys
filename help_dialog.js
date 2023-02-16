@@ -74,9 +74,19 @@ class HelpDialog {
     let html = await response.text();
     html = html.replace('href="help_dialog.css"', `href="${chrome.runtime.getURL("help_dialog.css")}"`);
     const helpDialog = document.createElement("div");
+    helpDialog.style.display = "none";
     const shadow = helpDialog.attachShadow({ mode: "open", delegatesFocus: true });
     shadow.innerHTML = html;
+
+    // We wait until the CSS is fetched before proceeding. Otherwise, the dialog will appear unstyled for a
+    // second.
+    const dialogLinkEl = shadow.querySelector("link");
+    const promise = new Promise((resolve) => {
+      dialogLinkEl.addEventListener("load", () => resolve());
+    });
     document.body.appendChild(helpDialog);
+    await promise;
+
     this.el = helpDialog;
     this.editingKeydownListener = (e) => this.onEditingKeydown(e);
     this.el.shadowRoot.addEventListener("click", async (e) => await this.onClick(e));
