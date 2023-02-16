@@ -4,6 +4,9 @@ Sheetkeys is a Chrome extension which adds powerful keyboard navigation shortcut
 spirit of the Vim text editor. It's written by one of the authors of
 [Vimium](https://github.com/philc/vimium).
 
+If you are a project manager, programmer, finance person, or just someone who uses spreadsheets a lot, this
+can greatly increase your efficiency in Google Sheets.
+
 (If you are using SheetKeys with [Vimium](https://github.com/philc/vimium), disable Vimium on Google Sheets so
 its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in Chrome's toolbar, enter
 `https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern, and click Save.)
@@ -90,13 +93,17 @@ Here is a partial list:
     ;,w,f  Toggle full screen
     ;o     Open URL in cell in a new tab
 
-## Other improvements to Google Sheets
+## Other usability improvements to Google Sheets
 
 * In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your changes
-  can't be brought back with "Undo". Sheetkeys fixes this. Now ESC will save your changes to the cell, and you
-  can revert them by using Undo.
+  can't be brought back with "Undo". This can be infuriating when done accidentally. Sheetkeys fixes this. Now
+  ESC will save your changes to the cell, and you can revert them if needed by using Undo.
 * `Ctrl-e` on Mac OS X is a handy system-wide shortcut which moves the cursor to the end of the form field
   you're currently editing. This essential shortcut doesn't work in Google Sheets. With Sheetkeys, it does.
+* Sheets has a useful full screen mode (View > Full screen) which allows many more rows of the spreadsheet to
+  be visible on screen. But it has two inconveniences: there is no keyboard shortcut for toggling it, and
+  there's a persistent popup whenever one enters full screen mode. SheetKeys adds a shortcut for it, and
+  auto-dismisses the popup for you.
 
 ## Developer workflow
 
