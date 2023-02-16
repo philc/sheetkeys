@@ -454,16 +454,20 @@ const SheetActions = {
     }
   },
 
+  isMac() {
+    return window.navigator.platform.includes("Mac"); // E.g. "MacIntel".
+  },
+
   scrollToTop() {
-    // TODO(philc): This may not work on Linux or Windows since it uses the meta key. Replace with CTRL on
-    // those platforms?
-    this.typeKeyFn(KeyboardUtils.keyCodes.home, {meta: true});
+    const modifiers = this.isMac() ? { meta: true } : { control: true };
+    this.typeKeyFn(KeyboardUtils.keyCodes.home, modifiers);
   },
 
   scrollToBottom() {
+    const modifiers = this.isMac() ? { meta: true } : { control: true };
     // End takes you to the bottom-right corner of the sheet, which doesn't mirror gg. So use Left afterwards.
-    this.typeKeyFn(KeyboardUtils.keyCodes.end, {meta: true});
-    this.typeKeyFn(KeyboardUtils.keyCodes.left, {meta: true});
+    this.typeKeyFn(KeyboardUtils.keyCodes.end, modifiers);
+    this.typeKeyFn(KeyboardUtils.keyCodes.left, modifiers);
   },
 
   //
