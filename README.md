@@ -1,7 +1,7 @@
 ## SheetKeys - The Hacker's Spreadsheet
 
-Sheetkeys is a Chrome extension which adds powerful keyboard navigation shortcuts to Google Sheets, in the
-spirit of the Vim text editor. It's written by one of the authors of
+SheetKeys is a browser extension which adds powerful keyboard shortcuts to Google Sheets, in the spirit of the
+Vim text editor. It's written by one of the authors of
 [Vimium](https://github.com/philc/vimium).
 
 [Watch the demo video here](https://www.youtube.com/watch?v=aUgHj2qrXe4).
@@ -98,10 +98,10 @@ Here is a partial list:
 ## Other usability improvements to Google Sheets
 
 * In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your changes
-  can't be brought back with "Undo". This can be infuriating when done accidentally. Sheetkeys fixes this. Now
+  can't be brought back with "Undo". This can be infuriating when done accidentally. SheetKeys fixes this. Now
   ESC will save your changes to the cell, and you can revert them if needed by using Undo.
 * `Ctrl-e` on Mac OS X is a handy system-wide shortcut which moves the cursor to the end of the form field
-  you're currently editing. This essential shortcut doesn't work in Google Sheets. With Sheetkeys, it does.
+  you're currently editing. This essential shortcut doesn't work in Google Sheets. With SheetKeys, it does.
 * Sheets has a useful full screen mode (View > Full screen) which allows many more rows of the spreadsheet to
   be visible on screen. But it has two inconveniences: there is no keyboard shortcut for toggling it, and
   there's a persistent popup whenever one enters full screen mode. SheetKeys adds a shortcut for it, and
@@ -113,7 +113,7 @@ Here is a partial list:
   [Extension Reloader](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid)
   which provides a quick shortcut for reloading all of your locally-developed extensions. See
   [here](http://stackoverflow.com/a/12767200/46237) for further info.
-* Refresh your Google Sheets page after reloading the Sheetkeys extension in Chrome.
+* Refresh your Google Sheets page after reloading the SheetKeys extension in Chrome.
 
 ## License
 
