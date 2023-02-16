@@ -40,10 +40,19 @@ async function buildStorePackage() {
   const fileContents = await Deno.readTextFile("./manifest.json");
   // Chrome's manifest.json supports comment syntax, so use the JSON5 library to parse this file.
   const manifestContents = JSON5.parse(fileContents);
+
   const rsyncOptions = ["-r", ".", "dist/sheetkeys"].concat(
     ...excludeList.map((item) => ["--exclude", item])
   );
   const sheetkeysVersion = manifestContents["version"];
+
+  // Ensure the manifest does not contain the options_page key. That is only used in development.
+  if (manifestContents["options_page"]) {
+    throw new Error("The 'options_page' key in manifest.json should be commented out. It's used only in " +
+                "develompent for testing purposes.");
+  }
+
+
   // cd into "dist/sheetkeys" before building the zip, so that the files in the zip don't each have the
   // path prefix "dist/sheetkeys".
   // --filesync ensures that files in the archive which are no longer on disk are deleted. It's equivalent to
