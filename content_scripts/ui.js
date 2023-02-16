@@ -82,7 +82,7 @@ const UI = {
 
   isEditable(el) {
     // Note that the window object doesn't have a tagname.
-    const tagName = (el.tagName? el.tagName.toLowerCase() : null);
+    const tagName = (el.tagName ? el.tagName.toLowerCase() : null);
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
   },
 
