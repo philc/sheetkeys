@@ -15,7 +15,8 @@ its key mappings don't collide with SheetKeys. To do so, click on the Vimium ico
 
 ## How to install
 
-Install on the Chrome web store (coming soon).
+Install on the
+[Chrome web store](https://chrome.google.com/webstore/detail/sheetkeys/dnckajfoijllhbnfdhdklcfpckcbonhi).
 
 To install from source, see [here](https://github.com/philc/sheetkeys/wiki/How-to-install-from-source).
 
