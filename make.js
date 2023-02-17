@@ -25,8 +25,6 @@ async function shell(procName, argsArray = []) {
 
 // Builds a zip file for submission to the Chrome and Firefox stores. The output is in dist/.
 async function buildStorePackage() {
-  // TODO(philc): Assert that manifest.json doesn't include an "options_page" key. That is used for debugging
-  // purposes and shouldn't make it into a release build.
   const excludeList = [
     "*.md",
     ".*",
@@ -37,14 +35,11 @@ async function buildStorePackage() {
     "harnesses",
     "tests",
   ];
-  const fileContents = await Deno.readTextFile("./manifest.json");
-  // Chrome's manifest.json supports comment syntax, so use the JSON5 library to parse this file.
-  const manifestContents = JSON5.parse(fileContents);
 
-  const rsyncOptions = ["-r", ".", "dist/sheetkeys"].concat(
-    ...excludeList.map((item) => ["--exclude", item])
-  );
-  const sheetkeysVersion = manifestContents["version"];
+  // Chrome's manifest.json supports JavaScript comment syntax. However, the Chrome Store rejects manifests
+  // with JavaScript comments in them! So here we use the JSON5 library, rather than JSON library, to parse
+  // our manifset.json and remove its comments.
+  const manifestContents = JSON5.parse(await Deno.readTextFile("./manifest.json"));
 
   // Ensure the manifest does not contain the options_page key. That is only used in development.
   if (manifestContents["options_page"]) {
@@ -52,6 +47,18 @@ async function buildStorePackage() {
                 "develompent for testing purposes.");
   }
 
+  await shell("rm", ["-rf", "dist/sheetkeys"]);
+  await shell("mkdir", ["-p", "dist/sheetkeys", "dist/chrome-store"]);
+  const rsyncOptions = ["-r", ".", "dist/sheetkeys"].concat(
+    ...excludeList.map((item) => ["--exclude", item])
+  );
+  await shell("rsync", rsyncOptions);
+
+  const writeDistManifest = async (manifestObject) => {
+    await Deno.writeTextFile("dist/sheetkeys/manifest.json", JSON.stringify(manifestObject, null, 2));
+  };
+
+  writeDistManifest(manifestContents);
 
   // cd into "dist/sheetkeys" before building the zip, so that the files in the zip don't each have the
   // path prefix "dist/sheetkeys".
@@ -59,10 +66,7 @@ async function buildStorePackage() {
   // removing the zip file before the build.
   const zipCommand = "cd dist/sheetkeys && zip -r --filesync ";
 
-  await shell("rm", ["-rf", "dist/sheetkeys"]);
-  await shell("mkdir", ["-p", "dist/sheetkeys", "dist/chrome-store"]);
-  await shell("rsync", rsyncOptions);
-
+  const sheetkeysVersion = manifestContents["version"];
   // Build the Chrome Store package.
   await shell("bash",
               ["-c", `${zipCommand} ../chrome-store/sheetkeys-chrome-store-${sheetkeysVersion}.zip .`]);
