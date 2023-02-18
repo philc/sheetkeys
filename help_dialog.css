@@ -1,6 +1,6 @@
 /*
- * We're trying to mimic many of the styles (border radius, font size, colors) from the Google Sheets UI. A
- * representative example of a dialog is File > Settings.
+ * We're trying to mimic many of the styles (border radius, font size, colors) from the Google
+ * Sheets UI. A representative example of a dialog is File > Settings.
  */
 
 #help-dialog-modal-background {
@@ -99,7 +99,8 @@ td:nth-of-type(2) span {
   border-radius: 5px;
   /* The shortcut gets focused, which draws a heavy border around it. Avoid that. */
   outline: none;
-  /* This is required because when editing a shortcut, the contents are cleared and the height collapsed. */
+  /* This is required because when editing a shortcut, the contents are cleared and the height
+     collapsed. */
   height: 25px;
 }
 
