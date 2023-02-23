@@ -1,4 +1,5 @@
-// The names of these keys are exposed in the UI if the user types one of these when creating a mapping.
+// The names of these keys are exposed in the UI if the user types one of these when creating a
+// mapping.
 const keyCodes = {
   backspace: 8,
   tab: 9,
@@ -16,7 +17,7 @@ const keyCodes = {
   down: 40,
   "delete": 46,
   f1: 112,
-  f12: 123
+  f12: 123,
 };
 
 window.KeyboardUtils = {
@@ -31,11 +32,11 @@ window.KeyboardUtils = {
     if (this.keyNames.has(event.keyCode)) {
       keyString = this.keyNames.get(event.keyCode);
     } else if (event.altKey && event.key && event.key != "Alt") {
-      // The pressed key is a non-ASCII printing character in the current layout, and is ASCII in en_US, so we
-      // use the corresponding ASCII character. We do this because event.key when modified with Alt may
-      // represent a character other than the key in the user's keyboard layout. E.g. on Mac, <A-v> comes
-      // through as <A-√>.
-      // See https://github.com/philc/vimium/issues/2147#issuecomment-230370011 for discussion.
+      // The pressed key is a non-ASCII printing character in the current layout, and is ASCII in
+      // en_US, so we use the corresponding ASCII character. We do this because event.key when
+      // modified with Alt may represent a character other than the key in the user's keyboard
+      // layout. E.g. on Mac, <A-v> comes through as <A-√>. See
+      // https://github.com/philc/vimium/issues/2147#issuecomment-230370011 for discussion.
       keyString = String.fromCharCode(event.keyCode).toLowerCase();
     } else if (event.key.length === 1) {
       keyString = event.key;
@@ -67,17 +68,42 @@ window.KeyboardUtils = {
       keyString = mod + "-" + keyString;
     }
 
-    if (modifiers.length > 0) { keyString = `<${keyString}>`; }
+    if (modifiers.length > 0) {
+      keyString = `<${keyString}>`;
+    }
     return keyString;
   },
 
   createSimulatedKeyEvent(el, type, keyCode, keyIdentifier) {
     // How to do this in Chrome: http://stackoverflow.com/q/10455626/46237
     const event = document.createEvent("KeyboardEvent");
-    Object.defineProperty(event, "keyCode", {get() { return this.keyCodeVal; }});
-    Object.defineProperty(event, "which", {get() { return this.keyCodeVal; }});
-    Object.defineProperty(event, "keyIdentifier", {get() { return keyIdentifier; }});
-    event.initKeyboardEvent(type, true, true, document.defaultView, false, false, false, false, keyCode, 0);
+    Object.defineProperty(event, "keyCode", {
+      get() {
+        return this.keyCodeVal;
+      },
+    });
+    Object.defineProperty(event, "which", {
+      get() {
+        return this.keyCodeVal;
+      },
+    });
+    Object.defineProperty(event, "keyIdentifier", {
+      get() {
+        return keyIdentifier;
+      },
+    });
+    event.initKeyboardEvent(
+      type,
+      true,
+      true,
+      document.defaultView,
+      false,
+      false,
+      false,
+      false,
+      keyCode,
+      0,
+    );
     event.keyCodeVal = keyCode;
     event.keyIdentifier = keyIdentifier;
     return event;
@@ -90,15 +116,29 @@ window.KeyboardUtils = {
   },
 
   simulateClick(el, x, y) {
-    if (x == null) { x = 0; }
-    if (y == null) { y = 0; }
+    if (x == null) x = 0;
+    if (y == null) y = 0;
     const eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
     for (let eventName of eventSequence) {
       let event = document.createEvent("MouseEvents");
-      // eventName, bubbles, cancelable, view, event-detail, screenX, screenY, clientX, clientY, ctrl, alt,
-      // shift, meta, button, relatedTarget
-      event.initMouseEvent(eventName, true, true, window, 1, x, y, x, y, false, false, false, false, 0, null);
+      event.initMouseEvent(
+        eventName,
+        true, // bubbles
+        true, // cancelable
+        window, //view
+        1, // event-detail
+        x, // screenX
+        y, // screenY
+        x, // clientX
+        y, // clientY
+        false, // ctrl
+        false, // alt
+        false, // shift
+        false, // meta
+        0, // button
+        null, // relatedTarget
+      );
       el.dispatchEvent(event);
     }
-  }
+  },
 };

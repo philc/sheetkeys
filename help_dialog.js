@@ -19,16 +19,18 @@ const EventDispatcher = {
 
   dispatchEvent: (eventName, listener) => {
     this.events = this.events || [];
-    for (const listener of this.events[eventName] || [])
+    for (const listener of this.events[eventName] || []) {
       listener();
+    }
   },
 
   removeEventListener: (eventName, listener) => {
     const events = this.events || {};
     const listeners = events[eventName] || [];
-    if (listeners.length > 0)
+    if (listeners.length > 0) {
       events[eventName] = listeners.filter((l) => l != listener);
-  }
+    }
+  },
 };
 
 class HelpDialog {
@@ -48,22 +50,23 @@ class HelpDialog {
       "selection": [],
       "tabs": [],
       "formatting": [],
-      "other": []
+      "other": [],
     };
 
-    for (const [key, command] of Object.entries(Commands.commands))
+    for (const [key, command] of Object.entries(Commands.commands)) {
       groupsToCommand[command.group].push(key);
+    }
     return groupsToCommand;
   }
 
   async createDialogElement() {
-    if (this.el)
-      return;
+    if (this.el) return;
 
-    // Here, we're adding a CSS file to the document root (outside of the dialog's shadow DOM) which contains
-    // a font-face declaration for an icon font. This is required if we want to use the font within the shadow
-    // DOM. It's a long-standing bug in Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=336876
-    // Workaround described: https://github.com/google/material-design-icons/issues/1165#issuecomment-851128010
+    // Here, we're adding a CSS file to the document root (outside of the dialog's shadow DOM) which
+    // contains a font-face declaration for an icon font. This is required if we want to use the
+    // font within the shadow DOM. It's a long-standing bug in Chrome:
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=336876 Workaround described:
+    // https://github.com/google/material-design-icons/issues/1165#issuecomment-851128010
     const linkEl = document.createElement("link");
     linkEl.setAttribute("type", "text/css");
     linkEl.setAttribute("rel", "stylesheet");
@@ -72,14 +75,17 @@ class HelpDialog {
 
     const response = await fetch(chrome.runtime.getURL("help_dialog.html"));
     let html = await response.text();
-    html = html.replace('href="help_dialog.css"', `href="${chrome.runtime.getURL("help_dialog.css")}"`);
+    html = html.replace(
+      'href="help_dialog.css"',
+      `href="${chrome.runtime.getURL("help_dialog.css")}"`,
+    );
     const helpDialog = document.createElement("div");
     helpDialog.style.display = "none";
     const shadow = helpDialog.attachShadow({ mode: "open", delegatesFocus: true });
     shadow.innerHTML = html;
 
-    // We wait until the CSS is fetched before proceeding. Otherwise, the dialog will appear unstyled for a
-    // second.
+    // We wait until the CSS is fetched before proceeding. Otherwise, the dialog will appear
+    // unstyled for a second.
     const dialogLinkEl = shadow.querySelector("link");
     const promise = new Promise((resolve) => {
       dialogLinkEl.addEventListener("load", () => resolve());
@@ -94,8 +100,9 @@ class HelpDialog {
 
   async onClick(event) {
     const anchor = event.target.closest("a");
-    if (!anchor)
+    if (!anchor) {
       return;
+    }
     event.preventDefault();
     if (anchor.classList.contains("close")) {
       this.hide();
@@ -112,7 +119,8 @@ class HelpDialog {
 
   beginEditing(clickTarget) {
     if (this.edits.rowEl) {
-      // Another mapping was being edited. Cancel that, so that we have only one edit in progress at a time.
+      // Another mapping was being edited. Cancel that, so that we have only one edit in progress at
+      // a time.
       this.cancelEditing();
     }
     const tr = clickTarget.closest("tr");
@@ -129,10 +137,11 @@ class HelpDialog {
     tr.querySelector(".editing-controls").style.visibility = visibility ? "visible" : "hidden";
     tr.querySelector(".edit").style.visibility = visibility ? "hidden" : "visible";
     const shortcut = tr.querySelector(".shortcut");
-    if (visibility)
+    if (visibility) {
       shortcut.classList.add("editing");
-    else
+    } else {
       shortcut.classList.remove("editing");
+    }
     this.edits.keyStrings = [];
     this.edits.rowEl = visibility ? tr : null;
   }
@@ -153,16 +162,18 @@ class HelpDialog {
     const shortcutEl = this.edits.rowEl.querySelector(".shortcut");
     shortcutEl.innerHTML = "";
     let originalMapping = this.edits.rowEl.dataset.mapping;
-    if (originalMapping == "")
+    if (originalMapping == "") {
       originalMapping = null;
+    }
     this.displayKeyString(shortcutEl, originalMapping);
     this.showEditingUI(this.edits.rowEl, false);
   }
 
   async showValidationErrors() {
     // Remove any previous validation errors
-    for (const el of this.el.shadowRoot.querySelectorAll(".validation-error"))
+    for (const el of this.el.shadowRoot.querySelectorAll(".validation-error")) {
       el.innerText = "";
+    }
 
     const normalModeMappings = Object.entries((await Settings.loadUserKeyMappings()).normal);
 
@@ -171,7 +182,8 @@ class HelpDialog {
       for (const [command, mapping] of normalModeMappings) {
         if (rowMapping == mapping && row.dataset.command != command) {
           const commandDisplayName = Commands.commands[command].name;
-          row.querySelector(".validation-error").innerText = `Conflicts with "${commandDisplayName}"`;
+          row.querySelector(".validation-error").innerText =
+            `Conflicts with "${commandDisplayName}"`;
         }
       }
     }
@@ -187,9 +199,9 @@ class HelpDialog {
   }
 
   async commitChange() {
-    const newKeyMapping = this.edits.keyStrings.length > 0 ?
-          this.edits.keyStrings.join(Commands.KEY_SEPARATOR) :
-          null;
+    const newKeyMapping = this.edits.keyStrings.length > 0
+      ? this.edits.keyStrings.join(Commands.KEY_SEPARATOR)
+      : null;
     const commandName = this.edits.rowEl.dataset.command;
     await Settings.changeKeyMapping(commandName, newKeyMapping);
     this.edits.rowEl.dataset.mapping = newKeyMapping || "";
@@ -205,12 +217,13 @@ class HelpDialog {
     const keyString = KeyboardUtils.getKeyString(event);
 
     // Ignore key presses which are just modifiers.
-    if (!keyString)
-      return;
+    if (!keyString) return;
 
     this.edits.keyStrings.push(keyString);
-    this.displayKeyString(this.edits.rowEl.querySelector(".shortcut"),
-                          this.edits.keyStrings.join(Commands.KEY_SEPARATOR));
+    this.displayKeyString(
+      this.edits.rowEl.querySelector(".shortcut"),
+      this.edits.keyStrings.join(Commands.KEY_SEPARATOR),
+    );
   }
 
   async populateDialog() {
@@ -219,10 +232,10 @@ class HelpDialog {
     // These are the order in which they'll be shown in the dialog.
     const groups = ["movement", "selection", "editing", "formatting", "other"];
 
-    const capitalize = function(str) {
+    const capitalize = function (str) {
       const lower = str.toLowerCase();
       return str.charAt(0).toUpperCase() + lower.slice(1);
-    }
+    };
 
     const shadow = this.el.shadowRoot;
     const theadTemplate = shadow.querySelector("thead");
@@ -245,8 +258,9 @@ class HelpDialog {
 
       for (const commandKey of commandKeys) {
         const command = Commands.commands[commandKey];
-        if (command.hiddenFromHelp)
+        if (command.hiddenFromHelp) {
           continue;
+        }
         const mapping = normalModeMappings[commandKey]; // This can be null.
         const row = trTemplate.cloneNode(true);
         row.dataset.command = commandKey;
@@ -282,8 +296,8 @@ class HelpDialog {
     this.el.style.display = "";
     this.windowKeydownListener = (event) => this.onWindowKeydown(event);
     window.addEventListener("keydown", this.windowKeydownListener);
-    // Focus the dialog body. This prevents keys from going to the underlying spreadsheet, and it allows the
-    // help dialog to be scrolled using the arrow keys.
+    // Focus the dialog body. This prevents keys from going to the underlying spreadsheet, and it
+    // allows the help dialog to be scrolled using the arrow keys.
     this.el.shadowRoot.querySelector(".dialog-body").focus();
   }
 

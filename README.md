@@ -1,29 +1,31 @@
 ## SheetKeys - The Hacker's Spreadsheet
 
-SheetKeys is a browser extension which adds powerful keyboard shortcuts to Google Sheets, in the spirit of the
-Vim text editor. It's written by one of the authors of
+SheetKeys is a browser extension which adds powerful keyboard shortcuts to Google Sheets, in the
+spirit of the Vim text editor. It's written by one of the authors of
 [Vimium](https://github.com/philc/vimium).
 
 [Watch the demo video here](https://www.youtube.com/watch?v=aUgHj2qrXe4).
 
-If you are a project manager, programmer, finance person, or just someone who uses spreadsheets a lot, this
-can greatly increase your efficiency in Google Sheets.
+If you are a project manager, programmer, finance person, or just someone who uses spreadsheets a
+lot, this can greatly increase your efficiency in Google Sheets.
 
-(If you are using SheetKeys with [Vimium](https://github.com/philc/vimium), disable Vimium on Google Sheets so
-its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in Chrome's toolbar, enter
-`https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern, and click Save.)
+(If you are using SheetKeys with [Vimium](https://github.com/philc/vimium), disable Vimium on Google
+Sheets so its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in
+Chrome's toolbar, enter `https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern,
+and click Save.)
 
 ## How to install
 
 Install on the
 [Chrome web store](https://chrome.google.com/webstore/detail/sheetkeys/dnckajfoijllhbnfdhdklcfpckcbonhi).
 
-To install from source, see [here](https://github.com/philc/sheetkeys/wiki/How-to-install-from-source).
+To install from source, see
+[here](https://github.com/philc/sheetkeys/wiki/How-to-install-from-source).
 
 ## Keyboard Mappings
 
-SheetKeys adds many key mappings to Google Sheets. After installing, you can see and customize all of them by
-typing `?` while on a Google Sheets page.
+SheetKeys adds many key mappings to Google Sheets. After installing, you can see and customize all
+of them by typing `?` while on a Google Sheets page.
 
 Here is a partial list:
 
@@ -98,15 +100,17 @@ Here is a partial list:
 
 ## Other usability improvements to Google Sheets
 
-* In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your changes
-  can't be brought back with "Undo". This can be infuriating when done accidentally. SheetKeys fixes this. Now
-  ESC will save your changes to the cell, and you can revert them if needed by using Undo.
-* `Ctrl-e` on Mac OS X is a handy system-wide shortcut which moves the cursor to the end of the form field
-  you're currently editing. This essential shortcut doesn't work in Google Sheets. With SheetKeys, it does.
-* Sheets has a useful full screen mode (View > Full screen) which allows many more rows of the spreadsheet to
-  be visible on screen. But it has two inconveniences: there is no keyboard shortcut for toggling it, and
-  there's a persistent popup whenever one enters full screen mode. SheetKeys adds a shortcut for it, and
-  auto-dismisses the popup for you.
+* In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your
+  changes can't be brought back with "Undo". This can be infuriating when done accidentally.
+  SheetKeys fixes this. Now ESC will save your changes to the cell, and you can revert them if
+  needed by using Undo.
+* `Ctrl-e` on Mac OS X is a handy system-wide shortcut which moves the cursor to the end of the form
+  field you're currently editing. This essential shortcut doesn't work in Google Sheets. With
+  SheetKeys, it does.
+* Sheets has a useful full screen mode (View > Full screen) which allows many more rows of the
+  spreadsheet to be visible on screen. But it has two inconveniences: there is no keyboard shortcut
+  for toggling it, and there's a persistent popup whenever one enters full screen mode. SheetKeys
+  adds a shortcut for it, and auto-dismisses the popup for you.
 
 ## Developer workflow
 

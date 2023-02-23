@@ -19,23 +19,31 @@
   // "options_page": "harnesses/help_dialog_harness.html",
   "content_scripts": [
     {
-      "matches": ["https://docs.google.com/spreadsheets/*",
-                  "https://docs.google.com/a*/spreadsheets/*"],
-      "js": ["content_scripts/keyboard_utils.js",
-             "content_scripts/settings.js",
-             "content_scripts/sheet_actions.js",
-             "content_scripts/ui.js",
-             "content_scripts/commands.js",
-             "help_dialog.js"],
+      "matches": [
+        "https://docs.google.com/spreadsheets/*",
+        "https://docs.google.com/a*/spreadsheets/*"
+      ],
+      "js": [
+        "content_scripts/keyboard_utils.js",
+        "content_scripts/settings.js",
+        "content_scripts/sheet_actions.js",
+        "content_scripts/ui.js",
+        "content_scripts/commands.js",
+        "help_dialog.js"
+      ],
       "run_at": "document_end",
       "all_frames": false
-    }],
+    }
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["page_scripts/page_script.js",
-                    "fontello_svg_icon_font.css",
-                    "help_dialog.css",
-                    "help_dialog.html"],
+      "resources": [
+        "page_scripts/page_script.js",
+        "fontello_svg_icon_font.css",
+        "help_dialog.css",
+        "help_dialog.html"
+      ],
       "matches": ["https://docs.google.com/*"]
-    }]
+    }
+  ]
 }
