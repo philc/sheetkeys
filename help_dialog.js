@@ -17,7 +17,7 @@ const EventDispatcher = {
     this.events[eventName].push(listener);
   },
 
-  dispatchEvent: (eventName, listener) => {
+  dispatchEvent: (eventName) => {
     this.events = this.events || [];
     for (const listener of this.events[eventName] || []) {
       listener();
@@ -109,7 +109,7 @@ class HelpDialog {
     } else if (anchor.classList.contains("edit")) {
       this.beginEditing(anchor);
     } else if (anchor.classList.contains("save")) {
-      this.commitChange();
+      await this.commitChange();
     } else if (anchor.classList.contains("cancel")) {
       this.cancelEditing();
     } else if (anchor.classList.contains("default")) {

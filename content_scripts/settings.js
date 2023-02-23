@@ -13,7 +13,7 @@ const Settings = {
     const values = settings[this.settingsKey] || {};
 
     // If the user has a keybinding which refers to a command that no longer exists, prune it.
-    for (let commandName of Object.keys(values.keyMappings || {})) {
+    for (const commandName of Object.keys(values.keyMappings || {})) {
       if (!Commands.commands[commandName]) {
         delete values.keyMappings[mode][commandName];
       }
@@ -22,7 +22,7 @@ const Settings = {
     return Object.assign(defaultOptions, values);
   },
 
-  async set(settings) {
+  set(settings) {
     const o = {};
     o[this.settingsKey] = settings;
     chrome.storage.sync.set(o);
@@ -36,7 +36,7 @@ const Settings = {
     }
     const settings = await Settings.get();
     settings.keyMappings[commandName] = keyMapping;
-    await Settings.set(settings);
+    Settings.set(settings);
     chrome.runtime.sendMessage(null, "keyMappingChange");
   },
 
@@ -45,7 +45,7 @@ const Settings = {
     const settings = await Settings.get();
     const mappings = {};
     // Do a deep clone of the default mappings.
-    for (let mode of Object.keys(Commands.defaultMappings)) {
+    for (const mode of Object.keys(Commands.defaultMappings)) {
       mappings[mode] = Object.assign({}, Commands.defaultMappings[mode]);
     }
     // We only allow the user to bind keys in normal mode, for conceptual and UI simplicity.

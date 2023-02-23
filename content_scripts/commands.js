@@ -393,8 +393,8 @@ const Commands = {
       // Tabs
       "moveTabRight": ">•>",
       "moveTabLeft": "<•<",
-      "nextTab": "g•t",
-      "prevTab": "g•T",
+      // "nextTab": "g•t",
+      // "prevTab": "g•T",
       "prevTab": "J",
       "nextTab": "K",
 

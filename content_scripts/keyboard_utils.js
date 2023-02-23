@@ -64,7 +64,7 @@ window.KeyboardUtils = {
       modifiers.push("A");
     }
 
-    for (let mod of Array.from(modifiers)) {
+    for (const mod of Array.from(modifiers)) {
       keyString = mod + "-" + keyString;
     }
 
@@ -74,7 +74,7 @@ window.KeyboardUtils = {
     return keyString;
   },
 
-  createSimulatedKeyEvent(el, type, keyCode, keyIdentifier) {
+  createSimulatedKeyEvent(type, keyCode, keyIdentifier) {
     // How to do this in Chrome: http://stackoverflow.com/q/10455626/46237
     const event = document.createEvent("KeyboardEvent");
     Object.defineProperty(event, "keyCode", {
@@ -110,17 +110,17 @@ window.KeyboardUtils = {
   },
 
   simulateKeypress(el, keyCode, keyIdentifier) {
-    el.dispatchEvent(this.createSimulatedKeyEvent(el, "keydown", keyCode, keyIdentifier));
-    el.dispatchEvent(this.createSimulatedKeyEvent(el, "keypress", keyCode, keyIdentifier));
-    el.dispatchEvent(this.createSimulatedKeyEvent(el, "keyup", keyCode, keyIdentifier));
+    el.dispatchEvent(this.createSimulatedKeyEvent("keydown", keyCode, keyIdentifier));
+    el.dispatchEvent(this.createSimulatedKeyEvent("keypress", keyCode, keyIdentifier));
+    el.dispatchEvent(this.createSimulatedKeyEvent("keyup", keyCode, keyIdentifier));
   },
 
   simulateClick(el, x, y) {
     if (x == null) x = 0;
     if (y == null) y = 0;
     const eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
-    for (let eventName of eventSequence) {
-      let event = document.createEvent("MouseEvents");
+    for (const eventName of eventSequence) {
+      const event = document.createEvent("MouseEvents");
       event.initMouseEvent(
         eventName,
         true, // bubbles

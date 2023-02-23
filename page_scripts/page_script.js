@@ -44,7 +44,7 @@ jsonEl.style.display = "none";
 jsonEl.id = "sheetkeys-json-message";
 document.body.appendChild(jsonEl);
 
-window.addEventListener("sheetkeys-simulate-key-event", function (e) {
+window.addEventListener("sheetkeys-simulate-key-event", function (_event) {
   const editorEl = document.getElementById("waffle-rich-text-editor");
   const args = JSON.parse(jsonEl.innerText);
   // We simulate all three events because it's needed for some keystrokes to be recognized by Google

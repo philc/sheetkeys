@@ -109,14 +109,13 @@ const SheetActions = {
         break;
       default:
         throw `Attempted to exit an unknown mode: ${this.mode}`;
-        break;
     }
   },
 
   clickToolbarButton(captionList) {
     // Sometimes a toolbar button won't exist in the DOM until its parent has been clicked, so we
     // click all of its parents in sequence.
-    for (let caption of Array.from(captionList)) {
+    for (const caption of Array.from(captionList)) {
       const el = document.querySelector(`*[aria-label='${caption}']`);
       if (!el) {
         console.log(`Couldn't find the element for the button labeled ${caption}.`);
@@ -145,7 +144,7 @@ const SheetActions = {
   findMenuItem(caption) {
     const menuItems = document.querySelectorAll(".goog-menuitem");
     const isRegexp = caption instanceof RegExp;
-    for (let menuItem of Array.from(menuItems)) {
+    for (const menuItem of Array.from(menuItems)) {
       const label = menuItem.innerText;
       if (!label) continue;
       if (isRegexp) {
@@ -481,14 +480,14 @@ const SheetActions = {
   // NOTE(philc): It would be nice to improve these scrolling commands. They're somewhat slow and
   // imprecise.
   scrollHalfPageDown() {
-    var rowCount = Math.floor(this.visibleRowCount() / 2);
+    const rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
       this.typeKeyFn(KeyboardUtils.keyCodes.down);
     }
   },
 
   scrollHalfPageUp() {
-    var rowCount = Math.floor(this.visibleRowCount() / 2);
+    const rowCount = Math.floor(this.visibleRowCount() / 2);
     for (let i = 0; i < rowCount; i++) {
       this.typeKeyFn(KeyboardUtils.keyCodes.up);
     }
@@ -554,7 +553,7 @@ const SheetActions = {
     if (!menu) this.activateTabMenu();
     const menuItems = document.querySelectorAll(".docs-sheet-tab-menu .goog-menuitem");
     let result = null;
-    for (let item of Array.from(menuItems)) {
+    for (const item of Array.from(menuItems)) {
       if (item.innerText.indexOf(buttonCaption) === 0) {
         result = item;
         break;
@@ -679,7 +678,7 @@ const SheetActions = {
     // of them. Another reasonable behavior is to click on none of them, since one of these buttons
     // is likely for a notification that's not the fullscreen dismiss button.
     const dismissButtons = document.querySelectorAll(".docs-butterbar-dismiss");
-    for (let button of dismissButtons) {
+    for (const button of dismissButtons) {
       KeyboardUtils.simulateClick(button);
     }
   },

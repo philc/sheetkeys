@@ -1,7 +1,7 @@
 // Utilities
 window.invertObjectMap = (o) => {
   const o2 = {};
-  for (let k of Object.keys(o)) {
+  for (const k of Object.keys(o)) {
     const v = o[k];
     o2[v] = k;
   }
@@ -90,7 +90,7 @@ const UI = {
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
   },
 
-  onFocus(e) {
+  onFocus(_event) {
     if (!this.editor) this.setupEditor();
     const el = event.target;
     if (el.id === this.richTextEditorId) {
@@ -108,8 +108,8 @@ const UI = {
       if (this.editor) {
         // Listen for when the editor's style attribute changes. This indicates that a cell is now
         // being edited, perhaps due to double clicking into a cell.
-        const observer = new MutationObserver((mutations) => {
-          if (SheetActions.mode === "disabled") {
+        const observer = new MutationObserver((_mutations) => {
+          if (SheetActions.mode == "disabled") {
             return;
           }
           this.isEditorEditing() ? SheetActions.setMode("insert") : SheetActions.setMode("normal");
@@ -129,7 +129,7 @@ const UI = {
     // There's no obvious way to determine directly that the cell editor is currently editing a
     // cell. However, when this happens, the parent node of the editor gets a big long style
     // attribute to portray the cell editor input box.
-    var style = this.editor.parentNode.getAttribute("style");
+    const style = this.editor.parentNode.getAttribute("style");
     return style != null && style != "";
   },
 
@@ -138,16 +138,16 @@ const UI = {
   // add "d" and "d•a" keys to this map, but not "d•a•p".
   buildKeyMappingsPrefixes(keyMappings) {
     const prefixes = {};
-    for (let mode in keyMappings) {
+    for (const mode in keyMappings) {
       prefixes[mode] = {};
       const modeKeyMappings = keyMappings[mode];
-      for (let command of Object.keys(modeKeyMappings)) {
+      for (const command of Object.keys(modeKeyMappings)) {
         const keyString = modeKeyMappings[command];
         // If the bound action is null, then treat this key as unbound.
         if (!keyString) continue;
         const keys = keyString.split(Commands.KEY_SEPARATOR);
         for (let i = 0; i < keys.length - 1; i++) {
-          let prefix = keys.slice(0, i + 1).join(Commands.KEY_SEPARATOR);
+          const prefix = keys.slice(0, i + 1).join(Commands.KEY_SEPARATOR);
           prefixes[mode][prefix] = true;
         }
       }
@@ -191,7 +191,6 @@ const UI = {
     // See if a bound command matches the typed key sequence. If so, execute it.
     // Prioritize longer mappings over shorter mappings.
     for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
-      var fn;
       const keySequence = this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(
         Commands.KEY_SEPARATOR,
       );
@@ -203,7 +202,8 @@ const UI = {
         return;
       }
 
-      if (commandName = modeMappings[keySequence]) {
+      commandName = modeMappings[keySequence];
+      if (commandName) {
         this.keyQueue = [];
         this.cancelEvent(e);
         Commands.commands[commandName].fn();
