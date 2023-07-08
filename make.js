@@ -38,7 +38,7 @@ async function buildStorePackage() {
 
   // Chrome's manifest.json supports JavaScript comment syntax. However, the Chrome Store rejects
   // manifests with JavaScript comments in them! So here we use the JSON5 library, rather than JSON
-  // library, to parse our manifset.json and remove its comments.
+  // library, to parse our manifest.json and remove its comments.
   const manifestContents = JSON5.parse(await Deno.readTextFile("./manifest.json"));
 
   // Ensure the manifest does not contain the options_page key. That is only used in development.
