@@ -182,10 +182,10 @@ const SheetActions = {
 
     const rect = paletteButton.getBoundingClientRect();
     const palette = document.elementFromPoint(rect.left, rect.bottom + 10);
-    if (!palette) throw `Unable to find element for ${type} panel.`;
+    assert(palette, `Unable to find element for ${type} panel.`);
     const selector = `*[aria-label='${color}']`;
     const colorButton = palette.querySelector(selector);
-    if (!colorButton) throw `Couldn't find the color button with selector ${selector}`;
+    assert(colorButton, `Couldn't find the color button with selector ${selector}`);
 
     // Hide the color palette. This isn't strictly necessary because any other click on the document
     // will also result in hiding the palette.
@@ -631,7 +631,18 @@ const SheetActions = {
     this.clickToolbarButton(this.buttons.overflow);
   },
   clip() {
-    this.clickToolbarButton(this.buttons.clip);
+    // As of 2023-07-22, there are two toolbar buttons with aria-label="clip", so we have to
+    // distinguish between them. To do this using re using the element's ID. This is brittle because
+    // the element IDs are an implementation detail.
+    const getToolbarIcons = (caption) => document.querySelectorAll(`*[aria-label='${caption}']`);
+
+    const els = getToolbarIcons(this.buttons.clip[0]);
+    assert(els.length == 1, "Received unexpected results querying for " + this.buttons.clip[0]);
+    KeyboardUtils.simulateClick(els[0]);
+
+    const button = document.querySelector("#t-textwrap-clip");
+    assert(button, "Couldn't find clip button");
+    KeyboardUtils.simulateClick(button);
   },
   alignLeft() {
     this.clickToolbarButton(this.buttons.left);
@@ -739,6 +750,16 @@ const SheetActions = {
   reloadPage() {
     window.location.reload();
   },
+};
+
+// Logs a backtrace when an assertion fails, and also halts execution by throwing an error. We do
+// both, because logged objects in console.assert are easier to read from the DevTools console
+// than just the output from an error.
+const assert = (expression, ...messages) => {
+  console.assert.apply(console, [expression].concat(messages));
+  if (!expression) {
+    throw new Error(messages.join(" "));
+  }
 };
 
 window.SheetActions = SheetActions;
