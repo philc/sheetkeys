@@ -116,13 +116,22 @@ const SheetActions = {
     // Sometimes a toolbar button won't exist in the DOM until its parent has been clicked, so we
     // click all of its parents in sequence.
     for (const caption of Array.from(captionList)) {
-      const el = document.querySelector(`*[aria-label='${caption}']`);
-      if (!el) {
+      const els = document.querySelectorAll(`*[aria-label='${caption}']`);
+      if (els.length == 0) {
         console.log(`Couldn't find the element for the button labeled ${caption}.`);
         console.log(captionList);
         return;
       }
-      KeyboardUtils.simulateClick(el);
+      // Sometimes there are multiple elements that have the same label. When that happens, it's
+      // ambiguous which one to click, so we log it so it's easier to debug.
+      if (els.length > 1) {
+        console.log(
+          `Warning: there are multiple buttons with the caption ${caption}. ` +
+            "We're expecting only 1.",
+        );
+        console.log(captionList);
+      }
+      KeyboardUtils.simulateClick(els[0]);
     }
   },
 
