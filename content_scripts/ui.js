@@ -187,6 +187,9 @@ const UI = {
         this.repeatCount = parseInt(keyString);
       } else {
         this.repeatCount = this.repeatCount * 10 + parseInt(keyString);
+        if (this.repeatCount > 99) {
+          this.repeatCount = 99;
+        }
       }
       // console.log("repeatCount:", this.repeatCount);
       this.cancelEvent(e);
