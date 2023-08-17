@@ -219,10 +219,6 @@ const UI = {
         this.keyQueue = [];
         this.cancelEvent(e);
 
-        if (commandName == "undo" || commandName == "redo") {
-          this.repeatCount = this.previousRepeatCount || 1;
-        }
-
         if (this.repeatCount === null) {
           this.repeatCount = 1;
         }
@@ -230,7 +226,6 @@ const UI = {
         for (let i = 0; i < this.repeatCount; i++) {
           Commands.commands[commandName].fn();
         }
-        this.previousRepeatCount = this.repeatCount;
         this.repeatCount = null;
       }
     }
