@@ -55,36 +55,43 @@ const Commands = {
       fn: SheetActions.editCell.bind(SheetActions),
       name: "Edit cell",
       group: "editing",
+      nonRepeatable: true,
     },
     editCellAppend: {
       fn: SheetActions.editCellAppend.bind(SheetActions),
       name: "Append to cell",
       group: "editing",
+      nonRepeatable: true,
     },
     undo: {
       fn: SheetActions.undo.bind(SheetActions),
       name: "Undo",
       group: "editing",
+      nonRepeatable: true,
     },
     redo: {
       fn: SheetActions.redo.bind(SheetActions),
       name: "Redo",
       group: "editing",
+      nonRepeatable: true,
     },
     replaceChar: {
       fn: SheetActions.replaceChar.bind(SheetActions),
       name: "Replace",
       group: "editing",
+      nonRepeatable: true,
     },
     openRowBelow: {
       fn: SheetActions.openRowBelow.bind(SheetActions),
       name: "Add and edit row below",
       group: "editing",
+      nonRepeatable: true,
     },
     openRowAbove: {
       fn: SheetActions.openRowAbove.bind(SheetActions),
       name: "Add and edit row above",
       group: "editing",
+      nonRepeatable: true,
     },
     insertRowBelow: {
       fn: SheetActions.insertRowBelow.bind(SheetActions),
@@ -105,16 +112,19 @@ const Commands = {
       fn: SheetActions.clear.bind(SheetActions),
       name: "Clear",
       group: "editing",
+      nonRepeatable: true,
     },
     changeCell: {
       fn: SheetActions.changeCell.bind(SheetActions),
       name: "Change cell",
       group: "editing",
+      nonRepeatable: true,
     },
     moveCursorToCellLineEnd: {
       fn: SheetActions.moveCursorToCellLineEnd.bind(SheetActions),
       name: "Move cursor to line end",
       group: "editing",
+      nonRepeatable: true,
       // This is hidden because this is an insert-mode binding, and that concept isn't yet exposed
       // to the user or handled by the UI.
       hiddenFromHelp: true,
@@ -123,22 +133,26 @@ const Commands = {
       fn: SheetActions.copyRowOrSelection.bind(SheetActions),
       name: "Copy row, or selected cells",
       group: "editing",
+      nonRepeatable: true,
     },
     // "Yank cell"
     copy: {
       fn: SheetActions.copy.bind(SheetActions),
       name: "Copy cells",
       group: "editing",
+      nonRepeatable: true,
     },
     paste: {
       fn: SheetActions.paste.bind(SheetActions),
       name: "Paste",
       group: "editing",
+      nonRepeatable: true,
     },
     exitMode: {
       fn: SheetActions.exitMode.bind(SheetActions),
       name: "Exit the current mode",
       group: "editing",
+      nonRepeatable: true,
     },
 
     // Merging cells
@@ -146,21 +160,25 @@ const Commands = {
       fn: SheetActions.mergeAllCells.bind(SheetActions),
       name: "Merge all cells",
       group: "editing",
+      nonRepeatable: true,
     },
     mergeCellsHorizontally: {
       fn: SheetActions.mergeCellsHorizontally.bind(SheetActions),
       name: "Merge cells horizontally",
       group: "editing",
+      nonRepeatable: true,
     },
     mergeCellsVertically: {
       fn: SheetActions.mergeCellsVertically.bind(SheetActions),
       name: "Merge cells vertically",
       group: "editing",
+      nonRepeatable: true,
     },
     unmergeCells: {
       fn: SheetActions.unmergeCells.bind(SheetActions),
       name: "Unmerge cells",
       group: "editing",
+      nonRepeatable: true,
     },
 
     // Selection
@@ -168,16 +186,19 @@ const Commands = {
       fn: SheetActions.enterVisualMode.bind(SheetActions),
       name: "Begin selecting cells",
       group: "selection",
+      nonRepeatable: true,
     },
     enterVisualRowMode: {
       fn: SheetActions.enterVisualRowMode.bind(SheetActions),
       name: "Begin selecting rows",
       group: "selection",
+      nonRepeatable: true,
     },
     enterVisualColumnMode: {
       fn: SheetActions.enterVisualColumnMode.bind(SheetActions),
       name: "Begin selecting columns",
       group: "selection",
+      nonRepeatable: true,
     },
 
     // Scrolling
@@ -195,11 +216,13 @@ const Commands = {
       fn: SheetActions.scrollToTop.bind(SheetActions),
       name: "Scroll to top",
       group: "movement",
+      nonRepeatable: true,
     },
     scrollToBottom: {
       fn: SheetActions.scrollToBottom.bind(SheetActions),
       name: "Scroll to bottom",
       group: "movement",
+      nonRepeatable: true,
     },
 
     // Tabs
@@ -229,92 +252,109 @@ const Commands = {
       fn: SheetActions.alignLeft.bind(SheetActions),
       name: "Align left",
       group: "formatting",
+      nonRepeatable: true,
     },
     alignCenter: {
       fn: SheetActions.alignCenter.bind(SheetActions),
       name: "Align center",
       group: "formatting",
+      nonRepeatable: true,
     },
     alignRight: {
       fn: SheetActions.alignRight.bind(SheetActions),
       name: "Align right",
       group: "formatting",
+      nonRepeatable: true,
     },
     wrap: {
       fn: SheetActions.wrap.bind(SheetActions),
       name: "Wrap cell",
       group: "formatting",
+      nonRepeatable: true,
     },
     overflow: {
       fn: SheetActions.overflow.bind(SheetActions),
       name: "Overflow cell",
       group: "formatting",
+      nonRepeatable: true,
     },
     clip: {
       fn: SheetActions.clip.bind(SheetActions),
       name: "Clip cell",
       group: "formatting",
+      nonRepeatable: true,
     },
     colorCellWhite: {
       fn: SheetActions.colorCellWhite.bind(SheetActions),
       name: "Color background white",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     colorCellLightYellow3: {
       fn: SheetActions.colorCellLightYellow3.bind(SheetActions),
       name: "Color background light yellow 3",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     colorCellLightCornflowerBlue3: {
       fn: SheetActions.colorCellLightCornflowerBlue3.bind(SheetActions),
       name: "Color cell light corn flower blue 3",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     colorCellLightPurple: {
       fn: SheetActions.colorCellLightPurple.bind(SheetActions),
       name: "Color cell light purple",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     colorCellLightRed3: {
       fn: SheetActions.colorCellLightRed3.bind(SheetActions),
       name: "Color cell light red 3",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     colorCellLightGray2: {
       fn: SheetActions.colorCellLightGray2.bind(SheetActions),
       name: "Color cell light gray 2",
       group: "formatting",
+      nonRepeatable: true,
       hiddenFromHelp: true,
     },
     fontSizeNormal: {
       fn: SheetActions.setFontSize10.bind(SheetActions),
       name: "Set font size to normal",
       group: "formatting",
+      nonRepeatable: true,
     },
     fontSizeLarge: {
       fn: SheetActions.setFontSize12.bind(SheetActions),
       name: "Set font size to large",
       group: "formatting",
+      nonRepeatable: true,
     },
     fontSizeSmall: {
       fn: SheetActions.setFontSize8.bind(SheetActions),
       name: "Set font size to small",
       group: "formatting",
+      nonRepeatable: true,
     },
     freezeRow: {
       fn: SheetActions.freezeRow.bind(SheetActions),
       name: "Freeze row",
       group: "formatting",
+      nonRepeatable: true,
     },
     freezeColumn: {
       fn: SheetActions.freezeColumn.bind(SheetActions),
       name: "Freeze column",
       group: "formatting",
+      nonRepeatable: true,
     },
 
     // Misc
@@ -322,21 +362,25 @@ const Commands = {
       fn: SheetActions.showHelpDialog,
       name: "Show help",
       group: "other",
+      nonRepeatable: true,
     },
     toggleFullScreen: {
       fn: SheetActions.toggleFullScreen.bind(SheetActions),
       name: "Toggle full screen",
       group: "other",
+      nonRepeatable: true,
     },
     openCellAsUrl: {
       fn: SheetActions.openCellAsUrl.bind(SheetActions),
       name: "Open URL in cell in a new tab",
       group: "other",
+      nonRepeatable: true,
     },
     reloadPage: {
       fn: SheetActions.reloadPage.bind(SheetActions),
       name: "Reload page",
       group: "other",
+      nonRepeatable: true,
     },
   },
 
