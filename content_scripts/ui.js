@@ -222,12 +222,14 @@ const UI = {
         this.keyQueue = [];
         this.cancelEvent(e);
 
-        if (this.repeatCount === null) {
+        const command = Commands.commands[commandName];
+
+        if (this.repeatCount === null || command.nonRepeatable) {
           this.repeatCount = 1;
         }
 
         for (let i = 0; i < this.repeatCount; i++) {
-          Commands.commands[commandName].fn();
+          command.fn();
         }
         this.repeatCount = null;
       }
