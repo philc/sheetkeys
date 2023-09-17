@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SheetKeys",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Adds powerful keyboard shortcuts to Google Sheets, in the spirit of the Vim text editor.",
   "permissions": [
     "storage"
