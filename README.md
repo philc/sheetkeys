@@ -100,8 +100,9 @@ Here is a partial list:
 
 **Repeating commands**
 
-SheetKeys supports command repetition. For example, hitting `5s` will insert 5 rows into the sheet
-rather than one.
+SheetKeys supports command repetition. For example, typing `5s` will insert 5 rows into the sheet
+rather than one. Due to the integration with Google Sheets, undoing a repeated command will undo it
+one step at a time.
 
 ## Other usability improvements to Google Sheets
 
