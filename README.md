@@ -98,6 +98,11 @@ Here is a partial list:
     ;,w,f  Toggle full screen
     ;o     Open URL in cell in a new tab
 
+**Repeating commands**
+
+SheetKeys supports command repetition. For example, hitting `5s` will insert 5 rows into the sheet
+rather than one.
+
 ## Other usability improvements to Google Sheets
 
 * In Google Sheets, when editing a cell, typing ESC erases all of the changes you've made, and your
