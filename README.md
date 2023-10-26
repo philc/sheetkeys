@@ -92,6 +92,13 @@ Here is a partial list:
     ;,f,r  Freeze row
     ;,f,c  Freeze column
 
+**Tabs**
+
+    >,>    Move tab right
+    <,<    Move tab left
+    K      Next tab
+    J      Previous tab
+
 **Other**
 
     ?      Show the help dialog
