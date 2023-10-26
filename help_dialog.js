@@ -230,7 +230,7 @@ class HelpDialog {
     const commandsByGroup = this.getCommandsByGroup();
 
     // These are the order in which they'll be shown in the dialog.
-    const groups = ["movement", "selection", "editing", "formatting", "other"];
+    const groups = ["movement", "selection", "editing", "formatting", "tabs", "other"];
 
     const capitalize = function (str) {
       const lower = str.toLowerCase();
