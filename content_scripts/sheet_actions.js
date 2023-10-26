@@ -458,15 +458,23 @@ const SheetActions = {
 
   // Merging cells
   mergeAllCells() {
+    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
+    this.clickToolbarButton(["Select merge type"])
     this.clickMenu(this.menuItems.mergeAll);
   },
   mergeCellsHorizontally() {
+    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
+    this.clickToolbarButton(["Select merge type"])
     this.clickMenu(this.menuItems.mergeHorizontally);
   },
   mergeCellsVertically() {
+    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
+    this.clickToolbarButton(["Select merge type"])
     this.clickMenu(this.menuItems.mergeVertically);
   },
   unmergeCells() {
+    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
+    this.clickToolbarButton(["Select merge type"])
     this.clickMenu(this.menuItems.unmerge);
   },
 
