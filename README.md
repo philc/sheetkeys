@@ -43,7 +43,7 @@ Here is a partial list:
 
     C-d    Scroll half page down
     C-u    Scroll half page up
-    g,g    Scroll to the top of the sheet
+    gg    Scroll to the top of the sheet
     G      Scroll to the bottom of the sheet
 
 **Selection**
@@ -64,45 +64,45 @@ Here is a partial list:
     s      Insert a row below the cursor
     S      Insert a row above the cursor
 
-    d,d    Delete the current row (or selected rows/columns)
+    dd    Delete the current row (or selected rows/columns)
     x      Delete cell contents
-    y,y    Copy the current row (or selected rows/columns)
-    y,c    Copy cells
+    yy    Copy the current row (or selected rows/columns)
+    yc    Copy cells
     p      Paste
 
-    ;,m,a  Merge selected cells
-    ;,m,h  Merge selected cells horizontally
-    ;,m,v  Merge selected cells vertically
+    ;ma  Merge selected cells
+    ;mh  Merge selected cells horizontally
+    ;mv  Merge selected cells vertically
 
 **Formatting**
 
-    ;,a,l  Align left
-    ;,a,c  Align center
-    ;,a,r  Align right
+    ;al  Align left
+    ;ac  Align center
+    ;ar  Align right
 
-    ;,w,w  Wrap cell
-    ;,w,w  Overflow the cell
-    ;,w,c  Clip the cell
+    ;ww  Wrap cell
+    ;ww  Overflow the cell
+    ;wc  Clip the cell
 
 
-    ;,f,s  Set font size to small
-    ;,f,n  Set font size to normal
-    ;,f,l  Set font size to large
+    ;fs  Set font size to small
+    ;fn  Set font size to normal
+    ;fl  Set font size to large
 
-    ;,f,r  Freeze row
-    ;,f,c  Freeze column
+    ;fr  Freeze row
+    ;fc  Freeze column
 
 **Tabs**
 
-    >,>    Move tab right
-    <,<    Move tab left
+    >>    Move tab right
+    <<    Move tab left
     K      Next tab
     J      Previous tab
 
 **Other**
 
     ?      Show the help dialog
-    ;,w,f  Toggle full screen
+    ;wf  Toggle full screen
     ;o     Open URL in cell in a new tab
 
 **Repeating commands**
