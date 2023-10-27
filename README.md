@@ -125,6 +125,8 @@ one step at a time.
   which provides a quick shortcut for reloading all of your locally-developed extensions. See
   [here](http://stackoverflow.com/a/12767200/46237) for further info.
 * Refresh your Google Sheets page after reloading the SheetKeys extension in Chrome.
+* If you want to load this extension in Firefox from source, run `./make.js write-firefox-manifest`
+  to get a Firefox-compatible manifest.json. Then navigate to `about:debugging` and add Vimium.
 
 ## Release notes
 
