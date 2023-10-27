@@ -456,25 +456,28 @@ const SheetActions = {
     this.unselectRow();
   },
 
+  // This must be called prior to invoking any of the merge menu items. It fills a similar role to
+  // activateMenu: it forces the creation of the menu items when the browser window is too small.
+  // See #37.
+  prepareMergeMenu() {
+    this.clickToolbarButton(["Select merge type"])
+  },
+
   // Merging cells
   mergeAllCells() {
-    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
-    this.clickToolbarButton(["Select merge type"])
+    this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeAll);
   },
   mergeCellsHorizontally() {
-    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
-    this.clickToolbarButton(["Select merge type"])
+    this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeHorizontally);
   },
   mergeCellsVertically() {
-    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
-    this.clickToolbarButton(["Select merge type"])
+    this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeVertically);
   },
   unmergeCells() {
-    // This call is so that the merge types are loaded. Fills a similar function to activateMenu.
-    this.clickToolbarButton(["Select merge type"])
+    this.prepareMergeMenu();
     this.clickMenu(this.menuItems.unmerge);
   },
 
