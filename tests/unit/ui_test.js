@@ -1,5 +1,5 @@
-import * as shoulda from "../vendor/shoulda.js";
-import { assert, context, should } from "../vendor/shoulda.js";
+import * as shoulda from "https://deno.land/x/shoulda@v2.0/shoulda.js";
+const { assert, context, should } = shoulda;
 import "../../content_scripts/sheet_actions.js";
 import "../../content_scripts/commands.js";
 import "../../content_scripts/ui.js";
