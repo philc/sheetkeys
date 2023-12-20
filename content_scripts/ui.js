@@ -224,7 +224,8 @@ const UI = {
 
         const command = Commands.commands[commandName];
 
-        if (this.repeatCount === null || command.nonRepeatable) {
+        // Note: use of == to check for either undefined or null
+        if (this.repeatCount == null || command.nonRepeatable) {
           this.repeatCount = 1;
         }
 
