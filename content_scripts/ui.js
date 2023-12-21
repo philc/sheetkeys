@@ -183,8 +183,11 @@ const UI = {
 
     // if keystring is a number, add it to the repeatCount
     if (SheetActions.mode === "normal" && keyString.match(/^\d+$/)) {
-      if (!this.repeatCount) {
-        this.repeatCount = parseInt(keyString);
+      if (this.repeatCount == null) {
+        const count = parseInt(keyString);
+        if (count != 0) {
+          this.repeatCount = count;
+        }
       } else {
         this.repeatCount = this.repeatCount * 10 + parseInt(keyString);
         if (this.repeatCount > 99) {
