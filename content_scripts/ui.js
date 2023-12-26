@@ -17,17 +17,18 @@ const addOneTimeListener = function (dispatcher, eventType, listenerFn) {
   return dispatcher.addEventListener(eventType, handlerFn, true);
 };
 
-const UI = {
-  // An arbitrary limit that should instead be equal to the longest key sequence that's actually
-  // bound.
-  maxKeyMappingLength: 6,
+// An arbitrary limit that should instead be equal to the longest key sequence that's actually
+// bound.
+const MAX_KEY_MAPPING_LENGTH = 6;
+const RICH_TEXT_EDITOR_ID = "waffle-rich-text-editor";
+
+class UI {
   // Keys which were typed recently
-  keyQueue: [],
+  keyQueue = [];
   // A map of mode -> comma-separated keys -> bool. The keys are prefixes to the user's bound key
   // mappings.
-  keyMappingsPrefixes: null,
-  richTextEditorId: "waffle-rich-text-editor",
-  modeToKeyToCommand: null,
+  keyMappingsPrefixes = null;
+  modeToKeyToCommand = null;
 
   init() {
     this.injectPageScript();
@@ -52,7 +53,7 @@ const UI = {
         this.loadKeyMappings();
       }
     });
-  },
+  }
 
   async loadKeyMappings() {
     const mappings = await Settings.loadUserKeyMappings();
@@ -73,7 +74,7 @@ const UI = {
     }
 
     this.keyMappingsPrefixes = this.buildKeyMappingsPrefixes(mappings);
-  },
+  }
 
   // We inject the page_script into the page so that we can simulate keypress events, which must be
   // done by a page script, and not a content script.
@@ -82,29 +83,29 @@ const UI = {
     const script = document.createElement("script");
     script.src = chrome.runtime.getURL("page_scripts/page_script.js");
     return document.documentElement.appendChild(script);
-  },
+  }
 
   isEditable(el) {
     // Note that the window object doesn't have a tagname.
-    const tagName = (el.tagName ? el.tagName.toLowerCase() : null);
+    const tagName = el.tagName ? el.tagName.toLowerCase() : null;
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
-  },
+  }
 
   onFocus(_event) {
     if (!this.editor) this.setupEditor();
     const el = event.target;
-    if (el.id === this.richTextEditorId) {
+    if (el.id === RICH_TEXT_EDITOR_ID) {
       if (SheetActions.mode === "disabled") {
         SheetActions.setMode("normal");
       }
     } else if (this.isEditable(el)) {
       SheetActions.setMode("disabled");
     }
-  },
+  }
 
   setupEditor() {
     if (!this.editor) {
-      this.editor = document.getElementById(this.richTextEditorId);
+      this.editor = document.getElementById(RICH_TEXT_EDITOR_ID);
       if (this.editor) {
         // Listen for when the editor's style attribute changes. This indicates that a cell is now
         // being edited, perhaps due to double clicking into a cell.
@@ -122,7 +123,7 @@ const UI = {
     }
 
     return this.editor;
-  },
+  }
 
   isEditorEditing() {
     if (!this.editor) return false;
@@ -131,7 +132,7 @@ const UI = {
     // attribute to portray the cell editor input box.
     const style = this.editor.parentNode.getAttribute("style");
     return style != null && style != "";
-  },
+  }
 
   // Returns a map of (partial keyString) => is_bound?
   // Note that the keys only include partial keystrings for mappings. So the mapping "d•a•p" will
@@ -153,12 +154,12 @@ const UI = {
       }
     }
     return prefixes;
-  },
+  }
 
   cancelEvent(e) {
     e.preventDefault();
     e.stopPropagation();
-  },
+  }
 
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
@@ -203,12 +204,14 @@ const UI = {
     // There are keymaps for two different modes: insert and normal. When we're in one of the visual
     // modes, use the normal keymap. The commands themselves may implement mode-specific behavior.
     const modeToUse = SheetActions.mode == "insert" ? "insert" : "normal";
-    if (this.keyQueue.length > this.maxKeyMappingLength) this.keyQueue.shift();
+    if (this.keyQueue.length > MAX_KEY_MAPPING_LENGTH) {
+      this.keyQueue.shift();
+    }
     const modeMappings = this.modeToKeyToCommand[modeToUse] || [];
     const modePrefixes = this.keyMappingsPrefixes[modeToUse] || [];
     // See if a bound command matches the typed key sequence. If so, execute it.
     // Prioritize longer mappings over shorter mappings.
-    for (let i = Math.min(this.maxKeyMappingLength, this.keyQueue.length); i >= 1; i--) {
+    for (let i = Math.min(MAX_KEY_MAPPING_LENGTH, this.keyQueue.length); i >= 1; i--) {
       const keySequence = this.keyQueue.slice(this.keyQueue.length - i, this.keyQueue.length).join(
         Commands.KEY_SEPARATOR,
       );
@@ -238,7 +241,7 @@ const UI = {
         this.repeatCount = null;
       }
     }
-  },
+  }
 
   // modifiers: Optional; an object with these boolean properties: meta, shift, control.
   typeKey(keyCode, modifiers) {
@@ -251,7 +254,7 @@ const UI = {
     });
     window.dispatchEvent(new CustomEvent("sheetkeys-simulate-key-event", {}));
     this.ignoreKeys = false;
-  },
+  }
 
   reflowGrid() {
     // When you hide a DOM element, Google's Waffle grid doesn't know to reflow and take up the full
@@ -260,12 +263,13 @@ const UI = {
     const exploreButton = document.querySelector(".waffle-assistant-entry [role=button]");
     KeyboardUtils.simulateClick(exploreButton);
     KeyboardUtils.simulateClick(exploreButton); // Click twice to show and then hide.
-  },
-};
+  }
+}
 
 // Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
 if (window.document && !document.location.pathname.endsWith("harness.html")) {
-  UI.init();
+  UI.instance = new UI();
+  UI.instance.init();
 }
 
 window.UI = UI;

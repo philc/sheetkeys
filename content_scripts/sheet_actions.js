@@ -276,7 +276,7 @@ const SheetActions = {
   unselectRow() {
     const oldY = this.cellCursorY();
     // Typing any arrow key will unselect the current selection.
-    UI.typeKey(KeyboardUtils.keyCodes.down);
+    this.typeKeyFn(KeyboardUtils.keyCodes.down);
     // If the cursor moved after we typed our arrow key, undo this selection change.
     if (oldY !== this.cellCursorY()) {
       this.typeKeyFn(KeyboardUtils.keyCodes.up);
@@ -750,10 +750,10 @@ const SheetActions = {
   },
 
   async showHelpDialog() {
-    UI.ignoreKeys = true;
+    UI.instance.ignoreKeys = true;
     const h = new HelpDialog();
     h.addEventListener("hide", () => {
-      UI.ignoreKeys = false;
+      UI.instance.ignoreKeys = false;
     });
     await h.show();
   },

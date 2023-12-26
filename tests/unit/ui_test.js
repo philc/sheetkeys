@@ -11,6 +11,7 @@ context("UI", () => {
   });
 
   should("buildKeyMappingsPrefixes", () => {
+    const ui = new UI();
     const mappings = {
       "normal": {
         "moveUp": "a•b•c",
@@ -19,7 +20,7 @@ context("UI", () => {
         "moveDown": "z",
       },
     };
-    const result = UI.buildKeyMappingsPrefixes(mappings);
+    const result = ui.buildKeyMappingsPrefixes(mappings);
     assert.equal({ "a": true, "a•b": true, "x": true }, result["normal"]);
   });
 });
