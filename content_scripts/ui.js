@@ -195,7 +195,6 @@ class UI {
           this.repeatCount = 99;
         }
       }
-      // console.log("repeatCount:", this.repeatCount);
       this.cancelEvent(e);
       return;
     }
@@ -223,7 +222,7 @@ class UI {
         return;
       }
 
-      commandName = modeMappings[keySequence];
+      const commandName = modeMappings[keySequence];
       if (commandName) {
         this.keyQueue = [];
         this.cancelEvent(e);

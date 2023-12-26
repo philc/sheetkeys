@@ -20,7 +20,7 @@ const keyCodes = {
   f12: 123,
 };
 
-window.KeyboardUtils = {
+globalThis.KeyboardUtils = {
   keyCodes: keyCodes,
 
   // A map of keyCode => keyName (a reverse map of keyCodes).

@@ -53,3 +53,5 @@ const Settings = {
     return mappings;
   },
 };
+
+globalThis.Settings = Settings;
