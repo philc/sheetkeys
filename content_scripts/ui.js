@@ -229,7 +229,6 @@ class UI {
 
         const command = Commands.commands[commandName];
 
-        // Note: use of == to check for either undefined or null
         if (this.repeatCount == null || command.nonRepeatable) {
           this.repeatCount = 1;
         }
