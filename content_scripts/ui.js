@@ -91,7 +91,7 @@ class UI {
     return el.isContentEditable || tagName === "input" || tagName === "textarea";
   }
 
-  onFocus(_event) {
+  onFocus(event) {
     if (!this.editor) this.setupEditor();
     const el = event.target;
     if (el.id === RICH_TEXT_EDITOR_ID) {
