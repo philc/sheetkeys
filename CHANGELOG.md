@@ -1,3 +1,8 @@
+0.4 (2023-12-25)
+
+* Show the tabs section in the README
+* Bug fixes
+
 0.3 (2023-09-16)
 
 * Fix the "wordwrap clip" command in latest version of Sheets.
