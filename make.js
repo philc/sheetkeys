@@ -29,7 +29,7 @@ function createFirefoxManifest(manifest) {
   // As of 2023-07-08 Firefox doesn't yet support background.service_worker.
   delete manifest.background["service_worker"];
   Object.assign(manifest.background, {
-    "scripts": ["background_scripts/background.js"],
+    "scripts": ["background_script.js"],
   });
 
   Object.assign(manifest, {
@@ -66,10 +66,10 @@ async function buildStorePackage() {
     "tests",
   ];
 
-  const manifestContents = await parseManifestFile();
+  const chromeManifest = await parseManifestFile();
 
   // Ensure the manifest does not contain the options_page key. That is only used in development.
-  if (manifestContents["options_page"]) {
+  if (chromeManifest["options_page"]) {
     throw new Error(
       "The 'options_page' key in manifest.json should be commented out. It's used only in " +
         "develompent for testing purposes.",
@@ -77,12 +77,13 @@ async function buildStorePackage() {
   }
 
   await shell("rm", ["-rf", "dist/sheetkeys"]);
-  await shell("mkdir", ["-p", "dist/sheetkeys", "dist/chrome-store"]);
+  await shell("mkdir", ["-p", "dist/sheetkeys", "dist/chrome-store", "dist/firefox"]);
   const rsyncOptions = ["-r", ".", "dist/sheetkeys"].concat(
     ...excludeList.map((item) => ["--exclude", item]),
   );
   await shell("rsync", rsyncOptions);
 
+  const version = chromeManifest["version"];
   const writeDistManifest = async (manifestObject) => {
     await Deno.writeTextFile(
       "dist/sheetkeys/manifest.json",
@@ -90,19 +91,22 @@ async function buildStorePackage() {
     );
   };
 
-  writeDistManifest(manifestContents);
-
   // cd into "dist/sheetkeys" before building the zip, so that the files in the zip don't each have
   // the path prefix "dist/sheetkeys".
   // --filesync ensures that files in the archive which are no longer on disk are deleted. It's
   // equivalent to removing the zip file before the build.
   const zipCommand = "cd dist/sheetkeys && zip -r --filesync ";
 
-  const sheetkeysVersion = manifestContents["version"];
+  // Build the Firefox package
+  const firefoxManifest = createFirefoxManifest(chromeManifest);
+  await writeDistManifest(firefoxManifest);
+  await shell("bash", ["-c", `${zipCommand} ../firefox/sheetkeys-firefox-${version}.zip .`]);
+
   // Build the Chrome Store package.
+  writeDistManifest(chromeManifest);
   await shell("bash", [
     "-c",
-    `${zipCommand} ../chrome-store/sheetkeys-chrome-store-${sheetkeysVersion}.zip .`,
+    `${zipCommand} ../chrome-store/sheetkeys-chome-store-${version}.zip .`,
   ]);
 }
 
