@@ -467,18 +467,22 @@ const SheetActions = {
   mergeAllCells() {
     this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeAll);
+    this.exitMode();
   },
   mergeCellsHorizontally() {
     this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeHorizontally);
+    this.exitMode();
   },
   mergeCellsVertically() {
     this.prepareMergeMenu();
     this.clickMenu(this.menuItems.mergeVertically);
+    this.exitMode();
   },
   unmergeCells() {
     this.prepareMergeMenu();
     this.clickMenu(this.menuItems.unmerge);
+    this.exitMode();
   },
 
   //
