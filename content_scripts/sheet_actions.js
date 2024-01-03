@@ -730,10 +730,23 @@ const SheetActions = {
       });
     } else {
       const text = formulaBar.textContent.trim();
-      const functionMatch = text.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
-      // Case 2: Usage of the 'HYPERLINK("url", "caption")' function
+      const functionMatch = text.match(/HYPERLINK\("(.+?)"/i);
+      // Case 2: Usage of the 'HYPERLINK()' function
       if (functionMatch) {
-        window.open(functionMatch[1], "_blank");
+        const hashMatch = functionMatch[1].match(/^#/);
+        if (hashMatch) {
+          // It's a hashmark link, intended to move to a section on this page;
+          // so set the current page's hash to be this new hash.
+          window.location.hash = functionMatch[1];
+
+          // For some reason, we have to commit cell changes here;
+          // otherwise if changing the hash moves to a different cell,
+          // the new cell will be selected in insert mode.
+          this.commitCellChanges();
+        } else {
+          // Assume it's an external link, and open it in a new tab.
+          window.open(functionMatch[1], "_blank");
+        }
       } else {
         const urlMatches = text.match(/(https?:\/\/[^\s]+)/g);
         // Case 3: Raw link(s) in the cell's plain text
