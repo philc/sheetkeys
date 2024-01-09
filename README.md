@@ -10,14 +10,17 @@ If you are a project manager, programmer, finance person, or just someone who us
 lot, this can greatly increase your efficiency in Google Sheets.
 
 (If you are using SheetKeys with [Vimium](https://github.com/philc/vimium), disable Vimium on Google
-Sheets so its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in
-Chrome's toolbar, enter `https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern,
+Sheets so its key mappings don't collide with SheetKeys. To do so, click on the Vimium icon in your
+browser's toolbar, enter `https?://docs.google.com/spreadsheets/*` for the excluded sites Pattern,
 and click Save.)
 
 ## How to install
 
-Install on the
-[Chrome web store](https://chrome.google.com/webstore/detail/sheetkeys/dnckajfoijllhbnfdhdklcfpckcbonhi).
+* Chrome:
+  [Chrome web store](https://chrome.google.com/webstore/detail/sheetkeys/dnckajfoijllhbnfdhdklcfpckcbonhi)
+* Edge:
+  [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/sheetkeys/ekpdiiifhofjohmblmajadhemckcjice)
+* Firefox: [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/sheetkeys/)
 
 To install from source, see
 [here](https://github.com/philc/sheetkeys/wiki/How-to-install-from-source).
@@ -133,7 +136,7 @@ one step at a time.
   [here](http://stackoverflow.com/a/12767200/46237) for further info.
 * Refresh your Google Sheets page after reloading the SheetKeys extension in Chrome.
 * If you want to load this extension in Firefox from source, run `./make.js write-firefox-manifest`
-  to get a Firefox-compatible manifest.json. Then navigate to `about:debugging` and add Vimium.
+  to get a Firefox-compatible manifest.json. Then navigate to `about:debugging` and add SheetKeys.
 
 ## Release notes
 

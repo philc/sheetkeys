@@ -2,6 +2,7 @@
 
 * Show the tabs section in the README
 * Bug fixes
+* Release for Firefox and Edge browsers
 
 0.3 (2023-09-16)
 
