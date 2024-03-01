@@ -1,5 +1,15 @@
 {
   "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@philc/shoulda@^2.0.0": "jsr:@philc/shoulda@2.0.0"
+    },
+    "jsr": {
+      "@philc/shoulda@2.0.0": {
+        "integrity": "2bc8b2eb9e5dee41fcd77760b009d3b3527980edf5b29cbf9f25443489a5faa9"
+      }
+    }
+  },
   "redirects": {
     "https://deno.land/x/json5/mod.ts": "https://deno.land/x/json5@v1.0.0/mod.ts",
     "https://deno.land/x/shoulda/shoulda.js": "https://deno.land/x/shoulda@v2.0/shoulda.js"
@@ -39,7 +49,11 @@
     "https://deno.land/x/drake@v1.5.1/lib/tasks.ts": "4da700366fe15881c665e90d1668b60aafe0af2e0c8d10c2a48739986f971fcc",
     "https://deno.land/x/drake@v1.5.1/lib/utils.ts": "55e56f4f0fb119374ae063a907e2bbe325443f6ea9f88408612ac619ac617fdc",
     "https://deno.land/x/drake@v1.5.1/mod.ts": "56d43e13b0c80dbb473944b5554567592299bba228947c6b3c9dc0f68a217d74",
-    "https://deno.land/x/json5@v1.0.0/mod.ts": "0975ee46086985b2e354e901d052f50b3c4b0ed828d0563492b6a02589402574",
-    "https://deno.land/x/shoulda@v2.0/shoulda.js": "d42d0b414e2dba1d2b9e566e0fc39bbf4c4e305e55c70324a5658490d663adbd"
+    "https://deno.land/x/json5@v1.0.0/mod.ts": "0975ee46086985b2e354e901d052f50b3c4b0ed828d0563492b6a02589402574"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@philc/shoulda@^2.0.0"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-import * as shoulda from "https://deno.land/x/shoulda@v2.0/shoulda.js";
+import * as shoulda from "@philc/shoulda";
 const { assert, context, setup, should, stub } = shoulda;
 import "../../content_scripts/settings.js";
 import "../../content_scripts/sheet_actions.js";

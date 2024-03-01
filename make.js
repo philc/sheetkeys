@@ -3,7 +3,7 @@
 // This is a set of tasks for building and testing SheetKeys in development.
 import * as path from "https://deno.land/std@0.136.0/path/mod.ts";
 import { desc, run, task } from "https://deno.land/x/drake@v1.5.1/mod.ts";
-import * as shoulda from "https://deno.land/x/shoulda@v2.0/shoulda.js";
+import * as shoulda from "@philc/shoulda";
 import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
 
 const projectPath = new URL(".", import.meta.url).pathname;
