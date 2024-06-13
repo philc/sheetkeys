@@ -1,3 +1,10 @@
+0.5 (2024-06-12)
+
+* Make compatible with the latest version of Google Sheets
+  ([#53](https://github.com/philc/sheetkeys/issues/53))
+* After merging/unmerging cells, go back to normal mode
+  ([#45](https://github.com/philc/sheetkeys/issues/45))
+
 0.4 (2023-12-25)
 
 * Show the tabs section in the README
