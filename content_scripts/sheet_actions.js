@@ -10,9 +10,11 @@ const SheetActions = {
     // number. When multiple rows are selected, the capture is "Rows X(D)".
     deleteRow: { parent: "Edit", caption: /^Row[s]? \d+\(D\)/ },
     deleteValues: { parent: "Edit", caption: "Values" },
-    fontSize8: { parent: "Format", caption: /^8$/ },
-    fontSize10: { parent: "Format", caption: /^10$/ },
-    fontSize12: { parent: "Format", caption: /^12$/ },
+    // In the font size menus, these digits in parentheses don't show up in the UI, but they do when
+    // printing the menu item element's innerText programmatically.
+    fontSize8: { parent: "Format", caption: "8(3)" },
+    fontSize10: { parent: "Format", caption: "10(5)" },
+    fontSize12: { parent: "Format", caption: "12(7)" },
     fontSizeMenu: { parent: "Format", caption: "Font size►" },
     freeze: { parent: "View", caption: "Freeze►" },
     // This is a sub-item of the "Freeze" menu.
