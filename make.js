@@ -106,7 +106,7 @@ async function buildStorePackage() {
   writeDistManifest(chromeManifest);
   await shell("bash", [
     "-c",
-    `${zipCommand} ../chrome-store/sheetkeys-chome-store-${version}.zip .`,
+    `${zipCommand} ../chrome-store/sheetkeys-chrome-store-${version}.zip .`,
   ]);
 }
 
