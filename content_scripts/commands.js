@@ -7,6 +7,27 @@ const Commands = {
   // in this map.
   commands: {
     // Cursor movement
+
+moveToLastNonEmptyInRow: {
+  fn: SheetActions.moveToLastNonEmptyInRow.bind(SheetActions),
+  name: "Move to last non-empty cell in row",
+  group: "movement",
+},
+moveToFirstNonEmptyInRow: {
+  fn: SheetActions.moveToFirstNonEmptyInRow.bind(SheetActions),
+  name: "Move to first non-empty cell in row",
+  group: "movement",
+},
+moveToTopNonEmptyInColumn: {
+  fn: SheetActions.moveToTopNonEmptyInColumn.bind(SheetActions),
+  name: "Move to top non-empty cell in column",
+  group: "movement",
+},
+moveToBottomNonEmptyInColumn: {
+  fn: SheetActions.moveToBottomNonEmptyInColumn.bind(SheetActions),
+  name: "Move to bottom non-empty cell in column",
+  group: "movement",
+},
     moveUp: {
       fn: SheetActions.moveUp.bind(SheetActions),
       name: "Move up",
@@ -386,6 +407,10 @@ const Commands = {
 
   defaultMappings: {
     "normal": {
+      "moveToLastNonEmptyInRow": "<A-l>",
+      "moveToFirstNonEmptyInRow": "<A-h>",
+      "moveToTopNonEmptyInColumn": "<A-k>",
+      "moveToBottomNonEmptyInColumn": "<A-j>",
       // Cursor movement
       "moveUp": "k",
       "moveDown": "j",

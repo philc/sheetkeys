@@ -310,6 +310,22 @@ const SheetActions = {
   //
   // Movement
   //
+    moveToLastNonEmptyInRow() {
+      this.typeKeyFn(KeyboardUtils.keyCodes.right, { control: true });
+    },
+
+    moveToFirstNonEmptyInRow() {
+      this.typeKeyFn(KeyboardUtils.keyCodes.left, { control: true });
+    },
+
+    moveToTopNonEmptyInColumn() {
+      this.typeKeyFn(KeyboardUtils.keyCodes.up, { control: true });
+    },
+
+    moveToBottomNonEmptyInColumn() {
+      this.typeKeyFn(KeyboardUtils.keyCodes.down, { control: true });
+    },
+
   moveUp() {
     const keyOptions = (this.mode == "normal") ? {} : { shift: true };
     this.typeKeyFn(KeyboardUtils.keyCodes.up, keyOptions);
