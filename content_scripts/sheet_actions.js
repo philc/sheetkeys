@@ -760,8 +760,6 @@ const SheetActions = {
     // Case 1: Embedded links
     if (embeddedLinks.length > 0) {
       embeddedLinks.forEach((el) => {
-        console.log(el);
-        console.log(el.dataset.sheetsFormulaBarTextLink);
         window.open(el.dataset.sheetsFormulaBarTextLink, "_blank");
       });
     } else {
@@ -809,4 +807,4 @@ const assert = (expression, ...messages) => {
   }
 };
 
-window.SheetActions = SheetActions;
+globalThis.SheetActions = SheetActions;
