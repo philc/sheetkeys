@@ -752,35 +752,64 @@ const SheetActions = {
 
   // Opens a new tab for each link in the current cell.
   openCellAsUrl() {
-    // Focus the current cell, which causes the <a> elements to appear in the formula bar DOM:
+    // Begin editing the current cell, which causes the <a> elements to appear in the formula bar
+    // DOM:
     this.typeKeyFn(KeyboardUtils.keyCodes.enter);
+
+    const openUrl = (text) => {
+      // The cell's URL might be a reference to a cell and/or another tab in this sheet. If so, we
+      // should jump directly to it rather than opening a new tab.
+      //
+      // The reference to a cell can either be just a fragment, e.g. "#A1", or a full url with a
+      // fragment at the end. In Sheets, right clicking on a cell and selecting "get link to this
+      // cell" copies to the clipboard the full URL of the sheet, with tab and cell as fragments.
+      const urlWithoutFragment = (url) => {
+        if (url == null) return;
+        return url.origin + url.pathname;
+      };
+
+      let url;
+      try {
+        url = URL.parse(text);
+      } catch (error) {}
+
+      const isLinkToCell = text.startsWith("#") ||
+        (url?.hash && urlWithoutFragment(url) == urlWithoutFragment(window.location));
+      if (isLinkToCell) {
+        window.location.hash = url?.hash || text;
+      } else {
+        window.open(text, "_blank");
+      }
+    };
 
     const formulaBar = document.querySelector("#t-formula-bar-input-container .cell-input");
     const embeddedLinks = formulaBar.querySelectorAll("a");
-    // Case 1: Embedded links
+    const formulaText = formulaBar.textContent.trim();
+    // Now that we have the cell's content, we can exit from editing the cell.
+    this.typeKeyFn(KeyboardUtils.keyCodes.esc);
+
+    // Case 1: embedded links (anchor tags).
     if (embeddedLinks.length > 0) {
       embeddedLinks.forEach((el) => {
-        window.open(el.dataset.sheetsFormulaBarTextLink, "_blank");
+        openUrl(el.dataset.sheetsFormulaBarTextLink);
       });
     } else {
-      const text = formulaBar.textContent.trim();
-      const functionMatch = text.match(/HYPERLINK\("(.+?)"[^"]+".+?"\)/i);
-      // Case 2: Usage of the 'HYPERLINK("url", "caption")' function
-      if (functionMatch) {
-        window.open(functionMatch[1], "_blank");
+      // Case 2: Usage of the 'HYPERLINK("url", "caption")' function. The caption is optional.
+      // Extract the URL within the first set of quotes.
+      const hyperlinkMatch = formulaText.match(/HYPERLINK\("([^"]+)"/i);
+      if (hyperlinkMatch) {
+        const url = hyperlinkMatch[1];
+        openUrl(url);
       } else {
-        const urlMatches = text.match(/(https?:\/\/[^\s]+)/g);
-        // Case 3: Raw link(s) in the cell's plain text
+        const urlMatches = formulaText.match(/(https?:\/\/[^\s]+)/g);
+        // Case 3: Raw link(s) in the cell's plain text.
         if (urlMatches) {
           urlMatches.forEach((url) => {
-            window.open(url, "_blank");
+            openUrl(url);
           });
         }
       }
     }
-
-    // Finally, unfocus the current cell:
-    this.commitCellChanges();
   },
 
   async showHelpDialog() {

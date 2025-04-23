@@ -46,6 +46,22 @@ context("openCellAsUrl", () => {
     assert.equal(["example.com"], opened);
   });
 
+  should("open HYPERLINK formulas which are cell references", () => {
+    const html = `<div id='t-formula-bar-input-container'>
+      <div class='cell-input'>
+        hello HYPERLINK("#gid=123&range=A9") world
+      </div>
+    </div>`;
+    jsdomStub(html);
+    const opened = [];
+    stub(window, "open", (url) => {
+      opened.push(url);
+    });
+    SheetActions.openCellAsUrl();
+    assert.equal([], opened);
+    assert.equal("#gid=123&range=A9", window.location.hash);
+  });
+
   should("open URL-like strings", () => {
     const html = `<div id='t-formula-bar-input-container'>
       <div class='cell-input'>
