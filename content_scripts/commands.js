@@ -489,4 +489,4 @@ const Commands = {
   },
 };
 
-window.Commands = Commands;
+globalThis.Commands = Commands;

@@ -1,5 +1,5 @@
 // Utilities
-window.invertObjectMap = (o) => {
+globalThis.invertObjectMap = (o) => {
   const o2 = {};
   for (const k of Object.keys(o)) {
     const v = o[k];
@@ -265,9 +265,9 @@ class UI {
 }
 
 // Don't initialize this Sheets UI if this code is being loaded from our extension's options page.
-if (window.document && !document.location.pathname.endsWith("harness.html")) {
+if (globalThis.document && !globalThis.document.location.pathname.endsWith("harness.html")) {
   UI.instance = new UI();
   UI.instance.init();
 }
 
-window.UI = UI;
+globalThis.UI = UI;
