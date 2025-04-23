@@ -1,10 +1,11 @@
 #!/usr/bin/env deno run --allow-read --allow-write --allow-env --allow-net --allow-run
 // Usage: ./make.js command. Use -l to list commands.
 // This is a set of tasks for building and testing SheetKeys in development.
-import * as path from "https://deno.land/std@0.136.0/path/mod.ts";
+import * as fs from "@std/fs";
+import * as path from "@std/path";
 import { desc, run, task } from "https://deno.land/x/drake@v1.5.1/mod.ts";
 import * as shoulda from "@philc/shoulda";
-import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
+import JSON5 from "json5";
 
 const projectPath = new URL(".", import.meta.url).pathname;
 

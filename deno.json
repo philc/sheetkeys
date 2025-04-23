@@ -4,6 +4,9 @@
   },
   "imports": {
     "@philc/shoulda": "jsr:@philc/shoulda@^2.0.0",
-    "jsdom": "npm:jsdom@^26.1.0"
+    "@std/fs": "jsr:@std/fs@^1.0.16",
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "jsdom": "npm:jsdom@^26.1.0",
+    "json5": "npm:json5@^2.2.3"
   }
 }
