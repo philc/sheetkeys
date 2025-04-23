@@ -2,5 +2,8 @@
   "fmt": {
     "lineWidth": 100
   },
-  "imports": { "@philc/shoulda": "jsr:@philc/shoulda@^2.0.0" }
+  "imports": {
+    "@philc/shoulda": "jsr:@philc/shoulda@^2.0.0",
+    "jsdom": "npm:jsdom@^26.1.0"
+  }
 }
