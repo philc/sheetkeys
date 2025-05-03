@@ -95,6 +95,10 @@ Here is a partial list:
     ;fr  Freeze row
     ;fc  Freeze column
 
+    ;c[x] where x is the starting name of the color
+          for eg: ;cr turns the color of the cell to red
+
+
 **Tabs**
 
     >>    Move tab right
