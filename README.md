@@ -69,8 +69,8 @@ Here is a partial list:
 
     dd    Delete the current row (or selected rows/columns)
     x      Delete cell contents
-    yy    Copy the current row (or selected rows/columns)
-    yc    Copy cells
+    yy    Copy the current row (or selected rows/columns); NOTE: This shortcut is broken as of 7/12/2024. It Copies the URL instead.
+    yc    Copy cells; NOTE: This shortcut is broken as of 7/12/2024. It Copies the URL instead.
     p      Paste
 
     ;ma  Merge selected cells
