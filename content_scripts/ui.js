@@ -92,7 +92,9 @@ class UI {
   }
 
   onFocus(event) {
-    if (!this.editor) this.setupEditor();
+    if (!this.editor) {
+      this.setupEditor();
+    }
     const el = event.target;
     if (el.id === RICH_TEXT_EDITOR_ID) {
       if (SheetActions.mode === "disabled") {
@@ -126,7 +128,9 @@ class UI {
   }
 
   isEditorEditing() {
-    if (!this.editor) return false;
+    if (!this.editor) {
+      return false;
+    }
     // There's no obvious way to determine directly that the cell editor is currently editing a
     // cell. However, when this happens, the parent node of the editor gets a big long style
     // attribute to portray the cell editor input box.
@@ -145,7 +149,9 @@ class UI {
       for (const command of Object.keys(modeKeyMappings)) {
         const keyString = modeKeyMappings[command];
         // If the bound action is null, then treat this key as unbound.
-        if (!keyString) continue;
+        if (!keyString) {
+          continue;
+        }
         const keys = keyString.split(Commands.KEY_SEPARATOR);
         for (let i = 0; i < keys.length - 1; i++) {
           const prefix = keys.slice(0, i + 1).join(Commands.KEY_SEPARATOR);
@@ -164,10 +170,14 @@ class UI {
   onKeydown(e) {
     const keyString = KeyboardUtils.getKeyString(e);
     // console.log("keydown event. keyString:", keyString, e.keyCode, e.keyIdentifier, e);
-    if (this.ignoreKeys || SheetActions.mode == "disabled") return;
+    if (this.ignoreKeys || SheetActions.mode == "disabled") {
+      return;
+    }
 
     // Ignore key presses which are just modifiers.
-    if (!keyString) return;
+    if (!keyString) {
+      return;
+    }
 
     // In replace mode, we're waiting for one character to be typed, and we will replace the cell's
     // contents with that character and then return to normal mode.
@@ -243,9 +253,13 @@ class UI {
 
   // modifiers: Optional; an object with these boolean properties: meta, shift, control.
   typeKey(keyCode, modifiers) {
-    if (keyCode == null) throw "The keyCode provided to typeKey() is null.";
+    if (keyCode == null) {
+      throw "The keyCode provided to typeKey() is null.";
+    }
     this.ignoreKeys = true;
-    if (!modifiers) modifiers = {};
+    if (!modifiers) {
+      modifiers = {};
+    }
     document.getElementById("sheetkeys-json-message").innerText = JSON.stringify({
       keyCode,
       mods: modifiers,

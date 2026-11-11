@@ -116,8 +116,12 @@ globalThis.KeyboardUtils = {
   },
 
   simulateClick(el, x, y) {
-    if (x == null) x = 0;
-    if (y == null) y = 0;
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
     const eventSequence = ["mouseover", "mousedown", "mouseup", "click"];
     for (const eventName of eventSequence) {
       const event = document.createEvent("MouseEvents");

@@ -49,7 +49,9 @@ class HelpDialog {
   }
 
   async createDialogElement() {
-    if (this.el) return;
+    if (this.el) {
+      return;
+    }
 
     // Here, we're adding a CSS file to the document root (outside of the dialog's shadow DOM) which
     // contains a font-face declaration for an icon font. This is required if we want to use the
@@ -206,7 +208,9 @@ class HelpDialog {
     const keyString = KeyboardUtils.getKeyString(event);
 
     // Ignore key presses which are just modifiers.
-    if (!keyString) return;
+    if (!keyString) {
+      return;
+    }
 
     this.edits.keyStrings.push(keyString);
     this.displayKeyString(

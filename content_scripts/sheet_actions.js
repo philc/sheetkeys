@@ -75,7 +75,9 @@ const SheetActions = {
   typeKeyFn: null,
 
   setMode(mode) {
-    if (this.mode === mode) return;
+    if (this.mode === mode) {
+      return;
+    }
     console.log(`Entering ${mode} mode.`);
     this.mode = mode;
     this.keyQueue = [];
@@ -151,13 +153,19 @@ const SheetActions = {
   // item isn't found (since this is a common source of errors in SheetKeys) unless silenceWarning
   // is true.
   getMenuItem(menuItem, silenceWarning) {
-    if (silenceWarning == null) silenceWarning = false;
+    if (silenceWarning == null) {
+      silenceWarning = false;
+    }
     const caption = menuItem.caption;
     let el = this.menuItemElements[caption];
-    if (el) return el;
+    if (el) {
+      return el;
+    }
     el = this.findMenuItem(menuItem);
     if (!el) {
-      if (!silenceWarning) console.error("Could not find menu item with caption", caption);
+      if (!silenceWarning) {
+        console.error("Could not find menu item with caption", caption);
+      }
       return null;
     }
     return this.menuItemElements[caption] = el;
@@ -171,7 +179,9 @@ const SheetActions = {
     const isRegexp = caption instanceof RegExp;
     for (const el of Array.from(menuItemEls)) {
       const label = el.innerText;
-      if (!label) continue;
+      if (!label) {
+        continue;
+      }
       if (isRegexp) {
         if (caption.test(label)) {
           return el;
@@ -333,7 +343,9 @@ const SheetActions = {
   moveRowsUp() {
     // In normal mode, where we have just a single cell selected, restore the column after moving
     // the row.
-    if (this.mode == "normal") this.preserveSelectedColumn();
+    if (this.mode == "normal") {
+      this.preserveSelectedColumn();
+    }
     this.selectRow(); // A row has to be selected before the "Move>" menu becomes enabled.
     this.activateMenu(this.menuItems.move);
     this.clickMenu(this.menuItems.moveRowUp);
@@ -344,7 +356,9 @@ const SheetActions = {
   },
 
   moveRowsDown() {
-    if (this.mode == "normal") this.preserveSelectedColumn();
+    if (this.mode == "normal") {
+      this.preserveSelectedColumn();
+    }
     this.selectRow();
     this.activateMenu(this.menuItems.move);
     this.clickMenu(this.menuItems.moveRowDown);
@@ -560,7 +574,9 @@ const SheetActions = {
     const iterable = this.getTabEls();
     for (let i = 0; i < iterable.length; i++) {
       const tab = iterable[i];
-      if (tab.classList.contains("docs-sheet-active-tab")) return i;
+      if (tab.classList.contains("docs-sheet-active-tab")) {
+        return i;
+      }
     }
     return null;
   },
@@ -575,14 +591,18 @@ const SheetActions = {
   prevTab() {
     const tabs = this.getTabEls();
     const prev = this.getActiveTabIndex() - 1;
-    if (prev < 0) return;
+    if (prev < 0) {
+      return;
+    }
     KeyboardUtils.simulateClick(tabs[prev]);
   },
 
   nextTab() {
     const tabs = this.getTabEls();
     const next = this.getActiveTabIndex() + 1;
-    if (next >= tabs.length) return;
+    if (next >= tabs.length) {
+      return;
+    }
     KeyboardUtils.simulateClick(tabs[next]);
   },
 
@@ -590,7 +610,9 @@ const SheetActions = {
     const menu = document.querySelector(".docs-sheet-tab-menu");
     // This tab menu element gets created the first time the user clicks on it, so it may not yet be
     // available in the DOM.
-    if (!menu) this.activateTabMenu();
+    if (!menu) {
+      this.activateTabMenu();
+    }
     const menuItems = document.querySelectorAll(".docs-sheet-tab-menu .goog-menuitem");
     let result = null;
     for (const item of Array.from(menuItems)) {
@@ -764,7 +786,9 @@ const SheetActions = {
       // fragment at the end. In Sheets, right clicking on a cell and selecting "get link to this
       // cell" copies to the clipboard the full URL of the sheet, with tab and cell as fragments.
       const urlWithoutFragment = (url) => {
-        if (url == null) return;
+        if (url == null) {
+          return;
+        }
         return url.origin + url.pathname;
       };
 
