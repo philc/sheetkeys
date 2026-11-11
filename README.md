@@ -130,6 +130,19 @@ one step at a time.
 
 ## Developer workflow
 
+Install [Deno](https://deno.com), which runs `make.js`, and [dprint](https://dprint.dev/install/),
+which formats the code.
+
+* Format and lint everything, applying automatic fixes: `./make.js fix`. Run it after editing.
+* Check formatting and lint without changing files: `./make.js check`.
+* Run the tests: `./make.js test`.
+* Enable the git hooks in a new clone: `./make.js install-hooks`. The pre-push hook runs `./make.js
+  check` before every push, and refuses to push if it fails.
+
+Formatting uses [dprint](https://dprint.dev), configured in `dprint.json`. Linting uses `deno lint`,
+with the rules in [`jsr:@philc/lint-rules`](https://jsr.io/@philc/lint-rules), configured in
+`deno.json`.
+
 * You can use the
   [Extension Reloader](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid)
   which provides a quick shortcut for reloading all of your locally-developed extensions. See

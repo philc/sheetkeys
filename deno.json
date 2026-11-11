@@ -13,6 +13,9 @@
         "no-window",
         "no-window-prefix"
       ]
-    }
+    },
+    "plugins": [
+      "jsr:@philc/lint-rules@^0.2.1"
+    ]
   }
 }
