@@ -58,5 +58,5 @@ await writeDistManifest(manifest.toFirefox(chromeManifest));
 await zip(`../firefox/sheetkeys-firefox-${version}.zip`);
 
 // Build the Chrome Store package.
-writeDistManifest(chromeManifest);
+await writeDistManifest(chromeManifest);
 await zip(`../chrome-store/sheetkeys-chrome-store-${version}.zip`);
