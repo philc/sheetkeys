@@ -2,7 +2,7 @@
 // Usage: ./make.js command. Use -l to list commands.
 // This is a set of tasks for building and testing SheetKeys in development.
 import * as path from "@std/path";
-import { desc, run, task } from "drake";
+import * as drake from "drake";
 import * as shoulda from "@philc/shoulda";
 import JSON5 from "json5";
 
@@ -127,32 +127,32 @@ const runUnitTests = async () => {
   await shoulda.run();
 };
 
-desc("Format and lint everything, applying automatic fixes");
-task("fix", [], async () => {
+drake.desc("Format and lint everything, applying automatic fixes");
+drake.task("fix", [], async () => {
   await shell("dprint", ["fmt"]);
   await shell("deno", ["lint", "--fix"]);
 });
 
-desc("Check code formatting and lint issues, without changing any files");
-task("check", [], async () => {
+drake.desc("Check code formatting and lint issues, without changing any files");
+drake.task("check", [], async () => {
   await shell("dprint", ["check"]);
   await shell("deno", ["lint"]);
 });
 
-desc("Run tests");
-task("test", [], async () => {
+drake.desc("Run tests");
+drake.task("test", [], async () => {
   await runUnitTests();
 });
 
-desc("Builds a zip file for submission to the Chrome store. The output is in dist/");
-task("package", [], async () => {
+drake.desc("Builds a zip file for submission to the Chrome store. The output is in dist/");
+drake.task("package", [], async () => {
   await buildStorePackage();
 });
 
-desc("Replaces manifest.json with a Firefox-compatible version, for development");
-task("write-firefox-manifest", [], async () => {
+drake.desc("Replaces manifest.json with a Firefox-compatible version, for development");
+drake.task("write-firefox-manifest", [], async () => {
   const firefoxManifest = createFirefoxManifest(await parseManifestFile());
   await Deno.writeTextFile("./manifest.json", JSON.stringify(firefoxManifest, null, 2));
 });
 
-run();
+drake.run();
