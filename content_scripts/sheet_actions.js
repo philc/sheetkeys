@@ -1,6 +1,8 @@
 const SheetActions = {
   // NOTE(philc): When developing, you can use this snippet to preview all available menu items:
-  // Array.from(document.querySelectorAll(".goog-menuitem")).forEach((i) => console.log(i.innerText))
+  //
+  //   Array.from(document.querySelectorAll(".goog-menuitem"))
+  //     .forEach((i) => console.log(i.innerText))
   menuItems: {
     copy: { parent: "Edit", caption: "Copy" },
     delete: { parent: "Edit", caption: "Delete►" },
@@ -264,20 +266,23 @@ const SheetActions = {
   selectedCellCoords() {
     const box = document.querySelector(".active-cell-border").getBoundingClientRect();
     // Offset this box by > 0 so we don't select the borders around the selected cell.
-    // NOTE(philc): I've chosen 5 here instead of 1 because > 1 is required when the document is zoomed.
+    // NOTE(philc): I've chosen 5 here instead of 1 because > 1 is required when the document is
+    // zoomed.
     const margin = 5;
     return { top: box.top + margin, left: box.left + margin };
   },
 
   selectRow() {
-    // Sheets allows you to type Shift+Space to select a row, but its behavior is buggy, so we're avoiding it:
+    // Sheets allows you to type Shift+Space to select a row, but its behavior is buggy, so we're
+    // avoiding it:
     // 1. Sometimes it doesn't select the whole row, so you need to type it twice.
     // 2. In some sheets, moving a row after selecting a row with shift+space deterministically
     //    causes columns to swap!
 
     // xOffset is 15px from the left edge of the cell border because we don't want to mistakenly
     // click on the "unhide" arrow icon which is present when spreadsheet rows are hidden.
-    // TODO(philc): This approach does not work when the row grouping UI is showing (View > Group > rows)
+    // TODO(philc): This approach does not work when the row grouping UI is showing
+    // (View > Group > rows).
     const xOffset = 15;
     // yOffset is set to 10 because empirically it correctly selects the row even when the page is
     // zoomed.
