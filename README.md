@@ -130,13 +130,13 @@ one step at a time.
 
 ## Developer workflow
 
-Install [Deno](https://deno.com), which runs `make.js`, and [dprint](https://dprint.dev/install/),
-which formats the code.
+Install [Deno](https://deno.com), which runs the tasks in `deno.json`, and
+[dprint](https://dprint.dev/install/), which formats the code.
 
-* Format and lint everything, applying automatic fixes: `./make.js fix`. Run it after editing.
-* Check formatting and lint without changing files: `./make.js check`.
-* Run the tests: `./make.js test`.
-* Enable the git hooks in a new clone: `./make.js install-hooks`. The pre-push hook runs `./make.js
+* Format and lint everything, applying automatic fixes: `deno task fix`. Run it after editing.
+* Check formatting and lint without changing files: `deno task check`.
+* Run the tests: `deno task test`.
+* Enable the git hooks in a new clone: `deno task install-hooks`. The pre-push hook runs `deno task
   check` before every push, and refuses to push if it fails.
 
 Formatting uses [dprint](https://dprint.dev), configured in `dprint.json`. Linting uses `deno lint`,
@@ -148,7 +148,7 @@ with the rules in [`jsr:@philc/lint-rules`](https://jsr.io/@philc/lint-rules), c
   which provides a quick shortcut for reloading all of your locally-developed extensions. See
   [here](http://stackoverflow.com/a/12767200/46237) for further info.
 * Refresh your Google Sheets page after reloading the SheetKeys extension in Chrome.
-* If you want to load this extension in Firefox from source, run `./make.js write-firefox-manifest`
+* If you want to load this extension in Firefox from source, run `deno task write-firefox-manifest`
   to get a Firefox-compatible manifest.json. Then navigate to `about:debugging` and add SheetKeys.
 
 ## Release notes

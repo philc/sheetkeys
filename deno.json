@@ -1,9 +1,6 @@
 {
   "imports": {
     "@philc/shoulda": "jsr:@philc/shoulda@^2.1.0",
-    "@std/fs": "jsr:@std/fs@^1.0.16",
-    "@std/path": "jsr:@std/path@^1.0.8",
-    "drake": "https://deno.land/x/drake@v1.5.1/mod.ts",
     "jsdom": "npm:jsdom@^26.1.0",
     "json5": "npm:json5@^2.2.3"
   },
@@ -17,5 +14,31 @@
     "plugins": [
       "jsr:@philc/lint-rules@^0.2.1"
     ]
+  },
+  "tasks": {
+    "test": {
+      "description": "Run tests",
+      "command": "deno run -A @philc/shoulda/run tests"
+    },
+    "fix": {
+      "description": "Format and lint everything, applying automatic fixes",
+      "command": "dprint fmt && deno lint --fix"
+    },
+    "check": {
+      "description": "Check code formatting and lint issues, without changing any files",
+      "command": "dprint check && deno lint"
+    },
+    "package": {
+      "description": "Build zip files for submission to the Chrome and Firefox stores. The output is in dist/",
+      "command": "deno run --allow-read --allow-write --allow-run=rsync,bash scripts/package.js"
+    },
+    "write-firefox-manifest": {
+      "description": "Replace manifest.json with a Firefox-compatible version, for development",
+      "command": "deno run --allow-read --allow-write scripts/manifest.js write-firefox-manifest"
+    },
+    "install-hooks": {
+      "description": "Enable the git hooks in .githooks, e.g. the pre-push hook which runs check",
+      "command": "git config core.hooksPath .githooks"
+    }
   }
 }

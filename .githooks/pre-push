@@ -7,8 +7,8 @@
 # it must have no uncommitted changes, and the pushed branch must be the one that's checked out.
 
 # The project's check and fix commands, e.g. `./make.js check` or `deno task check`.
-check_command="./make.js check"
-fix_command="./make.js fix"
+check_command="deno task check"
+fix_command="deno task fix"
 
 zero_sha="0000000000000000000000000000000000000000"
 head_sha=$(git rev-parse HEAD)
