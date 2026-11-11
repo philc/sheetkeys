@@ -59,7 +59,7 @@ h1 .close {
 
 table {
   overflow: auto;
-  border-collapse: collapse
+  border-collapse: collapse;
 }
 
 thead {
@@ -105,13 +105,13 @@ td:nth-of-type(2) span {
 }
 
 .shortcut.editing {
-  border: 1px solid #CEE6D3;
-  background-color: #F9FCF9;
+  border: 1px solid #cee6d3;
+  background-color: #f9fcf9;
 }
 
 a {
-  color: #8AB4F8; /* dark mode */
-  color: #1967D2;
+  color: #8ab4f8; /* dark mode */
+  color: #1967d2;
 }
 
 .edit {
@@ -124,7 +124,7 @@ a {
 }
 
 .validation-error {
-  color: #CD4F3B;
+  color: #cd4f3b;
 }
 
 /*
@@ -139,7 +139,7 @@ a {
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
-  margin-right: .2em;
+  margin-right: 0.2em;
   text-align: center;
 
   /* For safety - reset parent styles, that can break glyph codes*/
@@ -154,5 +154,9 @@ a {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-cancel-circled:before { content: '\e800'; }
-.icon-pencil:before { content: '\e801'; }
+.icon-cancel-circled:before {
+  content: "\e800";
+}
+.icon-pencil:before {
+  content: "\e801";
+}
