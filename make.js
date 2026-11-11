@@ -14,11 +14,15 @@ async function shell(procName, argsArray = []) {
   if (Deno.build.os == "windows") {
     // if win32, prefix arguments with "/c {original command}"
     // e.g. "mkdir c:\git\sheetkeys" becomes "cmd.exe /c mkdir c:\git\sheetkeys"
-    optArray.unshift("/c", procName);
+    argsArray.unshift("/c", procName);
     procName = "cmd.exe";
   }
-  const p = Deno.run({ cmd: [procName].concat(argsArray) });
-  const status = await p.status();
+  const command = new Deno.Command(procName, {
+    args: argsArray,
+    stdout: "inherit",
+    stderr: "inherit",
+  });
+  const status = await command.output();
   if (!status.success) {
     throw new Error(`${procName} ${argsArray} exited with status ${status.code}`);
   }
@@ -123,6 +127,18 @@ const runUnitTests = async () => {
 
   await shoulda.run();
 };
+
+desc("Format and lint everything, applying automatic fixes");
+task("fix", [], async () => {
+  await shell("dprint", ["fmt"]);
+  await shell("deno", ["lint", "--fix"]);
+});
+
+desc("Check code formatting and lint issues, without changing any files");
+task("check", [], async () => {
+  await shell("dprint", ["check"]);
+  await shell("deno", ["lint"]);
+});
 
 desc("Run tests");
 task("test", [], async () => {

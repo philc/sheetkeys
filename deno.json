@@ -1,7 +1,4 @@
 {
-  "fmt": {
-    "lineWidth": 100
-  },
   "imports": {
     "@philc/shoulda": "jsr:@philc/shoulda@^2.0.0",
     "@std/fs": "jsr:@std/fs@^1.0.16",
