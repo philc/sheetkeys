@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@philc/shoulda": "jsr:@philc/shoulda@^2.0.0",
+    "@philc/shoulda": "jsr:@philc/shoulda@^2.1.0",
     "@std/fs": "jsr:@std/fs@^1.0.16",
     "@std/path": "jsr:@std/path@^1.0.8",
     "drake": "https://deno.land/x/drake@v1.5.1/mod.ts",

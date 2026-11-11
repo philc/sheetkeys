@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@philc/lint-rules@~0.2.1": "0.2.1",
-    "jsr:@philc/shoulda@2": "2.0.0",
+    "jsr:@philc/shoulda@^2.1.0": "2.1.0",
     "jsr:@std/fs@^1.0.16": "1.0.16",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "npm:jsdom@^26.1.0": "26.1.0",
@@ -12,8 +12,8 @@
     "@philc/lint-rules@0.2.1": {
       "integrity": "5da438129a2387b6e057c6408682ab01fae3278f270d6560c326050b2bad74e0"
     },
-    "@philc/shoulda@2.0.0": {
-      "integrity": "2bc8b2eb9e5dee41fcd77760b009d3b3527980edf5b29cbf9f25443489a5faa9"
+    "@philc/shoulda@2.1.0": {
+      "integrity": "064b3c7335b86dcbb1af35ed10b49455445ae18a988adb60114b82354907c261"
     },
     "@std/fs@1.0.16": {
       "integrity": "81878f62b6eeda0bf546197fc3daa5327c132fee1273f6113f940784a468b036",
@@ -26,7 +26,7 @@
     }
   },
   "npm": {
-    "@asamuzakjp/css-color@3.1.4_@csstools+css-parser-algorithms@3.0.4__@csstools+css-tokenizer@3.0.3_@csstools+css-tokenizer@3.0.3": {
+    "@asamuzakjp/css-color@3.1.4_@csstools+css-parser-algorithms@3.0.4_@csstools+css-tokenizer@3.0.3": {
       "integrity": "sha512-SeuBV4rnjpFNjI8HSgKUwteuFdkHwkboq31HWzznuqgySQir+jSTczoWVVL4jvOjKjuH80fMDG0Fvg1Sb+OJsA==",
       "dependencies": [
         "@csstools/css-calc",
@@ -39,14 +39,14 @@
     "@csstools/color-helpers@5.0.2": {
       "integrity": "sha512-JqWH1vsgdGcw2RR6VliXXdA0/59LttzlU8UlRT/iUUsEeWfYq8I+K0yhihEUTTHLRm1EXvpsCx3083EU15ecsA=="
     },
-    "@csstools/css-calc@2.1.3_@csstools+css-parser-algorithms@3.0.4__@csstools+css-tokenizer@3.0.3_@csstools+css-tokenizer@3.0.3": {
+    "@csstools/css-calc@2.1.3_@csstools+css-parser-algorithms@3.0.4_@csstools+css-tokenizer@3.0.3": {
       "integrity": "sha512-XBG3talrhid44BY1x3MHzUx/aTG8+x/Zi57M4aTKK9RFB4aLlF3TTSzfzn8nWVHWL3FgAXAxmupmDd6VWww+pw==",
       "dependencies": [
         "@csstools/css-parser-algorithms",
         "@csstools/css-tokenizer"
       ]
     },
-    "@csstools/css-color-parser@3.0.9_@csstools+css-parser-algorithms@3.0.4__@csstools+css-tokenizer@3.0.3_@csstools+css-tokenizer@3.0.3": {
+    "@csstools/css-color-parser@3.0.9_@csstools+css-parser-algorithms@3.0.4_@csstools+css-tokenizer@3.0.3": {
       "integrity": "sha512-wILs5Zk7BU86UArYBJTPy/FMPPKVKHMj1ycCEyf3VUptol0JNRLFU/BZsJ4aiIHJEbSLiizzRrw8Pc1uAEDrXw==",
       "dependencies": [
         "@csstools/color-helpers",
@@ -145,9 +145,6 @@
         "whatwg-url",
         "ws",
         "xml-name-validator"
-      ],
-      "optionalPeers": [
-        "canvas@^3.0.0"
       ]
     },
     "json5@2.2.3": {
@@ -236,11 +233,7 @@
       ]
     },
     "ws@8.18.1": {
-      "integrity": "sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==",
-      "optionalPeers": [
-        "bufferutil@^4.0.1",
-        "utf-8-validate@>=5.0.2"
-      ]
+      "integrity": "sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w=="
     },
     "xml-name-validator@5.0.0": {
       "integrity": "sha512-EvGK8EJ3DhaHfbRlETOWAS5pO9MZITeauHKJyb8wyajUfQUenkIg2MvLDTZ4T/TgIcm3HU0TFBgWWboAZ30UHg=="
@@ -292,7 +285,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@philc/shoulda@2",
+      "jsr:@philc/shoulda@^2.1.0",
       "jsr:@std/fs@^1.0.16",
       "jsr:@std/path@^1.0.8",
       "npm:jsdom@^26.1.0",
