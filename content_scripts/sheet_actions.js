@@ -768,10 +768,8 @@ const SheetActions = {
         return url.origin + url.pathname;
       };
 
-      let url;
-      try {
-        url = URL.parse(text);
-      } catch (error) {}
+      // URL.parse returns null, rather than throwing, if text isn't a URL.
+      const url = URL.parse(text);
 
       const isLinkToCell = text.startsWith("#") ||
         (url?.hash && urlWithoutFragment(url) == urlWithoutFragment(window.location));

@@ -1,14 +1,3 @@
-class ShortcutKey {
-  constructor(key, keyCode, shift, ctrl, alt, meta) {
-    this.key = key;
-    this.keyCode = keyCode;
-    this.shiftKey = shift;
-    this.ctrlKey = ctrl;
-    this.altKey = alt;
-    this.metaKey = meta;
-  }
-}
-
 /* Mixin-functions for enabling a class to dispatch methods. */
 const EventDispatcher = {
   addEventListener: (eventName, listener) => {

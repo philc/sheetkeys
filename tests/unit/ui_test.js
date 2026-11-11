@@ -19,7 +19,7 @@ context("UI methods", () => {
         "moveUp": "a•b•c",
         "moveDown": "a•d",
         "moveLeft": "x•y",
-        "moveDown": "z",
+        "moveRight": "z",
       },
     };
     const result = ui.buildKeyMappingsPrefixes(mappings);
@@ -30,7 +30,6 @@ context("UI methods", () => {
 context("onKeyDown", () => {
   let ui;
   let commandsInvoked;
-  const keydownEvent = (props) => Object.assign(new Event("keydown"), props);
   const keydown = (props) => {
     const event = Object.assign(new Event("keydown"), props);
     return ui.onKeydown(event);
@@ -38,11 +37,11 @@ context("onKeyDown", () => {
 
   setup(async () => {
     commandsInvoked = [];
-    stub(Settings, "loadUserKeyMappings", async () => {
-      return {
+    stub(Settings, "loadUserKeyMappings", () => {
+      return Promise.resolve({
         normal: { "moveUp": "k", "moveDown": "a•b" },
         insert: {},
-      };
+      });
     });
     stub(Commands.commands, "moveUp", {
       fn: () => commandsInvoked.push("moveUp"),
